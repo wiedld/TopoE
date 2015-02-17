@@ -1,5 +1,4 @@
 import model
-from model import session
 import csv
 
 
@@ -38,10 +37,11 @@ def load_gen_prod(session):
 
 
 
-def main():
+def main(session):
 	load_gen_stats(session)
 	load_gen_prod(session)
 
 
 if __name__ == "__main__":
-	main()
+	s=model.connect()
+	main(s)

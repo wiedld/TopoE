@@ -4,28 +4,27 @@ from sqlalchemy import Column, Integer, Float, String, DateTime, ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship, backref, scoped_session
 
 
-## TODO:  sqlite3 is not working with python in my windows PC.  Advisors were not able to fix yesterday.
-
-## Hence, the below lingo is to allow me to try to have the seeding work off "session" while concurrently using python shell sqlalchemy querying with "Session" to check db status (since I don't have sqlite3!)
-
-#Going to switch to working on the Hackbright Ubuntu boxes for now, until advisor can finda fix for the windows pc.  Because seeding on my PC has become a pain. 
-
-ENGINE = create_engine("sqlite:///database.db", echo=True)
-session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
 Base = declarative_base()
-Base.query = session.query_property()
 
+##  STEP1 = make the db file and metadata.  In python shell:
+# -i model.py  >  create_engine  >  Base.metadata.create
+
+##  STEP 2 = Perform seeding.
 # ENGINE = None 
-Session = None
+# Session = None
+# def connect():
+# 	global ENGINE
+# 	global Session
+# 	ENGINE = create_engine("sqlite:///database.db", echo=True)
+# 	Session = sessionmaker(bind=ENGINE)
+# 	return Session
+## in python shell:  -i model.py > s=connect() >  
 
-def connect():
-	global ENGINE
-	global Session
-
-	# ENGINE = create_engine("sqlite:///database.db", echo=True)
-	Session = sessionmaker(bind=ENGINE)
-
-	return Session	
+##  STEP 3 = setup threading.
+##  remove step2 code.   Instead, do below.
+# ENGINE = create_engine("sqlite:///database.db", echo=True)
+# session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
+# Base.query = session.query_property()
 
 
 
