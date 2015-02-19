@@ -27,7 +27,7 @@ Session = None
 ######################################################################
 
 
-##  This table is based on the most recent generator data (Nov 2014), and therefore has the most complete dataset.  Have this be the central database, because it lists ALL GENERATORS.
+##  This table is based on the most recent generator data (Jan-Nov 2014), and therefore has the most complete dataset.  Have this be the central database, because it lists ALL GENERATORS.
 # Static data from the EIA923 csv files. Generator production.
 class ProdGen(Base):
 	__tablename__ = "ProdGens"
@@ -73,6 +73,42 @@ class ProdGen(Base):
 	nov_mwh_gen = Column(Float)
 	dec_mwh_gen = Column(Float)
 
+	def __repr__(self):
+		"""Show info about ProdGen object"""
+		return "<plant_name: %s, operator_name: %s, state: %s, fuel_type: %s, aer_fuel_type: %s, months: Jan2014-Nov2014>" % (self.plant_name, self.operator_name, self.state, self.fuel_type, self.aer_fuel_type)
+
+
+
+
+
+##  this table is for the Dec 2013 data.  Keep other identifiers just in case need for comparison logic (make sure same dataset).
+class ProdGenDec2013(Base):
+	__tablename__ = "ProdGensDec2013"
+	id = Column(Integer, primary_key=True)
+	plant_id = Column(String(15))
+	chp = Column(String(5))
+	plant_name = Column(String(100))	# plant names are not novel.  cannot be key.
+	operator_name = Column(String(100))
+	operator_id = Column(String(15))
+	state = Column(String(2))
+	census_region = Column(String(15))
+	nerc_region = Column(String(15))
+	naics = Column(String(15))
+	sector_eia_id = Column(String(15))
+	sector_name = Column(String(15))
+	prime_mover = Column(String(15))
+	fuel_type = Column(String(15))
+	aer_fuel_type = Column(String(15))
+
+	dec_fuel_consumed = Column(Float)
+	dec_mwh_gen = Column(Float)
+
+
+	def __repr__(self):
+		"""Show info about ProdGenDec2013 object"""
+		return "<plant_name: %s, operator_name: %s, state: %s, fuel_type: %s, aer_fuel_type: %s, months: Dec2013>" % (self.plant_name, self.operator_name, self.state, self.fuel_type, self.aer_fuel_type)
+
+
 
 
 
@@ -100,6 +136,13 @@ class StatsGen(Base):
 	multi_fuel = Column(String(1))
 	interconnected = Column(String(1))
 	synchronized = Column(String(1))
+
+
+	def __repr__(self):
+		"""Show info about StatsGen object"""
+		return "<plant_name: %s, utility_name: %s, state: %s, county: %s, status: %s, interconnected: %s, synchronized: %s>" % (self.plant_name, self.utility_name, self.state, self.county, self.status, self.interconnected, self.synchronized)
+
+
 
 
 ######################################################################
