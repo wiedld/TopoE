@@ -5,4 +5,6 @@ Jinja2==2.6
 SQLAlchemy==0.7.9
 WTForms==1.0.2
 Werkzeug==0.8.3
+argparse==1.2.1
+crontab==0.20.2
 wsgiref==0.1.2

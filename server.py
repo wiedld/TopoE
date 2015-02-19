@@ -24,3 +24,11 @@ def zip_county_zone():
 def fuel_type_county_map():
     """using the db data, display a map with the fuel type per county.  Use EIA 923 data.  display format TBD."""
 
+
+
+def main():
+    """For future use."""
+    pass
+
+if __name__ == "__main__":
+    main()
