@@ -19,7 +19,7 @@ def load_gen_prod_2014(session):
 
 			gen_obj.plant_id = row[0]
 			gen_obj.chp = row[1]
-			gen_obj.plant_name = row[3]	
+			gen_obj.plant_name = row[3]
 			gen_obj.operator_name = row[4]
 			gen_obj.operator_id = row[5]
 			gen_obj.state = row[6]
@@ -73,7 +73,7 @@ def load_gen_prod_2014(session):
 
 
 
-## loading December 2013 in a separate database, because there is not a one-to-one relation with the jan to Nov 2014 data.  
+## loading December 2013 in a separate database, because there is not a one-to-one relation with the jan to Nov 2014 data.
 def load_gen_prod_DEC2013(session):
 	with open('seed_data/gen_production_addDec2013.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, dialect='excel')
@@ -83,7 +83,7 @@ def load_gen_prod_DEC2013(session):
 
 			gen_obj.plant_id = row[0]
 			gen_obj.chp = row[1]
-			gen_obj.plant_name = row[3]	
+			gen_obj.plant_name = row[3]
 			gen_obj.operator_name = row[4]
 			gen_obj.operator_id = row[5]
 			gen_obj.state = row[6]
@@ -163,8 +163,8 @@ def load_gen_stats(session):
 
 
 def main(session):
-	# load_gen_stats(session)
-	# load_gen_prod_2014(session)
+	load_gen_stats(session)
+	load_gen_prod_2014(session)
 	load_gen_prod_DEC2013(session)
 
 

@@ -1,12 +1,15 @@
 import datetime
-import requests
-import lxml.html
+import urllib2
+from BeautifulSoup import BeautifulSoup
+soup = BeautifulSoup(urllib2.urlopen("http://content.caiso.com/outlook/SP/renewables.html").read())
+
+
 
 # This file should include web scrapping for two unique ids, cron every 10 minute.  Collects realtime data which updates every 10 minutes.
 
 
 ## DATA SOURCE:
-# http://content.caiso.com/outlook/SP/renewables.html 
+# http://content.caiso.com/outlook/SP/renewables.html
 
 # <span class="to_readings" id="totalrenewables">1919 MW</span>
 # <span class="to_callout1">Current Solar:</span> <span class="to_readings" id="currentsolar">0 MW</span>
@@ -15,24 +18,31 @@ import lxml.html
 ###############################################################
 
 
-# TODO.  github this over to my machine.  update env, install lxml (requires libxml2 2.9.0+ and libxslt 1.1.26+).  Then try the below code and troubleshoot.
 
 def main():
     current = datetime.datetime.now()
-    cur_str = str(current)
+    current_str = str(current)
+
     try:
-        html = requests.get("http://content.caiso.com/outlook/SP/renewables.html").content
-        dom = lxml.html.fromstring(html)
-        mw_solar = dom.cssselect('.currentsolar') 
-        mw_wind = dom.cssselect('.currentwind')
-        ## TODO: update into db of dynamic data
+        solar = soup.find(id="currentsolar")
+        str_solar = solar.string
+        wind = soup.find(id="currentwind")
+        str_wind = wind.string
+        mw_solar = int(str_solar.replace(" MW",""))
+        mw_wind = int(str_wind.replace(" MW",""))
         print ("solar:", mw_solar)
         print ("wind:", mw_wind)
+         ## TODO: update into db of dynamic data
+
     except:
-        print ("Error.  CAISO web scrape failure at",cur_str)
+        print ("Error.  CAISO web scraper failure at",current_str)
+
+        f = open('log_file.txt','a')
+        f.write("\nError.  CAISO web scraper failure at: " +current_str)
+        f.close
+
 
 
 if __name__ == "__main__":
     main()
 
-    

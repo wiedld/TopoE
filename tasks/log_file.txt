@@ -1,1 +1,11 @@
-2015-02-19 12:41:57.144488
+# DO NOT DELETE THIS FILE!
+#  any failure in cron-automated tasks (api, scrapes) will log here.
+
+###############################################################
+
+
+
+
+Error.  CAISO web scraper failure at: 2015-02-19 16:53:19.318652
+Error.  CAISO web scraper failure at: 2015-02-19 16:53:20.441548
+Error.  CAISO web scraper failure at: 2015-02-19 16:53:32.306289

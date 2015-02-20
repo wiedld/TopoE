@@ -6,6 +6,6 @@ import datetime
 current = datetime.datetime.now()
 cur_str = str(current)
 
-f = open('log_file.txt','w')
+f = open('log_file.txt','a')
 f.write(cur_str)
 f.close
