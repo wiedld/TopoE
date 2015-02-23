@@ -9,3 +9,12 @@
 Error.  CAISO web scraper failure at: 2015-02-19 16:53:19.318652
 Error.  CAISO web scraper failure at: 2015-02-19 16:53:20.441548
 Error.  CAISO web scraper failure at: 2015-02-19 16:53:32.306289
+Error.  CAISO web scraper failure at: 2015-02-20 21:28:14.440445
+Error.  CAISO web scraper failure at: 2015-02-20 21:28:25.918712
+Error.  CAISO web scraper failure at: 2015-02-20 21:30:22.589607
+Error.  CAISO web scraper failure at: 2015-02-20 21:35:44.924939
+Error.  historic_renewables_seeding failure at: 2015-02-23 15:42:36.843501
+Error.  historic_renewables_seeding failure at: 2015-02-23 15:43:16.018255
+Error.  historic_renewables_seeding failure at: 2015-02-23 15:46:09.395327
+Error.  historic_renewables_seeding failure at: 2015-02-23 15:47:30.194099
+Error.  historic_renewables_seeding failure at: 2015-02-23 15:49:15.504823

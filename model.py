@@ -13,10 +13,10 @@ Base = declarative_base()
 # -i model.py  >  create_engine  >  Base.metadata.create
 
 ##  STEP 2 = Perform seeding.
-ENGINE = None 
+ENGINE = None
 Session = None
 # function connect() at bottom...before main.
-## in python shell:  -i model.py > s=connect() >  
+## in python shell:  -i model.py > s=connect() >
 
 ##  STEP 3 = setup threading.
 ##  remove step2 code.   import on line 5.  Insert below.

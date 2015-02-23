@@ -4,7 +4,6 @@ from BeautifulSoup import BeautifulSoup
 soup = BeautifulSoup(urllib2.urlopen("http://content.caiso.com/outlook/SP/renewables.html").read())
 
 
-
 # This file should include web scrapping for two unique ids, cron every 10 minute.  Collects realtime data which updates every 10 minutes.
 
 
@@ -16,7 +15,12 @@ soup = BeautifulSoup(urllib2.urlopen("http://content.caiso.com/outlook/SP/renewa
 # <span class="to_callout1">Current Wind:</span> <span class="to_readings" id="currentwind">216 MW</span>
 
 ###############################################################
+## POSSIBLE FUTURE DIRECTIONS:
 
+# build a web scraper for 10 minute updates on actual demand, today's forecats peak, and tmrw's forecat peak?  10 minute updated...most current!
+#  http://content.caiso.com/outlook/SP/systemconditions.html
+
+##############################################################
 
 
 def main():
@@ -32,7 +36,7 @@ def main():
         mw_wind = int(str_wind.replace(" MW",""))
         print ("solar:", mw_solar)
         print ("wind:", mw_wind)
-         ## TODO: update into db of dynamic data
+         ## TODO: check values within expected bounds, confirm timestamp is new, and update into db of dynamic data
 
     except:
         print ("Error.  CAISO web scraper failure at",current_str)
