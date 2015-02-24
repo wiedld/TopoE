@@ -1,6 +1,14 @@
 import datetime
 import urllib2
-from HB_project import model    # "relative" import.  create __init__ in parent dir.
+
+# add parent directory to the path, so can import model.py
+#  need model in order to update the database when this task is activated by cron
+import os
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.sys.path.insert(0,parentdir)
+import model
+
+
 
 
 """This file is used to update the database table: HistoricCAISOProdByFuels.
