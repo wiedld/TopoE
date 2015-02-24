@@ -145,6 +145,20 @@ class StatsGen(Base):
 
 
 
+## This table is for the historic production information from CAISO.  This data is in HOURLY AMOUNTS, versus the monthly amounts in the production tables above.
+# Data in this table will be populated in two ways: the initial seeding, and the updates from tasks/historic_renewables_seeding which is activated daily by cron.
+
+class HistoricCAISOProdByFuel(Base):
+	__tablename__ = "HistoricCAISOProdByFuels"
+	id = Column(Integer, primary_key=True)
+	date = Column(DateTime)
+	hour = Column(Integer)
+	minute = Column(Integer)
+	fuel_type = Column(String(20))
+	mw_gen = Column(Integer)
+
+
+
 ######################################################################
 
 def connect():

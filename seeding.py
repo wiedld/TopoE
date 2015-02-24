@@ -10,6 +10,7 @@ from datetime import datetime
 # later in python, will be grouping based on plant_name, which is the same in all databases, in order to measure/present data!
 
 
+# load historic production data for generators, Jan-Nov 2014
 def load_gen_prod_2014(session):
 	with open('seed_data/gen_production_2014.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, dialect='excel')
@@ -114,7 +115,7 @@ def load_gen_prod_DEC2013(session):
 
 
 
-
+# load the stats for each gen, which doesn't change that often
 def load_gen_stats(session):
 	# with open('seed_data/test.csv', 'rb') as csvfile:
 	with open('seed_data/gen_stats.csv', 'rb') as csvfile:
@@ -162,10 +163,19 @@ def load_gen_stats(session):
 
 
 
+# load the recent historic data from CAISO, on the amount of renewables versus total generation
+def load_CAISO_production(session):
+	from tasks import CAISO_hrly_data_scraper
+	CAISO_hrly_data_scraper.initial_db_seeding()
+
+
+
+
 def main(session):
-	load_gen_stats(session)
-	load_gen_prod_2014(session)
-	load_gen_prod_DEC2013(session)
+	# load_gen_stats(session)
+	# load_gen_prod_2014(session)
+	# load_gen_prod_DEC2013(session)
+	load_CAISO_production(session)
 
 
 
