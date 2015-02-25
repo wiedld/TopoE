@@ -164,9 +164,10 @@ def load_gen_stats(session):
 
 
 # load the recent historic data from CAISO, on the amount of renewables versus total generation
-def load_CAISO_production(session):
+def load_CAISO_production():
+	"""the seeding of this file comes from a web scraper.  This web scraper is located in tasks directory.  This web scraper is used both for the initiall seeding (startdate to enddate), as well as a recurring cron task."""
 	from tasks import CAISO_hrly_data_scraper
-	CAISO_hrly_data_scraper.initial_db_seeding()
+	CAISO_hrly_data_scraper.initial_db_seeding("20150101","20150105")
 
 
 
@@ -175,7 +176,9 @@ def main(session):
 	# load_gen_stats(session)
 	# load_gen_prod_2014(session)
 	# load_gen_prod_DEC2013(session)
-	load_CAISO_production(session)
+
+	## this seeding does not need session as arg.  Links to a task file which has session initiated.
+	load_CAISO_production()
 
 
 
