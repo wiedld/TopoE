@@ -13,7 +13,7 @@ app.secret_key = os.environ["flask_app_key"]
 @app.route("/")
 def index():
     """Initial rendering when begin on page"""
-    pass
+    return render_template("index.html")
 
 @app.route("/zip-county-zone")
 def zip_county_zone():
@@ -32,3 +32,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    app.run(debug=True)
