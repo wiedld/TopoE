@@ -3,11 +3,23 @@ import csv
 from datetime import datetime
 
 
+"""Below are the models for the database.  The tables can be broadly grouped into two types:
 
-##  NOTE ON ALL TABLES WITH GENERATOR DATA!
+	(1) EIA data.  federal government open data.  source: csv.
+		-->  these data instances do not have an inherent unique id (one was added during seeding).
+		-->  these data can be organized by plamt_name...which is uniform across tables --  but there are multiple instances of plant_name in each
+
+	(2)  CAISO data.  California electric grid.  API and web scrapers."""
+
+
+################################################################
+
+
+##  EIA DATA
+
 ##  THERE IS NOT A 1-TO-1 RELATIONSHIP IN EACH TABLE.  THE ONLY CONSTANT IS THE PLANT NAME, WHICH IS UNIQUE PER PLANT SITE BUT NOT UNIQUE PER ROW!!!
 
-# later in python, will be grouping based on plant_name, which is the same in all databases, in order to measure/present data!
+# TODO: later in calculations package, will be grouping based on plant_name, which is the same in all databases, in order to measure/present data!
 
 
 # load historic production data for generators, Jan-Nov 2014
@@ -162,23 +174,34 @@ def load_gen_stats(session):
 
 
 
+##############################################################
+
+
+## CAISO DATA
+
 
 # load the recent historic data from CAISO, on the amount of renewables versus total generation
 def load_CAISO_production():
 	"""the seeding of this file comes from a web scraper.  This web scraper is located in tasks directory.  This web scraper is used both for the initiall seeding (startdate to enddate), as well as a recurring cron task."""
 	from tasks import CAISO_hrly_data_scraper
-	CAISO_hrly_data_scraper.initial_db_seeding("20150101","20150105")
+	# did seeding in two parts (internet failure after completed 20141203)
+	CAISO_hrly_data_scraper.initial_db_seeding("20141204","20150223")
+	# CAISO_hrly_data_scraper.initial_db_seeding("20140101","20150223")
 
 
+
+#############################################################
 
 
 def main(session):
+	"""this contains all the different functions for seeding.  Comment out when seeding is complete"""
 	# load_gen_stats(session)
 	# load_gen_prod_2014(session)
 	# load_gen_prod_DEC2013(session)
 
 	## this seeding does not need session as arg.  Links to a task file which has session initiated.
-	load_CAISO_production()
+	# load_CAISO_production()
+
 
 
 
