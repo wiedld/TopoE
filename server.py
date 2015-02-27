@@ -36,6 +36,11 @@ def map_zoom():
     return render_template("map_zoom.html")
 
 
+@app.route("/map-zoom2")
+def map_zoom2():
+    return render_template("map_zoom2.html")
+
+
 @app.route("/counties")
 def counties():
     return render_template("choropleth.html")

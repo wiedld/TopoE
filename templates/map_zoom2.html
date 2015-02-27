@@ -9,15 +9,15 @@
       pointer-events: all;
     }
 
-    #states {
+    #CA_counties {
       fill: #aaa;
     }
 
-    #states .active {
+    #CA_counties .active {
       fill: orange;
     }
 
-    #state-borders {
+    #CA_countie-borders {
       fill: none;
       stroke: #fff;
       stroke-width: 1.5px;
@@ -34,7 +34,7 @@
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="http://d3js.org/topojson.v1.min.js"></script>
 
-
+  <h1> version #2 -- attempting CA counties </h1>
   <script>
 
       var width = 960,
@@ -60,18 +60,18 @@
 
       var g = svg.append("g");
 
-      d3.json("/static/us.json", function(error, us) {
+      d3.json("/static/counties.json", function(error, us) {
         g.append("g")
-          .attr("id", "states")
+          .attr("id", "CA_counties")
           .selectAll("path")
-            .data(topojson.feature(us, us.objects.states).features)
+            .data(topojson.feature(us, us.objects.CA_counties).features)
           .enter().append("path")
             .attr("d", path)
             .on("click", clicked);
 
         g.append("path")
-            .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-            .attr("id", "state-borders")
+            .datum(topojson.mesh(us, us.objects.CA_counties, function(a, b) { return a !== b; }))
+            .attr("id", "CA_countie-borders")
             .attr("d", path);
       });
 
