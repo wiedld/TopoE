@@ -1,0 +1,54 @@
+
+/*STYLING FOR TOPOMAP*/
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+.application{
+  fill: none;
+  color: black;
+}
+
+#CA_counties {
+  fill: #aaa;
+}
+
+#CA_counties .active {
+  fill: orange;
+}
+
+#CA_countie-borders {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+
+/*STYLING FOR SLIDERS*/
+
+.d3-slider {
+    position: relative;
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 1.1em;
+    border: 1px solid #aaaaaa;
+    z-index: 2;
+}
+
+.d3-slider-horizontal {
+    height: .8em;
+}
+
+.d3-slider-handle {
+    position: absolute;
+    width: 1.2em;
+    height: 1.2em;
+    border: 1px solid #d3d3d3;
+    border-radius: 4px;
+    background: #eee;
+    background: linear-gradient(to bottom, #eee 0%, #ddd 100%);
+    z-index: 3;
+}

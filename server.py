@@ -31,19 +31,10 @@ def fuel_type_county_map():
 ###########################################################
 ##  these routes are temporary.  For viewing different d3 options, which may be used later.
 
-@app.route("/map-zoom")
-def map_zoom():
-    return render_template("map_zoom.html")
 
-
-@app.route("/map-zoom2")
-def map_zoom2():
-    return render_template("map_zoom2.html")
-
-
-@app.route("/counties")
-def counties():
-    return render_template("choropleth.html")
+@app.route("/donut")
+def donuts():
+    return render_template("donuts.html")
 
 
 ###########################################################

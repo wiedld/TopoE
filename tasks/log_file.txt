@@ -30,3 +30,4 @@ Error.  historic_renewables_seeding failure at: 2015-02-23 16:10:45.781161
 Error.  historic_renewables_seeding failure at: 2015-02-23 16:31:15.110931
 Error.  historic_renewables_seeding failure at: 2015-02-23 16:32:42.525322
 Error.  historic_renewables_seeding failure at: 2015-02-23 16:33:20.822210
+Error.  CAISO_hrly_data_scraper failure at: 2015-02-26 22:00:07.459996

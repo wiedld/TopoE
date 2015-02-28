@@ -1,36 +1,154 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>In progress</title>
+  <title>TBD</title>
 
-    <!-- import libraries -->
-    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+  <!-- Bootstraps's js requires jquery. -->
+  <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <!-- custom styling -->
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+
+
 </head>
 
-<body>
-    <header>
-        <!-- TODO:  Stuff will go here. -->
-        <h2>Need a header</h2>
-    </header>
-    <main>
-        <!-- Main content here.  Interactive elements with d3 (visual), jquery/ajax (events & callbacks), and underscore (data handling).  May also use json based on data structure (and dataflow) decisions TBD later. -->
 
-        <!-- TODO: determine which elements in which containers. -->
-        <section id="map-container">
-            <p>map with EIA data</p>
-        </section>
+<body class="application">
+<!-- TODO:  NAV BAR -->
+  <!-- <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="navbar-brand" href="./">Dashboard Starter UI</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-left">
+          <li><a href="">Home</a></li>
+          <li><a href="">About</a></li>
+          <li><a href="">What am I using now?</a></li>
+        </ul>
+      </div>
+    </div> -->
+  <!-- </div> -->
 
-        <section>
-        </section>
 
-    </main>
+  <br>
+  <br>
 
+  <main class="container">
+    <div class="row">
 
+      <section class="col-sm-8">
+        <div class="chart-wrapper">
+            <div id="topomap">
+              <!-- This is where the topojson is rendered. -->
+            </div>
+        </div>
+      </section>
 
+      <section id="fuels-per-county" class="col-sm-4">
+        <div class = "row">
+          <div class = "col-sm-12">
+              <div class="chart-wrapper">
+                <div id="fuel-donut">
+                  <!-- Fuel donut will go here. -->
+                </div>
+              </div>
+          </div>
+        </div>
 
+        <div class = "row">
+          <div class = "col-sm-12">
+            <div id="slider-wrapper" style='display:none'>
+            <!-- <div id="slider-wrapper"> -->
+              <h4>Natural Gas</h4>
+              <span id="slider1text">0</span>
+                <div id="slider1">
+                  <!-- Slider1 will go here. -->
+                </div>
+              <br><br>
+              <h4>Coal</h4>
+              <span id="slider2text">0</span>
+                <div id="slider2">
+                  <!-- Slider2 will go here. -->
+                </div>
+              <br><br>
+              <h4>Solar</h4>
+              <span id="slider3text">0</span>
+                <div id="slider3">
+                  <!-- Slider2 will go here. -->
+                </div>
+              <br><br>
+              <h4>Wind</h4>
+              <span id="slider4text">0</span>
+                <div id="slider4">
+                  <!-- Slider4 will go here. -->
+                </div>
+              <br><br>
+              <h4>Other (geothermal, hydro)</h4>
+              <span id="slider5text">0</span>
+                <div id="slider5">
+                  <!-- Slider5 will go here. -->
+                </div>
+            </div>
+          </div>
+        </div>
 
-    <!-- import js file -->
-    <script src="/static/scripts.js"></script>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- d3, topojson, ajax, jquery, underscore.js -->
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/c3/0.4.9/c3.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
+  <!-- Scripts for this specific website -->
+  <script src="/static/scripts.js"></script>
+  <script src="/static/d3.slider.js"></script>
+
+  <script>
+    var axis = d3.svg.axis().orient("top").ticks(5);
+
+    d3.select('#slider1').call(d3.slider().axis(axis)
+      .on("slide", function(evt, value) {
+      d3.select('#slider1text').text(value);
+    }));
+
+    d3.select('#slider2').call(d3.slider().axis(axis)
+      .on("slide", function(evt, value) {
+      d3.select('#slider2text').text(value);
+    }));
+
+    d3.select('#slider3').call(d3.slider().axis(axis)
+      .on("slide", function(evt, value) {
+      d3.select('#slider3text').text(value);
+    }));
+
+    d3.select('#slider4').call(d3.slider().axis(axis)
+      .on("slide", function(evt, value) {
+      d3.select('#slider4text').text(value);
+    }));
+
+    d3.select('#slider5').call(d3.slider().axis(axis)
+      .on("slide", function(evt, value) {
+      d3.select('#slider5text').text(value);
+    }));
+  </script>
+
 </body>
 </html>
