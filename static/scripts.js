@@ -67,7 +67,7 @@ var fuel_mix = {
 //  SLIDERS, with src js script import in html DOM, before this js file
 
 
-var set_slider_values = function(v1,v2,v3,v4,v5){
+var set_slider_values = function(v1,v2,v3,v4,v5,county_name){
 
     var axis = d3.svg.axis().orient("top").ticks(5);
 
@@ -121,8 +121,8 @@ var set_slider_values = function(v1,v2,v3,v4,v5){
 
 
 
-///////////////////////////////////////////////////////
-// TOPOJSON -- COUNTY MAP  ////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+// TOPOJSON -- COUNTY MAP  ///////////////////////////////////////////////
 
     // MAKE THE SVG
 
@@ -229,7 +229,7 @@ var set_slider_values = function(v1,v2,v3,v4,v5){
                       value3 = fuel_mix[county_name]["solar"],
                       value4 = fuel_mix[county_name]["wind"],
                       value5 = fuel_mix[county_name]["other"];
-                  set_slider_values(value1, value2, value3, value4, value5);
+                  set_slider_values(value1, value2, value3, value4, value5, county_name);
 
             } else {
               x = width / (2.5);
@@ -252,14 +252,25 @@ var set_slider_values = function(v1,v2,v3,v4,v5){
 
 
 
-/////////////////////////////////////////////////////////////
-// DONUT CHART /////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+// DONUT CHART /////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+  // C3 donut ////////////////////////////////////////////////////
 
       var make_donut = function(){
             var chart = c3.generate({
               data: {
                   columns: [
-                      ['data1', 30],
+                      ['Natural gas', 30],
                       ['data2', 120],
                   ],
                   type : 'donut',
@@ -268,7 +279,7 @@ var set_slider_values = function(v1,v2,v3,v4,v5){
                   onmouseout: function (d, i) { console.log("onmouseout", d, i); }
               },
               donut: {
-                  title: "Iris Petal Width"
+                  title: "Fuel Mix in County"
               },
               bindto: document.getElementById('fuel-donut')
             });
