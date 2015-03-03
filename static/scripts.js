@@ -67,15 +67,25 @@ var fuel_mix = {
 //  SLIDERS, with src js script import in html DOM, before this js file
 
 
-var set_slider_values = function(v1,v2,v3,v4,v5,county_name){
+var set_slider_values = function(data_list,county_name){
 
     var axis = d3.svg.axis().orient("top").ticks(5);
+
+    var v1 = data_list[0],
+        v2 = data_list[1],
+        v3 = data_list[2],
+        v4 = data_list[3],
+        v5 = data_list[4],
+        data0 = data_list;
 
     d3.select('#slider1').call(d3.slider().axis(axis)
       .value(v1)
       .on("slide", function(evt, value1) {
         d3.select('#slider1text').text(value1);
         fuel_mix[county_name]["gas"] = value1;
+        $('#fuel-donut').empty();
+        data0 = [value1, v2, v3, v4, v5];
+        make_donut(data0);
       }
     ));
 
@@ -84,6 +94,9 @@ var set_slider_values = function(v1,v2,v3,v4,v5,county_name){
       .on("slide", function(evt, value2) {
         d3.select('#slider2text').text(value2);
         fuel_mix[county_name]["coal"] = value2;
+        $('#fuel-donut').empty();
+        data0 = [v1, value2, v3, v4, v5];
+        make_donut(data0);
       }
     ));
 
@@ -92,6 +105,9 @@ var set_slider_values = function(v1,v2,v3,v4,v5,county_name){
       .on("slide", function(evt, value3) {
         d3.select('#slider3text').text(value3);
         fuel_mix[county_name]["solar"] = value3;
+        $('#fuel-donut').empty();
+        data0 = [v1, v2, value3, v4, v5];
+        make_donut(data0);
       }
     ));
 
@@ -100,6 +116,9 @@ var set_slider_values = function(v1,v2,v3,v4,v5,county_name){
       .on("slide", function(evt, value4) {
         d3.select('#slider4text').text(value4);
         fuel_mix[county_name]["wind"] = value4;
+        $('#fuel-donut').empty();
+        data0 = [v1, v2, v3, value4, v5];
+        make_donut(data0);
       }
     ));
 
@@ -108,6 +127,9 @@ var set_slider_values = function(v1,v2,v3,v4,v5,county_name){
       .on("slide", function(evt, value5) {
         d3.select('#slider5text').text(value5);
         fuel_mix[county_name]["other"] = value5;
+        $('#fuel-donut').empty();
+        data0 = [v1, v2, v3, v4, value5];
+        make_donut(data0);
       }
     ));
 
@@ -211,8 +233,19 @@ var set_slider_values = function(v1,v2,v3,v4,v5,county_name){
                 var county_name = d.id;
                 console.log(d.id);
 
+              //get fuel_mix info
+                var v1 = fuel_mix[county_name]["gas"],
+                    v2 = fuel_mix[county_name]["coal"],
+                    v3 = fuel_mix[county_name]["solar"],
+                    v4 = fuel_mix[county_name]["wind"],
+                    v5 = fuel_mix[county_name]["other"];
+                var data0 = [v1,v2,v3,v4,v5];
+
               // display the c3 donut, with county-specific data.
-              make_donut();
+                //  empty old
+                  $('#fuel-donut').empty();
+                //  make new
+                  make_donut(data0, null);
 
               // display the d3 sliders, with county-specific data.
                 // make visible
@@ -224,12 +257,7 @@ var set_slider_values = function(v1,v2,v3,v4,v5,county_name){
                   $('#slider4').empty();
                   $('#slider5').empty();
                 // re-make sliders with new values
-                  var value1 = fuel_mix[county_name]["gas"],
-                      value2 = fuel_mix[county_name]["coal"],
-                      value3 = fuel_mix[county_name]["solar"],
-                      value4 = fuel_mix[county_name]["wind"],
-                      value5 = fuel_mix[county_name]["other"];
-                  set_slider_values(value1, value2, value3, value4, value5, county_name);
+                  set_slider_values(data0, county_name);
 
             } else {
               x = width / (2.5);
@@ -253,8 +281,149 @@ var set_slider_values = function(v1,v2,v3,v4,v5,county_name){
 
 
 ////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 // DONUT CHART /////////////////////////////////////////////////////////////
 
+  var make_donut = function(data0, data1){
+
+    // MAKE THE IDEA OF THE SVG
+
+        var width = 960/2,
+            height = 500/2,
+            outerRadius = Math.min(width, height) * .5 - 10,
+            innerRadius = outerRadius * .6;
+
+
+    // MAKE THE DATA, to feed into the svg
+        var n = 5,
+            data;
+
+
+    // MAKE THE STYLE:  color, shape (arc), and divide arc into data sections(pie)
+    // note:  arc not added to svg yet!
+        var color = d3.scale.category10();
+        var arc = d3.svg.arc();
+        var pie = d3.layout.pie()
+            .sort(null);
+
+
+    // ADD SVG TO THE BODY
+        var svg = d3.select("#fuel-donut").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+
+    // ADD DATA TO EACH ARC
+        svg.selectAll(".arc")
+            .data(arcs(data0, data1))
+          // ADD ARC TO THE SVG
+          .enter().append("g")
+            .attr("class", "arc")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+          // MAKE THE VISUAL PATH be the color(i) and data(d)
+          .append("path")
+            .attr("fill", function(d, i) { return color(i); })
+            .attr("d", arc);
+
+
+    // this is a function, defined below.  Changes the data used for the arc.
+    // TODO:  this funct just keeps occuring.  I want it to occur with event handler.
+        // if (data1 !== null){
+        //   transition();
+        // }
+
+    /////////////////////////
+
+    // ARCS function
+    //    takes two datasets, (data0 and data1), and draws the two arcs during the transition?
+
+        function arcs(data0, data1) {
+          // defines two arcs based on pie of two data.
+          var arcs0 = pie(data0),
+              i = -1,
+              arc;
+          // if (data1 !== null) {
+          //     var arcs1 = pie(data1);
+          //     }
+          // set the color of arc0 (for data0)
+          while (++i < n) {
+            arc = arcs0[i];
+            arc.innerRadius = innerRadius;
+            arc.outerRadius = outerRadius;
+            // if (data1 !== null){
+            //   arc.next = arcs1[i];
+            // }
+          }
+          return arcs0;
+        }
+
+  //   ///////////////////////////
+
+    //  TRANSITION function
+
+        // function transition(state) {
+        function transition() {
+
+          //during the transition, the path has it's data inputed
+          var path = d3.selectAll(".arc > path")
+              .data(arcs(data0, data1));
+              // .data(state ? arcs(data0, data1) : arcs(data1, data0));
+
+          // Wedges split into two rings.
+          var t0 = path.transition()
+              .duration(1000)
+              .attrTween("d", tweenArc(function(d, i) {
+                return {
+                  innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
+                  outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
+                };
+              }));
+
+          // Wedges translate to be centered on their final position.
+          var t1 = t0.transition()
+              .attrTween("d", tweenArc(function(d, i) {
+                var a0 = d.next.startAngle + d.next.endAngle,
+                    a1 = d.startAngle - d.endAngle;
+                return {
+                  startAngle: (a0 + a1) / 2,
+                  endAngle: (a0 - a1) / 2
+                };
+              }));
+
+          // Wedges then update their values, changing size.
+          var t2 = t1.transition()
+                .attrTween("d", tweenArc(function(d, i) {
+                  return {
+                    startAngle: d.next.startAngle,
+                    endAngle: d.next.endAngle
+                  };
+                }));
+
+          // Wedges reunite into a single ring.
+          var t3 = t2.transition()
+              .attrTween("d", tweenArc(function(d, i) {
+                return {
+                  innerRadius: innerRadius,
+                  outerRadius: outerRadius
+                };
+              }));
+
+        }
+
+    ////////////////////////
+
+    //  THIS FUNCTION IS CALLED at t1, t2, t3 of the transition
+
+        function tweenArc(b) {
+          return function(a, i) {
+            var d = b.call(this, a, i), i = d3.interpolate(a, d);
+            for (var k in d) a[k] = d[k]; // update data
+            return function(t) { return arc(i(t)); };
+          };
+        }
+
+
+  };
 
 
 
@@ -262,45 +431,45 @@ var set_slider_values = function(v1,v2,v3,v4,v5,county_name){
 
 
 
-
-
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
   // C3 donut ////////////////////////////////////////////////////
 
-      var make_donut = function(){
-            var chart = c3.generate({
-              data: {
-                  columns: [
-                      ['Natural gas', 30],
-                      ['data2', 120],
-                  ],
-                  type : 'donut',
-                  onclick: function (d, i) { console.log("onclick", d, i); },
-                  onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-                  onmouseout: function (d, i) { console.log("onmouseout", d, i); }
-              },
-              donut: {
-                  title: "Fuel Mix in County"
-              },
-              bindto: document.getElementById('fuel-donut')
-            });
+      // var make_donut = function(){
+      //       var chart = c3.generate({
+      //         data: {
+      //             columns: [
+      //                 ['Natural gas', 30],
+      //                 ['data2', 120],
+      //             ],
+      //             type : 'donut',
+      //             onclick: function (d, i) { console.log("onclick", d, i); },
+      //             onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+      //             onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+      //         },
+      //         donut: {
+      //             title: "Fuel Mix in County"
+      //         },
+      //         bindto: document.getElementById('fuel-donut')
+      //       });
 
-            setTimeout(function () {
-                chart.load({
-                    columns: [
-                        ["setosa", 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.2, 0.1, 0.1, 0.2, 0.4, 0.4, 0.3, 0.3, 0.3, 0.2, 0.4, 0.2, 0.5, 0.2, 0.2, 0.4, 0.2, 0.2, 0.2, 0.2, 0.4, 0.1, 0.2, 0.2, 0.2, 0.2, 0.1, 0.2, 0.2, 0.3, 0.3, 0.2, 0.6, 0.4, 0.3, 0.2, 0.2, 0.2, 0.2],
-                        ["versicolor", 1.4, 1.5, 1.5, 1.3, 1.5, 1.3, 1.6, 1.0, 1.3, 1.4, 1.0, 1.5, 1.0, 1.4, 1.3, 1.4, 1.5, 1.0, 1.5, 1.1, 1.8, 1.3, 1.5, 1.2, 1.3, 1.4, 1.4, 1.7, 1.5, 1.0, 1.1, 1.0, 1.2, 1.6, 1.5, 1.6, 1.5, 1.3, 1.3, 1.3, 1.2, 1.4, 1.2, 1.0, 1.3, 1.2, 1.3, 1.3, 1.1, 1.3],
-                        ["virginica", 2.5, 1.9, 2.1, 1.8, 2.2, 2.1, 1.7, 1.8, 1.8, 2.5, 2.0, 1.9, 2.1, 2.0, 2.4, 2.3, 1.8, 2.2, 2.3, 1.5, 2.3, 2.0, 2.0, 1.8, 2.1, 1.8, 1.8, 1.8, 2.1, 1.6, 1.9, 2.0, 2.2, 1.5, 1.4, 2.3, 2.4, 1.8, 1.8, 2.1, 2.4, 2.3, 1.9, 2.3, 2.5, 2.3, 1.9, 2.0, 2.3, 1.8],
-                    ]
-                });
-            }, 1500);
+      //       setTimeout(function () {
+      //           chart.load({
+      //               columns: [
+      //                   ["setosa", 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.2, 0.1, 0.1, 0.2, 0.4, 0.4, 0.3, 0.3, 0.3, 0.2, 0.4, 0.2, 0.5, 0.2, 0.2, 0.4, 0.2, 0.2, 0.2, 0.2, 0.4, 0.1, 0.2, 0.2, 0.2, 0.2, 0.1, 0.2, 0.2, 0.3, 0.3, 0.2, 0.6, 0.4, 0.3, 0.2, 0.2, 0.2, 0.2],
+      //                   ["versicolor", 1.4, 1.5, 1.5, 1.3, 1.5, 1.3, 1.6, 1.0, 1.3, 1.4, 1.0, 1.5, 1.0, 1.4, 1.3, 1.4, 1.5, 1.0, 1.5, 1.1, 1.8, 1.3, 1.5, 1.2, 1.3, 1.4, 1.4, 1.7, 1.5, 1.0, 1.1, 1.0, 1.2, 1.6, 1.5, 1.6, 1.5, 1.3, 1.3, 1.3, 1.2, 1.4, 1.2, 1.0, 1.3, 1.2, 1.3, 1.3, 1.1, 1.3],
+      //                   ["virginica", 2.5, 1.9, 2.1, 1.8, 2.2, 2.1, 1.7, 1.8, 1.8, 2.5, 2.0, 1.9, 2.1, 2.0, 2.4, 2.3, 1.8, 2.2, 2.3, 1.5, 2.3, 2.0, 2.0, 1.8, 2.1, 1.8, 1.8, 1.8, 2.1, 1.6, 1.9, 2.0, 2.2, 1.5, 1.4, 2.3, 2.4, 1.8, 1.8, 2.1, 2.4, 2.3, 1.9, 2.3, 2.5, 2.3, 1.9, 2.0, 2.3, 1.8],
+      //               ]
+      //           });
+      //       }, 1500);
 
-            setTimeout(function () {
-                chart.unload({
-                    ids: 'data1'
-                });
-                chart.unload({
-                    ids: 'data2'
-                });
-            }, 2500);
-      };
+      //       setTimeout(function () {
+      //           chart.unload({
+      //               ids: 'data1'
+      //           });
+      //           chart.unload({
+      //               ids: 'data2'
+      //           });
+      //       }, 2500);
+      // };
 
