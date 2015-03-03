@@ -1,4 +1,128 @@
-// TOPOJSON ///////////////////////////////////////////
+// DATA STRUCTURE -- FOR TESTING /////////////////////////////////////
+
+var fuel_mix = {
+  "Alameda": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Alpine": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Amador": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Butte": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Calaveras": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Colusa": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Contra Costa": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Del Norte": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "El Dorado": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Fresno": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Glenn": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Humboldt": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Imperial": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Inyo": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Kern": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Kings": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Lake": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Lassen": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Los Angeles": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Madera": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Marin": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Mariposa": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Mendocino": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Merced": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Modoc": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Mono": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Monterey": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Napa": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Nevada": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Orange": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Placer": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Plumas": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Riverside": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Sacramento": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "San Benito": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "San Bernardino": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "San Diego": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "San Francisco": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "San Joaquin": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "San Luis Obispo": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "San Mateo": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Santa Barbara": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Santa Clara": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Santa Cruz": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Shasta": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Sierra": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Siskiyou": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Solano": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Sonoma": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Stanislaus": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Sutter": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Tehama": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Trinity": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Tulare": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Tuolumne": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Ventura": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Yolo": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
+  "Yuba": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20}
+};
+
+
+
+///////////////////////////////////////////////////////////////////////
+//  SLIDERS, with src js script import in html DOM, before this js file
+
+
+var set_slider_values = function(v1,v2,v3,v4,v5){
+
+    var axis = d3.svg.axis().orient("top").ticks(5);
+
+    d3.select('#slider1').call(d3.slider().axis(axis)
+      .value(v1)
+      .on("slide", function(evt, value1) {
+        d3.select('#slider1text').text(value1);
+        fuel_mix[county_name]["gas"] = value1;
+      }
+    ));
+
+    d3.select('#slider2').call(d3.slider().axis(axis)
+      .value(v2)
+      .on("slide", function(evt, value2) {
+        d3.select('#slider2text').text(value2);
+        fuel_mix[county_name]["coal"] = value2;
+      }
+    ));
+
+    d3.select('#slider3').call(d3.slider().axis(axis)
+      .value(v3)
+      .on("slide", function(evt, value3) {
+        d3.select('#slider3text').text(value3);
+        fuel_mix[county_name]["solar"] = value3;
+      }
+    ));
+
+    d3.select('#slider4').call(d3.slider().axis(axis)
+      .value(v4)
+      .on("slide", function(evt, value4) {
+        d3.select('#slider4text').text(value4);
+        fuel_mix[county_name]["wind"] = value4;
+      }
+    ));
+
+    d3.select('#slider5').call(d3.slider().axis(axis)
+      .value(v5)
+      .on("slide", function(evt, value5) {
+        d3.select('#slider5text').text(value5);
+        fuel_mix[county_name]["other"] = value5;
+      }
+    ));
+
+    // show the starting values in the html
+    d3.select('#slider1text').text(v1);
+    d3.select('#slider2text').text(v2);
+    d3.select('#slider3text').text(v3);
+    d3.select('#slider4text').text(v4);
+    d3.select('#slider5text').text(v5);
+};
+
+
+
+///////////////////////////////////////////////////////
+// TOPOJSON -- COUNTY MAP  ////////////////////////////
 
     // MAKE THE SVG
 
@@ -72,23 +196,48 @@
 
       // js function.  for moving the clicked county to the center
       function clicked(d) {
-        make_donut();
-        $('#slider-wrapper').show();
+
         var x, y, k;
 
+            // if clicking on a county (d)
             if (d && centered !== d) {
               var centroid = path.centroid(d);
               x = centroid[0];
               y = centroid[1];
               k = 4;
               centered = d;
+
+              // get the id of the county, which == county name, and should match db info!!!
+                var county_name = d.id;
+                console.log(d.id);
+
+              // display the c3 donut, with county-specific data.
+              make_donut();
+
+              // display the d3 sliders, with county-specific data.
+                // make visible
+                  $('#slider-wrapper').css('visibility','visible');
+                // get ride of old sliders & values.
+                  $('#slider1').empty();
+                  $('#slider2').empty();
+                  $('#slider3').empty();
+                  $('#slider4').empty();
+                  $('#slider5').empty();
+                // re-make sliders with new values
+                  var value1 = fuel_mix[county_name]["gas"],
+                      value2 = fuel_mix[county_name]["coal"],
+                      value3 = fuel_mix[county_name]["solar"],
+                      value4 = fuel_mix[county_name]["wind"],
+                      value5 = fuel_mix[county_name]["other"];
+                  set_slider_values(value1, value2, value3, value4, value5);
+
             } else {
               x = width / (2.5);
               y = height / (2.5);
               k = 1;
               centered = null;
               $('#fuel-donut').empty();
-              $('#slider-wrapper').hide();
+              $('#slider-wrapper').css('visibility','hidden');
             }
 
             // bind all the clicked paths to the class .active
@@ -99,14 +248,11 @@
                 .duration(750)
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
                 .style("stroke-width", 1.5 / k + "px");
-
-        // get the id of the county, which = county name, and should match db info!!!
-        console.log(d);
-        console.log(d.id);
       }
 
 
 
+/////////////////////////////////////////////////////////////
 // DONUT CHART /////////////////////////////////////////////
 
       var make_donut = function(){

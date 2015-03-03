@@ -72,34 +72,34 @@
 
         <div class = "row">
           <div class = "col-sm-12">
-            <div id="slider-wrapper" style='display:none'>
+            <div id="slider-wrapper" style='visibility:hidden'>
             <!-- <div id="slider-wrapper"> -->
               <h4>Natural Gas</h4>
-              <span id="slider1text">0</span>
+              <span id="slider1text"></span>
                 <div id="slider1">
                   <!-- Slider1 will go here. -->
                 </div>
               <br><br>
               <h4>Coal</h4>
-              <span id="slider2text">0</span>
+              <span id="slider2text"></span>
                 <div id="slider2">
                   <!-- Slider2 will go here. -->
                 </div>
               <br><br>
               <h4>Solar</h4>
-              <span id="slider3text">0</span>
+              <span id="slider3text"></span>
                 <div id="slider3">
                   <!-- Slider2 will go here. -->
                 </div>
               <br><br>
               <h4>Wind</h4>
-              <span id="slider4text">0</span>
+              <span id="slider4text"></span>
                 <div id="slider4">
                   <!-- Slider4 will go here. -->
                 </div>
               <br><br>
               <h4>Other (geothermal, hydro)</h4>
-              <span id="slider5text">0</span>
+              <span id="slider5text"></span>
                 <div id="slider5">
                   <!-- Slider5 will go here. -->
                 </div>
@@ -118,37 +118,8 @@
   <script src="http://cdnjs.cloudflare.com/ajax/libs/c3/0.4.9/c3.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
   <!-- Scripts for this specific website -->
-  <script src="/static/scripts.js"></script>
   <script src="/static/d3.slider.js"></script>
-
-  <script>
-    var axis = d3.svg.axis().orient("top").ticks(5);
-
-    d3.select('#slider1').call(d3.slider().axis(axis)
-      .on("slide", function(evt, value) {
-      d3.select('#slider1text').text(value);
-    }));
-
-    d3.select('#slider2').call(d3.slider().axis(axis)
-      .on("slide", function(evt, value) {
-      d3.select('#slider2text').text(value);
-    }));
-
-    d3.select('#slider3').call(d3.slider().axis(axis)
-      .on("slide", function(evt, value) {
-      d3.select('#slider3text').text(value);
-    }));
-
-    d3.select('#slider4').call(d3.slider().axis(axis)
-      .on("slide", function(evt, value) {
-      d3.select('#slider4text').text(value);
-    }));
-
-    d3.select('#slider5').call(d3.slider().axis(axis)
-      .on("slide", function(evt, value) {
-      d3.select('#slider5text').text(value);
-    }));
-  </script>
+  <script src="/static/scripts.js"></script>
 
 </body>
 </html>

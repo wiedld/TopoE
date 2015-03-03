@@ -64,7 +64,7 @@ return function module() {
       var drag = d3.behavior.drag();
       drag.on('dragend', function () {
         dispatch.slideend(d3.event, value);
-      })
+      });
 
       // Slider handle
       //if range slider, create two
