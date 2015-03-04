@@ -104,6 +104,7 @@ def get_historic_mw_by_fuel(date):
         f = open('log_file.txt','a')
         f.write("\nError.  CAISO_hrly_data_scraper failure at: " +current_str)
         f.close
+        # TODO: write a timeout funtion (delay), and recall function attempt again...call the main function (daily_scraper_db_update)?  Python library -- try up to x times until succeeds, and then would error and print to log file.  Once production -- use trigger email (make http request to email service, for fee).
 
 
 

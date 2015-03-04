@@ -62,83 +62,57 @@ var fuel_mix = {
 };
 
 
-
 ///////////////////////////////////////////////////////////////////////
 //  SLIDERS, with src js script import in html DOM, before this js file
 
 
 var set_slider_values = function(data_list,county_name){
 
+    // make the sliders
+
     var axis = d3.svg.axis().orient("top").ticks(5);
 
-    var v1 = data_list[0],
-        v2 = data_list[1],
-        v3 = data_list[2],
-        v4 = data_list[3],
-        v5 = data_list[4],
-        data0 = data_list;
+    var fuel_names = ["gas", "coal", "solar", "wind", "other"],
+        slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4"];
 
-    d3.select('#slider1').call(d3.slider().axis(axis)
-      .value(v1)
-      .on("slide", function(evt, value1) {
-        d3.select('#slider1text').text(value1);
-        fuel_mix[county_name]["gas"] = value1;
-        $('#fuel-donut').empty();
-        data0 = [value1, v2, v3, v4, v5];
-        make_donut(data0);
-      }
-    ));
+    $.each(slider_elements, function(idx, slider_element){
+        d3.select(slider_element).call(d3.slider().axis(axis)
+          .value(data_list[idx])
+          .on("slide", function(evt, value){
+            slide_event(value, fuel_names[idx], idx);
+            }
+          )
+        );
+    });
 
-    d3.select('#slider2').call(d3.slider().axis(axis)
-      .value(v2)
-      .on("slide", function(evt, value2) {
-        d3.select('#slider2text').text(value2);
-        fuel_mix[county_name]["coal"] = value2;
-        $('#fuel-donut').empty();
-        data0 = [v1, value2, v3, v4, v5];
-        make_donut(data0);
-      }
-    ));
-
-    d3.select('#slider3').call(d3.slider().axis(axis)
-      .value(v3)
-      .on("slide", function(evt, value3) {
-        d3.select('#slider3text').text(value3);
-        fuel_mix[county_name]["solar"] = value3;
-        $('#fuel-donut').empty();
-        data0 = [v1, v2, value3, v4, v5];
-        make_donut(data0);
-      }
-    ));
-
-    d3.select('#slider4').call(d3.slider().axis(axis)
-      .value(v4)
-      .on("slide", function(evt, value4) {
-        d3.select('#slider4text').text(value4);
-        fuel_mix[county_name]["wind"] = value4;
-        $('#fuel-donut').empty();
-        data0 = [v1, v2, v3, value4, v5];
-        make_donut(data0);
-      }
-    ));
-
-    d3.select('#slider5').call(d3.slider().axis(axis)
-      .value(v5)
-      .on("slide", function(evt, value5) {
-        d3.select('#slider5text').text(value5);
-        fuel_mix[county_name]["other"] = value5;
-        $('#fuel-donut').empty();
-        data0 = [v1, v2, v3, v4, value5];
-        make_donut(data0);
-      }
-    ));
 
     // show the starting values in the html
-    d3.select('#slider1text').text(v1);
-    d3.select('#slider2text').text(v2);
-    d3.select('#slider3text').text(v3);
-    d3.select('#slider4text').text(v4);
-    d3.select('#slider5text').text(v5);
+    for (var i = 0; i<5; i++){
+      d3.select('#slider'+i+'text').text(data_list[i]);
+    }
+
+    // what happens when the sliders are changed by the user.
+    var slide_event = function(value, fuel_type, index){
+        value = Math.round(value);
+        // update_percentages() for all fuels, to sum to 100%
+        data_list = update_percentages(value,index);
+        // change values in the html label of the slider
+        d3.select('#slider'+index+'text').text(value);
+        // changle values in the fuel_mix dict
+        fuel_mix[county_name][fuel_type] = value;
+        //update the donut
+        $('#fuel-donut').empty();
+        make_donut(data_list);
+    };
+
+    // PERCENTAGES - changed with user input via sliders, and impacts the data structure (updates the dict) as well as changes the donut (make_donut(data_list)).
+    var update_percentages = function(value,index){
+      // update percentages based on 100
+      data_list [index] = value;
+      return data_list;
+    };
+
+
 };
 
 
@@ -233,31 +207,31 @@ var set_slider_values = function(data_list,county_name){
                 var county_name = d.id;
                 console.log(d.id);
 
-              //get fuel_mix info
-                var v1 = fuel_mix[county_name]["gas"],
-                    v2 = fuel_mix[county_name]["coal"],
-                    v3 = fuel_mix[county_name]["solar"],
-                    v4 = fuel_mix[county_name]["wind"],
-                    v5 = fuel_mix[county_name]["other"];
-                var data0 = [v1,v2,v3,v4,v5];
+              //get fuel_mix info, place into list.
+                var v0 = fuel_mix[county_name]["gas"],
+                    v1 = fuel_mix[county_name]["coal"],
+                    v2 = fuel_mix[county_name]["solar"],
+                    v3 = fuel_mix[county_name]["wind"],
+                    v4 = fuel_mix[county_name]["other"];
+                var data_list = [v0,v1,v2,v3,v4];
 
               // display the c3 donut, with county-specific data.
                 //  empty old
                   $('#fuel-donut').empty();
                 //  make new
-                  make_donut(data0, null);
+                  make_donut(data_list);
 
               // display the d3 sliders, with county-specific data.
                 // make visible
                   $('#slider-wrapper').css('visibility','visible');
                 // get ride of old sliders & values.
+                  $('#slider0').empty();
                   $('#slider1').empty();
                   $('#slider2').empty();
                   $('#slider3').empty();
                   $('#slider4').empty();
-                  $('#slider5').empty();
                 // re-make sliders with new values
-                  set_slider_values(data0, county_name);
+                  set_slider_values(data_list, county_name);
 
             } else {
               x = width / (2.5);
@@ -284,7 +258,7 @@ var set_slider_values = function(data_list,county_name){
 ////////////////////////////////////////////////////////////////////////////
 // DONUT CHART /////////////////////////////////////////////////////////////
 
-  var make_donut = function(data0, data1){
+  var make_donut = function(data0){
 
     // MAKE THE IDEA OF THE SVG
 
@@ -315,111 +289,38 @@ var set_slider_values = function(data_list,county_name){
 
     // ADD DATA TO EACH ARC
         svg.selectAll(".arc")
-            .data(arcs(data0, data1))
+            .data(arcs(data0))
           // ADD ARC TO THE SVG
           .enter().append("g")
             .attr("class", "arc")
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+
           // MAKE THE VISUAL PATH be the color(i) and data(d)
           .append("path")
             .attr("fill", function(d, i) { return color(i); })
             .attr("d", arc);
 
+    // TODO:  add data labels to each arc in the donut.
+        // svg.append("text")
+        //       .attr("transform", "translate(" + arc.centroid(d) + ")")
+        //       .attr("dy", ".35em")
+        //       .style("text-anchor", "middle")
+        //       .text("test");
 
-    // this is a function, defined below.  Changes the data used for the arc.
-    // TODO:  this funct just keeps occuring.  I want it to occur with event handler.
-        // if (data1 !== null){
-        //   transition();
-        // }
-
-    /////////////////////////
 
     // ARCS function
-    //    takes two datasets, (data0 and data1), and draws the two arcs during the transition?
-
-        function arcs(data0, data1) {
-          // defines two arcs based on pie of two data.
+        function arcs(data0) {
+          // defines the arc based on pie of data0.
           var arcs0 = pie(data0),
               i = -1,
               arc;
-          // if (data1 !== null) {
-          //     var arcs1 = pie(data1);
-          //     }
           // set the color of arc0 (for data0)
           while (++i < n) {
             arc = arcs0[i];
             arc.innerRadius = innerRadius;
             arc.outerRadius = outerRadius;
-            // if (data1 !== null){
-            //   arc.next = arcs1[i];
-            // }
           }
           return arcs0;
-        }
-
-  //   ///////////////////////////
-
-    //  TRANSITION function
-
-        // function transition(state) {
-        function transition() {
-
-          //during the transition, the path has it's data inputed
-          var path = d3.selectAll(".arc > path")
-              .data(arcs(data0, data1));
-              // .data(state ? arcs(data0, data1) : arcs(data1, data0));
-
-          // Wedges split into two rings.
-          var t0 = path.transition()
-              .duration(1000)
-              .attrTween("d", tweenArc(function(d, i) {
-                return {
-                  innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
-                  outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
-                };
-              }));
-
-          // Wedges translate to be centered on their final position.
-          var t1 = t0.transition()
-              .attrTween("d", tweenArc(function(d, i) {
-                var a0 = d.next.startAngle + d.next.endAngle,
-                    a1 = d.startAngle - d.endAngle;
-                return {
-                  startAngle: (a0 + a1) / 2,
-                  endAngle: (a0 - a1) / 2
-                };
-              }));
-
-          // Wedges then update their values, changing size.
-          var t2 = t1.transition()
-                .attrTween("d", tweenArc(function(d, i) {
-                  return {
-                    startAngle: d.next.startAngle,
-                    endAngle: d.next.endAngle
-                  };
-                }));
-
-          // Wedges reunite into a single ring.
-          var t3 = t2.transition()
-              .attrTween("d", tweenArc(function(d, i) {
-                return {
-                  innerRadius: innerRadius,
-                  outerRadius: outerRadius
-                };
-              }));
-
-        }
-
-    ////////////////////////
-
-    //  THIS FUNCTION IS CALLED at t1, t2, t3 of the transition
-
-        function tweenArc(b) {
-          return function(a, i) {
-            var d = b.call(this, a, i), i = d3.interpolate(a, d);
-            for (var k in d) a[k] = d[k]; // update data
-            return function(t) { return arc(i(t)); };
-          };
         }
 
 
@@ -429,11 +330,12 @@ var set_slider_values = function(data_list,county_name){
 
 
 
-
-
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
   // C3 donut ////////////////////////////////////////////////////
+
+
+  // TODO:  take the interact "mouseover" functionality of the c3 donut below, and add to the d3 element used above.
 
       // var make_donut = function(){
       //       var chart = c3.generate({
