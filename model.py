@@ -75,7 +75,7 @@ class ProdGen(Base):
 
 	def __repr__(self):
 		"""Show info about ProdGen object"""
-		return "<plant_name: %s, operator_name: %s, state: %s, fuel_type: %s, aer_fuel_type: %s, months: Jan2014-Nov2014>" % (self.plant_name, self.operator_name, self.state, self.fuel_type, self.aer_fuel_type)
+		return "{plant_name: %s, operator_name: %s, state: %s, fuel_type: %s, aer_fuel_type: %s, months: Jan2014-Nov2014}" % (self.plant_name, self.operator_name, self.state, self.fuel_type, self.aer_fuel_type)
 
 
 
@@ -106,7 +106,7 @@ class ProdGenDec2013(Base):
 
 	def __repr__(self):
 		"""Show info about ProdGenDec2013 object"""
-		return "<plant_name: %s, operator_name: %s, state: %s, fuel_type: %s, aer_fuel_type: %s, months: Dec2013>" % (self.plant_name, self.operator_name, self.state, self.fuel_type, self.aer_fuel_type)
+		return "{plant_name: %s, operator_name: %s, state: %s, fuel_type: %s, aer_fuel_type: %s, months: Dec2013}" % (self.plant_name, self.operator_name, self.state, self.fuel_type, self.aer_fuel_type)
 
 
 
@@ -140,7 +140,7 @@ class StatsGen(Base):
 
 	def __repr__(self):
 		"""Show info about StatsGen object"""
-		return "<plant_name: %s, utility_name: %s, state: %s, county: %s, status: %s, interconnected: %s, synchronized: %s>" % (self.plant_name, self.utility_name, self.state, self.county, self.status, self.interconnected, self.synchronized)
+		return "{plant_name: %s, utility_name: %s, state: %s, county: %s, status: %s, interconnected: %s, synchronized: %s}" % (self.plant_name, self.utility_name, self.state, self.county, self.status, self.interconnected, self.synchronized)
 
 
 
