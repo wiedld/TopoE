@@ -2,8 +2,13 @@ from flask import Flask, render_template, redirect, request, session
 import model
 import os
 
-from calculations import base_calcs
-print base_calcs.test
+from calculations import pandas_data_munging as pdm
+print pdm.test
+
+from calculations import binary_decision_tree as bdt
+print bdt.test
+
+
 
 app = Flask(__name__)
 app.secret_key = os.environ["flask_app_key"]

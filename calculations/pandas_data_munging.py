@@ -2,13 +2,13 @@ from pandas import DataFrame, merge
 
 
 # when launching server.py, this statement prints to confirm is connected
-test = "base_calcs is connected"
+test = "pandas is connected"
 
 
 
 
-def main():
-    """imports model, and pulls mwh production data from db"""
+def retrieve_from_db():
+    """imports model, pulls mwh production data from db, and places into pandas df.  Merges together for 12 annual months, and includes county for each plant_name."""
 
     # add parent directory to the path, so can import model.py
     #  need model in order to update the database when this task is activated by cron
@@ -72,10 +72,29 @@ def main():
 
 
 
+def counties_into_CAISO():
+    """takes panda df, and sorts by counties in each CAISO zone."""
+
+    pass
+
+
+
+def sum_annual():
+    """takes panda df, and adds up annual usage."""
+
+    pass
+
+
+
+def percentage_fuel_type():
+    """takes panda df, and makes a percentage per each fuel type"""
+
+    pass
+
 
 
 
 if __name__ == "__main__":
-    main()
+    retrieve_from_db()
 
 
