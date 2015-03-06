@@ -2,7 +2,7 @@ test = "trees are connected"
 
 class Node(object):
 
-    def __init__(self, test=None, fuel_type=None, left=None, right=None, msg_id=None):
+    def __init__(self, threshold=None, fuel_type=None, left=None, right=None, msg_id=None):
         assert left is None or isinstance(left, Node)
         assert right is None or isinstance(right, Node)
         self.fuel_type = fuel_type     # what fuel type will be tested
@@ -15,10 +15,10 @@ class Node(object):
         current_node = self
         if current_node.left==None and current_node.right==None: # no children
             return current_node.msg_id
-        if condition_dict[fuel_type] <= current_node.threshold:
+        if condition_dict[current_node.fuel_type] <= current_node.threshold:
             current_node = current_node.left
             current_node.testing_condition(condition_dict)
-        if condition_dict[fuel_type] > current_node.threshold:
+        if condition_dict[current_node.fuel_type] > current_node.threshold:
             current_node = current_node.right
             current_node.testing_condition(condition_dict)
         return "Error in binary decision tree"
