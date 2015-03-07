@@ -1,64 +1,64 @@
 // DATA STRUCTURE -- FOR TESTING /////////////////////////////////////
 
 var fuel_mix = {
-  "Alameda": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Alpine": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Amador": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Butte": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Calaveras": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Colusa": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Contra Costa": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Del Norte": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "El Dorado": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Fresno": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Glenn": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Humboldt": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Imperial": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Inyo": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Kern": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Kings": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Lake": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Lassen": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Los Angeles": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Madera": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Marin": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Mariposa": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Mendocino": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Merced": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Modoc": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Mono": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Monterey": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Napa": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Nevada": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Orange": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Placer": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Plumas": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Riverside": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Sacramento": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "San Benito": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "San Bernardino": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "San Diego": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "San Francisco": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "San Joaquin": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "San Luis Obispo": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "San Mateo": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Santa Barbara": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Santa Clara": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Santa Cruz": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Shasta": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Sierra": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Siskiyou": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Solano": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Sonoma": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Stanislaus": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Sutter": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Tehama": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Trinity": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Tulare": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Tuolumne": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Ventura": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Yolo": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20},
-  "Yuba": {"gas":20, "coal":20, "solar":20, "wind":20, "other":20}
+  "Alameda": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Alpine": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Amador": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Butte": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Calaveras": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Colusa": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Contra Costa": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Del Norte": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "El Dorado": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Fresno": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Glenn": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Humboldt": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Imperial": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Inyo": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Kern": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Kings": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Lake": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Lassen": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Los Angeles": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Madera": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Marin": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Mariposa": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Mendocino": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Merced": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Modoc": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Mono": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Monterey": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Napa": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Nevada": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Orange": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Placer": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Plumas": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Riverside": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Sacramento": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "San Benito": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "San Bernardino": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "San Diego": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "San Francisco": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "San Joaquin": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "San Luis Obispo": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "San Mateo": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Santa Barbara": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Santa Clara": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Santa Cruz": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Shasta": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Sierra": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Siskiyou": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Solano": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Sonoma": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Stanislaus": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Sutter": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Tehama": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Trinity": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Tulare": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Tuolumne": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Ventura": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Yolo": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+  "Yuba": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14}
 };
 
 
@@ -72,8 +72,8 @@ var set_slider_values = function(data_list,county_name){
 
     var axis = d3.svg.axis().orient("top").ticks(5);
 
-    var fuel_names = ["gas", "coal", "solar", "wind", "other"],
-        slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4"];
+    var fuel_names = ["gas", "coal", "solar", "wind", "nuclear", "hydro", "other"],
+        slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4", "#slider5", "#slider6"];
 
     $.each(slider_elements, function(idx, slider_element){
         d3.select(slider_element).call(d3.slider().axis(axis)
@@ -87,7 +87,7 @@ var set_slider_values = function(data_list,county_name){
 
 
     // show the starting values in the html
-    for (var i = 0; i<5; i++){
+    for (var i = 0; i<7; i++){
       d3.select('#slider'+i+'text').text(data_list[i]);
     }
 
@@ -212,8 +212,10 @@ var set_slider_values = function(data_list,county_name){
                     v1 = fuel_mix[county_name]["coal"],
                     v2 = fuel_mix[county_name]["solar"],
                     v3 = fuel_mix[county_name]["wind"],
-                    v4 = fuel_mix[county_name]["other"];
-                var data_list = [v0,v1,v2,v3,v4];
+                    v4 = fuel_mix[county_name]["nuclear"],
+                    v5 = fuel_mix[county_name]["hydro"],
+                    v6 = fuel_mix[county_name]["other"];
+                var data_list = [v0,v1,v2,v3,v4,v5,v6];
 
               // display the c3 donut, with county-specific data.
                 //  empty old
@@ -230,6 +232,8 @@ var set_slider_values = function(data_list,county_name){
                   $('#slider2').empty();
                   $('#slider3').empty();
                   $('#slider4').empty();
+                  $('#slider5').empty();
+                  $('#slider6').empty();
                 // re-make sliders with new values
                   set_slider_values(data_list, county_name);
 
@@ -269,7 +273,7 @@ var set_slider_values = function(data_list,county_name){
 
 
     // MAKE THE DATA, to feed into the svg
-        var n = 5,
+        var n = 7,
             data;
 
 
