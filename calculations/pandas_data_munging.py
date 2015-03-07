@@ -1,4 +1,4 @@
-from pandas import DataFrame, merge
+from pandas import DataFrame
 
 
 # when launching server.py, this statement prints to confirm is connected
@@ -18,55 +18,53 @@ def retrieve_from_db():
     import model
     s = model.connect()
 
-    CA_gen_dec13 = s.execute('SELECT plant_name, state, fuel_type, dec_mwh_gen FROM ProdGensDec2013 WHERE state="CA" ')
-    CA_gen_dec13_data = CA_gen_dec13.fetchall()
+    # retrive DECEMBER production data, for all turbines at all power plants in California
+    CA_gen_dec13_obj = s.execute('SELECT plant_name, state, fuel_type, dec_mwh_gen FROM ProdGensDec2013 WHERE state="CA" ')
+    CA_gen_dec13_data = CA_gen_dec13_obj.fetchall()
     df_dec2013 = DataFrame(CA_gen_dec13_data)
     df_dec2013.columns = ['plant_name', 'state', 'fuel_type', 'dec_mwh_gen']
 
-    CA_gen_2014 = s.execute('SELECT plant_name, state, fuel_type, jan_mwh_gen, feb_mwh_gen, mar_mwh_gen, apr_mwh_gen, may_mwh_gen, jun_mwh_gen, jul_mwh_gen, aug_mwh_gen, sep_mwh_gen, oct_mwh_gen, nov_mwh_gen FROM ProdGens WHERE state="CA" ')
-    CA_gen_2014_data = CA_gen_2014.fetchall()
+    # retrive JAN-NOV 2014 production data, for all turbines at all power plants in California
+    CA_gen_2014_obj = s.execute('SELECT plant_name, state, fuel_type, jan_mwh_gen, feb_mwh_gen, mar_mwh_gen, apr_mwh_gen, may_mwh_gen, jun_mwh_gen, jul_mwh_gen, aug_mwh_gen, sep_mwh_gen, oct_mwh_gen, nov_mwh_gen FROM ProdGens WHERE state="CA" ')
+    CA_gen_2014_data = CA_gen_2014_obj.fetchall()
     df_2014 = DataFrame(CA_gen_2014_data)
     df_2014.columns = ['plant_name', 'state', 'fuel_type', 'jan_mwh_gen', 'feb_mwh_gen', 'mar_mwh_gen', 'apr_mwh_gen', 'may_mwh_gen', 'jun_mwh_gen', 'jul_mwh_gen', 'aug_mwh_gen', 'sep_mwh_gen', 'oct_mwh_gen', 'nov_mwh_gen']
 
-    ##############################################
-    # THIS SECTION IS FOR TROUBLESHOOTING!  Is all working at the moment.
+    # retrieve county name, assigned to each turbine at each plant in Californis
+    CA_counties_obj = s.execute('SELECT plant_name, state, county FROM StatsGens WHERE state="CA" GROUP BY plant_name')
+    CA_plant_counties = CA_counties_obj.fetchall()
+    df_counties = DataFrame(CA_plant_counties)
+    df_counties.columns = ['plant_name', 'state', 'county']
 
-    # print df_dec2013
-    # print df_2014
-
-    # dec_plants = df_dec2013['plant_name'].value_counts()
-    # plants = df_2014['plant_name'].value_counts()
-    # print dec_plants
-    # print plants
+    return df_dec2013, df_2014, df_counties
 
 
-    # by_fuel_plant_dec = df_dec2013.groupby(['plant_name', 'fuel_type'])
-    # # agg_counts_dec = by_fuel_plant_dec.sum()
-    # # print agg_counts_dec
 
-    # by_fuel_plant_2014 = df_2014.groupby(['plant_name', 'fuel_type'])
-    # agg_counts_2014 = by_fuel_plant_2014.sum()
-    # print agg_counts_2014
+
+def make_df_byplant_byfuel (df):
+
+    by_fuel_plant = df.groupby(['plant_name', 'fuel_type'])
+    agg_counts = by_fuel_plant.sum()
+
+    return agg_counts
+
+
+
+
+def assign_county_to_plant (df_counties, df_plant_fuel):
+    ##  need to query df_counties for county match each plant name
+
+    return df_plant_county
+
+
+
+
 
     ##############################################
 
     # TODO:  make sure to ignore (remove) for plant_name ="State-Fuel Level Increment"
 
     ##############################################
-
-    #  TODO:  get the two fuels to merge/join together
-        ## these below methods failed.
-    # by_fuel_plant = by_fuel_plant_2014.join(by_fuel_plant_dec, on="plant_name", how='left', lsuffix="_review")
-    # by_fuel_plant_2014.join(by_fuel_plant_dec, on='plant_name', how='left', lsuffix="_review")
-    # by_fuel_plant = merge(by_fuel_plant_2014, by_fuel_plant_dec, on="plant_name", how='outer')
-
-        ##  this method succeeded, however, there was zero overlap on the plant_name.
-    df_all_months = df_2014.join(df_dec2013, on='plant_name', how='inner', lsuffix="_review")
-    print df_all_months
-    by_fuel_plant = df_all_months.groupby(['plant_name', 'fuel_type'])
-
-    agg_counts = by_fuel_plant.sum()
-    print agg_counts
 
     ############################################
 
@@ -95,6 +93,18 @@ def percentage_fuel_type():
 
 
 if __name__ == "__main__":
-    retrieve_from_db()
+    db2013, db2014, db_counties = retrieve_from_db()
+
+    df_byplant_byfuel_2013 = make_df_byplant_byfuel(db2013)
+    df_byplant_byfuel_2014 = make_df_byplant_byfuel(db2014)
+
+    print df_byplant_byfuel_2014
+    print df_byplant_byfuel_2013
+
+    # aggregated_2013 = assign_county_to_plant(db_counties, df_byplant_byfuel_2013)
+    # aggregated_2014 = assign_county_to_plant(db_counties, df_byplant_byfuel_2014)
+
+    # print aggregated_2013
+    # print aggregated_2014
 
 
