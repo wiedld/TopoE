@@ -90,39 +90,40 @@ bdt_root_test = Node(left=bdt_solar_density_test1, right=bdt_solar_density_test2
 
 ###################################################################
 
-#  TEST THE DECISION TREE!
+# when this moodule gets imported into the server.py, it auto-runs and creates the bdt, and dictionary of message results.
 
-fuel_mix = {
-  "Alameda": {"gas":30, "coal":20, "solar":14, "wind":20, "nuclear": 30, "hydro":30, "other":14},
-  "Alpine": {"gas":16, "coal":14, "solar":40, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-  "Amador": {"gas":30, "coal":40, "solar":14, "wind":0, "nuclear": 14, "hydro":0, "other":14},
-  "Butte": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14}
-  }
-  # alameda should be all good.
-  # alpine should have too litte norm, and too much solar
-  # amador should be good on norm and heat, and missing renewables target.
-  # butte has too little on norm and heat waves, but at least made renewable target
+# then this specific function below, gets only called on the specific frontend data.
 
+def bdt_on_user_input(user_input_dict, bdt_root_test=bdt_root_test):
+    results_dict = {}
 
-results_dict = {}
+    for county,condition in user_input_dict.items():
 
-for county,condition in fuel_mix.items():
+        # enter into condition dict, the two additional values used in the decision tree
+        user_input_dict[county]["renewables_total"] = int(user_input_dict[county]["solar"]) + int(user_input_dict[county]["wind"]) + int(user_input_dict[county]["hydro"])
+        user_input_dict[county]["baseload_total"] = int(user_input_dict[county]["gas"]) + int(user_input_dict[county]["coal"]) + int(user_input_dict[county]["nuclear"])
 
-    # enter into condition dict, the two additional values used in the decision tree
-    fuel_mix[county]["renewables_total"] = int(fuel_mix[county]["solar"]) + int(fuel_mix[county]["wind"]) + int(fuel_mix[county]["hydro"])
-    fuel_mix[county]["baseload_total"] = int(fuel_mix[county]["gas"]) + int(fuel_mix[county]["coal"]) + int(fuel_mix[county]["nuclear"])
+        # run condition through the decision tree, and assign result to dict per county
+        results_dict[county] = bdt_root_test.testing_condition(condition)
 
-    # run condition through the decision tree, and assign result to dict per county
-    result = bdt_root_test.testing_condition(condition)
-    results_dict[county] = bdt_root_test.testing_condition(condition)
-
-print results_dict
+    return results_dict
 
 
+###################################################################
+
+# #  TEST THE DECISION TREE!
+
+# fuel_mix_test = {
+#   "Alameda": {"gas":30, "coal":20, "solar":14, "wind":20, "nuclear": 30, "hydro":30, "other":14},
+#   "Alpine": {"gas":16, "coal":14, "solar":40, "wind":14, "nuclear": 14, "hydro":14, "other":14},
+#   "Amador": {"gas":30, "coal":40, "solar":14, "wind":0, "nuclear": 14, "hydro":0, "other":14},
+#   "Butte": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14}
+#   }
+#   # alameda should be all good.
+#   # alpine should have too litte norm, and too much solar
+#   # amador should be good on norm and heat, and missing renewables target.
+#   # but has too little on norm and heat waves, but at least made renewable target
 
 
-
-
-
-
+# print bdt_on_user_input(fuel_mix_test)
 

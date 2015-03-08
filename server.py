@@ -1,12 +1,12 @@
-from flask import Flask, render_template, redirect, request, session
+from flask import Flask, render_template, redirect, request, jsonify
 import model
 import os
 
 from calculations import pandas_data_munging as pdm
 print pdm.test
 
-from calculations import binary_decision_tree as bdt
-print bdt.test
+# from calculations import binary_decision_tree as bdt
+# print bdt.test
 
 
 
@@ -21,27 +21,29 @@ def index():
     return render_template("index.html")
 
 
+
+@app.route("/scenario-result", methods=['POST'])
+def scenario_result():
+    """Take data structure from frontend, pipe through binary_decision_tree, return result to front."""
+
+    from calculations import binary_decision_tree as bdt
+    print bdt.test
+
+    user_input = request.json
+    result = bdt.bdt_on_user_input(user_input)
+
+    return jsonify(result)
+
+
+
 @app.route("/zip-county-zone")
 def zip_county_zone():
     """translate the user input zip code into: county, and the CAISO load zone.  Save all three values in session for user."""
     pass
 
-@app.route("/fuel-type-county-map")
-def fuel_type_county_map():
-    """using the db data, display a map with the fuel type per county.  Use EIA 923 data.  display format TBD."""
-    pass
-
 
 
 ###########################################################
-##  these routes are temporary.  For viewing different d3 options, which may be used later.
-
-
-@app.route("/donut")
-def donuts():
-    return render_template("donuts.html")
-
-
 ###########################################################
 
 
@@ -49,6 +51,7 @@ def donuts():
 def main():
     """For future use."""
     pass
+
 
 if __name__ == "__main__":
     main()

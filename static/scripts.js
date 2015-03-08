@@ -63,6 +63,7 @@ var fuel_mix = {
 
 
 ///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 //  SLIDERS, with src js script import in html DOM, before this js file
 
 
@@ -117,6 +118,7 @@ var set_slider_values = function(data_list,county_name){
 
 
 
+//////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 // TOPOJSON -- COUNTY MAP  ///////////////////////////////////////////////
 
@@ -331,6 +333,31 @@ var set_slider_values = function(data_list,county_name){
   };
 
 
+
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+  // EVENT HANDLING //////////////////////////////////////////////
+
+
+function runScenario(evt){
+  evt.preventDefault();
+  console.log("runScenario js function");
+
+  $.ajax('scenario-result', {
+    type: 'POST',
+    data: JSON.stringify(fuel_mix),
+    contentType: 'application/json',
+    success: function(data, status, result){
+      var scenario_result = JSON.parse(result.responseText);
+      console.log(scenario_result);
+    }
+  });
+
+}
+
+
+$('#submit').on("click", runScenario);
 
 
 
