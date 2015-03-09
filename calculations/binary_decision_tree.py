@@ -52,11 +52,9 @@ class Node(object):
             return current_node.testing_condition(condition_dict)
 
 
-        ## LESSON LEARNED.  recursion makes another instance of this function, and pauses (yield?) the original function.  Will return to the original function afterwards.
-        ##  so using this return below, will overwrite the return current_node.msg above.  Since return in recursion just ends the current recursive function, but DOES NOT END earlier versions of this function called!
-        # return "Error in binary decision tree"
+        ## LESSON LEARNED.  recursion makes another instance of this function, and pauses the original function.  Will return to the original function afterwards.
 
-        ## LESSON LEARNED.  since recursive functions which return the result (self.msg), then return to continue the idled functions started earlier....the return result will be overwritten.  therefore, need to call the recursive function be "return recursive_function(self,params)".  so final return function, returns to the previos function which was puased, which returns to the previos function pasued, etc up the tree.
+        ## LESSON LEARNED.  since recursive functions which return the result (self.msg), then return to continue the idled functions started earlier....the return result will be overwritten.  therefore, need to call the recursive function be "return recursive_function(self,params)".  so final return function, returns to the previos function which was paused, which returns to the previos function paused, etc up the tree.
 
 
 ##################################################################

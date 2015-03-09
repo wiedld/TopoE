@@ -62,6 +62,95 @@ var fuel_mix = {
 };
 
 
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+  // SCENARIO RESULT -- EVENT HANDLING /////////////////////////////
+
+
+function runScenario(evt){
+  evt.preventDefault();
+  console.log("runScenario js function");
+
+  $.ajax('scenario-result', {
+    type: 'POST',
+    data: JSON.stringify(fuel_mix),
+    contentType: 'application/json',
+    success: function(data, status, result){
+      scenario_result = JSON.parse(result.responseText);
+      console.log(scenario_result);
+      $('#display-results').css('visibility','visible');
+    }
+  });
+
+}
+
+var scenario_result = {};
+$('#submit').on("click", runScenario);
+
+
+
+// var scenario_result = {
+//   "Alameda": "not tested yet",
+//   "Alpine": "not tested yet",
+//   "Amador": "not tested yet",
+//   "Butte": "not tested yet",
+//   "Calaveras": "not tested yet",
+//   "Colusa": "not tested yet",
+//   "Contra Costa": "not tested yet",
+//   "Del Norte": "not tested yet",
+//   "El Dorado": "not tested yet",
+//   "Fresno": "not tested yet",
+//   "Glenn": "not tested yet",
+//   "Humboldt": "not tested yet",
+//   "Imperial": "not tested yet",
+//   "Inyo": "not tested yet",
+//   "Kern": "not tested yet",
+//   "Kings": "not tested yet",
+//   "Lake": "not tested yet",
+//   "Lassen": "not tested yet",
+//   "Los Angeles": "not tested yet",
+//   "Madera": "not tested yet",
+//   "Marin": "not tested yet",
+//   "Mariposa": "not tested yet",
+//   "Mendocino": "not tested yet",
+//   "Merced": "not tested yet",
+//   "Modoc": "not tested yet",
+//   "Mono": "not tested yet",
+//   "Monterey": "not tested yet",
+//   "Napa": "not tested yet",
+//   "Nevada": "not tested yet",
+//   "Orange": "not tested yet",
+//   "Placer": "not tested yet",
+//   "Plumas": "not tested yet",
+//   "Riverside": "not tested yet",
+//   "Sacramento": "not tested yet",
+//   "San Benito": "not tested yet",
+//   "San Bernardino": "not tested yet",
+//   "San Diego": "not tested yet",
+//   "San Francisco": "not tested yet",
+//   "San Joaquin": "not tested yet",
+//   "San Luis Obispo": "not tested yet",
+//   "San Mateo": "not tested yet",
+//   "Santa Barbara": "not tested yet",
+//   "Santa Clara": "not tested yet",
+//   "Santa Cruz": "not tested yet",
+//   "Shasta": "not tested yet",
+//   "Sierra": "not tested yet",
+//   "Siskiyou": "not tested yet",
+//   "Solano": "not tested yet",
+//   "Sonoma": "not tested yet",
+//   "Stanislaus": "not tested yet",
+//   "Sutter": "not tested yet",
+//   "Tehama": "not tested yet",
+//   "Trinity": "not tested yet",
+//   "Tulare": "not tested yet",
+//   "Tuolumne": "not tested yet",
+//   "Ventura": "not tested yet",
+//   "Yolo": "not tested yet",
+//   "Yuba": "not tested yet"
+// };
+
+
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 //  SLIDERS, with src js script import in html DOM, before this js file
@@ -121,6 +210,9 @@ var set_slider_values = function(data_list,county_name){
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 // TOPOJSON -- COUNTY MAP  ///////////////////////////////////////////////
+
+
+var make_topojson_map = function(){
 
     // MAKE THE SVG
 
@@ -239,6 +331,10 @@ var set_slider_values = function(data_list,county_name){
                 // re-make sliders with new values
                   set_slider_values(data_list, county_name);
 
+              // input the scenario results.  Note: this div is hidden until after the scenario is run!
+                  $('#display-results').text(scenario_result[county_name]);
+
+
             } else {
               x = width / (2.5);
               y = height / (2.5);
@@ -246,6 +342,7 @@ var set_slider_values = function(data_list,county_name){
               centered = null;
               $('#fuel-donut').empty();
               $('#slider-wrapper').css('visibility','hidden');
+              $('#display-results').empty();
             }
 
             // bind all the clicked paths to the class .active
@@ -257,6 +354,10 @@ var set_slider_values = function(data_list,county_name){
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
                 .style("stroke-width", 1.5 / k + "px");
       }
+
+};
+
+make_topojson_map();
 
 
 
@@ -331,33 +432,6 @@ var set_slider_values = function(data_list,county_name){
 
 
   };
-
-
-
-
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-  // EVENT HANDLING //////////////////////////////////////////////
-
-
-function runScenario(evt){
-  evt.preventDefault();
-  console.log("runScenario js function");
-
-  $.ajax('scenario-result', {
-    type: 'POST',
-    data: JSON.stringify(fuel_mix),
-    contentType: 'application/json',
-    success: function(data, status, result){
-      var scenario_result = JSON.parse(result.responseText);
-      console.log(scenario_result);
-    }
-  });
-
-}
-
-
-$('#submit').on("click", runScenario);
 
 
 
