@@ -31,7 +31,7 @@ return function module() {
       step = 0.01,
       animate = true,
       orientation = "horizontal",
-      axis = false,
+      axis = true,
       margin = 50,
       value,
       active = 1,

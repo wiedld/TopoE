@@ -62,33 +62,6 @@ var fuel_mix = {
 };
 
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-  // SCENARIO RESULT -- EVENT HANDLING /////////////////////////////
-
-
-function runScenario(evt){
-  evt.preventDefault();
-  console.log("runScenario js function");
-
-  $.ajax('scenario-result', {
-    type: 'POST',
-    data: JSON.stringify(fuel_mix),
-    contentType: 'application/json',
-    success: function(data, status, result){
-      scenario_result = JSON.parse(result.responseText);
-      console.log(scenario_result);
-      $('#display-results').css('visibility','visible');
-    }
-  });
-
-}
-
-var scenario_result = {};
-$('#submit').on("click", runScenario);
-
-
-
 // var scenario_result = {
 //   "Alameda": "not tested yet",
 //   "Alpine": "not tested yet",
@@ -174,6 +147,7 @@ var set_slider_values = function(data_list,county_name){
           )
         );
     });
+    console.log(axis);
 
 
     // show the starting values in the html
@@ -432,6 +406,38 @@ make_topojson_map();
 
 
   };
+
+
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+  // SCENARIO RESULT -- EVENT HANDLING /////////////////////////////
+
+
+function runScenario(evt){
+  evt.preventDefault();
+  console.log("runScenario js function");
+
+  $.ajax('scenario-result', {
+    type: 'POST',
+    data: JSON.stringify(fuel_mix),
+    contentType: 'application/json',
+    success: function(data, status, result){
+      scenario_result = JSON.parse(result.responseText);
+      console.log(scenario_result);
+      $('#instructions').empty();
+      $('#display-results').css('visibility','visible');
+      $('#see-results').css('visibility','visible');
+
+    }
+  });
+
+}
+
+var scenario_result = {};
+$('#submit').on("click", runScenario);
+
 
 
 

@@ -6,7 +6,7 @@ test = "trees are connected"
 # SCENARIO RESULTS -- tied to the leaves of the binary decision tree.
 
 msg_condition_results = {
-    1: "Your customers complain about lossing energy on a normal basis, and the electric grid tends to go dark during heat waves.  Also, your company is being charged by the state for failing their renewables target.",
+    1: "Your customers complain about losing energy on a normal basis, and the electric grid tends to go dark during heat waves.  Also, your company is being charged by the state for failing their renewables target.",
     2: "Your customers lose power during normal days and heat waves, but at least you have made your renewables target to help the environment!",
     3: "Your electric grid doesn't have enough energy to function on most days, but has too much energy during sunny heat waves -- causing local areas in the grid to melt down (e.g. voltage flux).",
     4: "You definitely keep the lights on for your customers, during both the normal days and the hot ones.  However, your environmental foresight is lacking and your grandchildren have asthma.",

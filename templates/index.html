@@ -52,19 +52,29 @@
     <div class="row">
 
       <section class="col-sm-8">
-        <div class="chart-wrapper">
-            <div id="topomap">
-              <!-- This is where the topojson is rendered. -->
-            </div>
+        <div class="row">
+          <h2 id="instructions">Click on each county, and adjust the fuel mix!</h2>
+
+          <div id="see-results" style='visibility:hidden'>
+            <h2>To see your results, click on each county again!</h2>
+          </div>
+          <div id="display-results" style='visibility:hidden'>
+                <!-- This is where the scenario results will be displayed. -->
+          </div>
         </div>
-        <div id="display-results" style='visibility:hidden'>
-              <!-- This is where the scenario results will be displayed. -->
+
+        <div class="row">
+          <div class="chart-wrapper">
+              <div id="topomap">
+                <!-- This is where the topojson is rendered. -->
+              </div>
+          </div>
         </div>
       </section>
 
       <section id="fuels-per-county" class="col-sm-4">
         <div class = "row">
-          <div class = "col-sm-1">
+          <div class = "col-sm-3">
               <div id="scenario-div">
                 <form id="scenario">
                   <button id='submit'>Run Scenario</button>
@@ -72,7 +82,7 @@
                 </form>
               </div>
           </div>
-          <div class = "col-sm-11">
+          <div class = "col-sm-9">
               <div class="chart-wrapper">
                 <div id="fuel-donut">
                   <!-- Fuel donut will go here. -->
