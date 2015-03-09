@@ -31,22 +31,46 @@ def retrieve_from_db():
     df_2014.columns = ['plant_name', 'state', 'fuel_type', 'jan_mwh_gen', 'feb_mwh_gen', 'mar_mwh_gen', 'apr_mwh_gen', 'may_mwh_gen', 'jun_mwh_gen', 'jul_mwh_gen', 'aug_mwh_gen', 'sep_mwh_gen', 'oct_mwh_gen', 'nov_mwh_gen']
 
     # retrieve county name, assigned to each turbine at each plant in Californis
-    CA_counties_obj = s.execute('SELECT plant_name, state, county FROM StatsGens WHERE state="CA" GROUP BY plant_name')
+    CA_counties_obj = s.execute('SELECT plant_name, county FROM StatsGens WHERE state="CA" GROUP BY plant_name')
     CA_plant_counties = CA_counties_obj.fetchall()
     df_counties = DataFrame(CA_plant_counties)
-    df_counties.columns = ['plant_name', 'state', 'county']
+    df_counties.columns = ['plant_name', 'county']
+    # now convert into dict, so caan easily add county to other df.
+    dict_counties={}
+    for idx, row in enumerate(df_counties.values):
+        plant_name, county = row
+        dict_counties[plant_name] = county
 
-    return df_dec2013, df_2014, df_counties
+
+    return df_dec2013, df_2014, dict_counties
 
 
 
 
-def assign_county_to_plant (df_counties, df_plant_fuel):
-    left = df_counties.set_index('plant_name')
-    right = df_plant_fuel.set_index('plant_name')
+def assign_county_to_plant (dict_counties, df_plant_fuel):
 
-    df_plant_county = left.join(right, lsuffix='_l', rsuffix='_r')
-    return df_plant_county
+    # rename "state" column to "county"
+    df_plant_fuel.rename(columns={'state':'county'}, inplace=True)
+
+    # make a template for the completed df
+    columns = df_plant_fuel.columns
+    completed_df = DataFrame(columns=columns)
+
+    # replace state names, with county names retrieved from dict
+    #  note -- the retrieved row in only a copy, not the original.
+    #  therefore, need to insert the row (a numpy ndarray) to a new dataframe
+    for idx,row in enumerate(df_plant_fuel.values):
+        plant_name = row[0]
+        if plant_name in dict_counties:
+            row[1] = dict_counties[plant_name]  # returns county
+            print row
+            completed_df = completed_df.append(DataFrame(data=row))
+
+    # now filter the new df, to only include plants where we have the county.
+    #   meaning, where county != 'CA'
+    # completed_df = df_plant_fuel[(df_plant_fuel['county'] != 'CA')]
+
+    print completed_df
 
 
 
@@ -94,17 +118,10 @@ def percentage_fuel_type():
 
 
 if __name__ == "__main__":
-    db2013, db2014, db_counties = retrieve_from_db()
+    df2013, df2014, dict_counties = retrieve_from_db()
 
-    # df_byplant_byfuel_2013 = make_df_byplant_byfuel(db2013)
-    # df_byplant_byfuel_2014 = make_df_byplant_byfuel(db2014)
-
-    # print df_byplant_byfuel_2014 #323
-    # print df_byplant_byfuel_2013 #292
-    # print db_counties #934
-
-    completed_df_2013 = assign_county_to_plant(db_counties, db2013)
-    completed_df_2014 = assign_county_to_plant(db_counties, db2014)
+    completed_df_2013 = assign_county_to_plant(dict_counties, df2013)
+    completed_df_2014 = assign_county_to_plant(dict_counties, df2014)
 
     print completed_df_2013
     print completed_df_2014
