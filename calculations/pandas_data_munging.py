@@ -1,4 +1,4 @@
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
 
 # when launching server.py, this statement prints to confirm is connected
@@ -47,51 +47,65 @@ def retrieve_from_db():
 
 
 
-def assign_county_to_plant (dict_counties, df_plant_fuel):
 
-    # rename "state" column to "county"
-    df_plant_fuel.rename(columns={'state':'county'}, inplace=True)
+def assign_county_and_agg(dict_counties, fuel_codes, df_jan_to_nov, df_dec):
+    # output of function  = makes dictionary of counties
+    fuel_per_county = { }
+    for county in dict_counties.values():
+        starting_totals = [0,0,0,0,0,0,0,0,0,0,0,0]
+        fuel_per_county[county] = {
+            "gas":starting_totals,
+            "coal":starting_totals,
+            "solar":starting_totals,
+            "wind":starting_totals,
+            "nuclear": starting_totals,
+            "hydro":starting_totals,
+            "other":starting_totals
+            }
 
-    # make a template for the completed df
-    columns = df_plant_fuel.columns
-    completed_df = DataFrame(columns=columns)
+    #  note -- the retrieved row in only a copy, not the original. Dataframes are good for data manipulation (e.g. pivot table), but are not very mutable.
+    for idx,row in enumerate(df_jan_to_nov.values):
+        plant_name = row[0]     # for each row, get the plant name
 
-    # replace state names, with county names retrieved from dict
-    #  note -- the retrieved row in only a copy, not the original.
-    #  therefore, need to insert the row (a numpy ndarray) to a new dataframe
-    for idx,row in enumerate(df_plant_fuel.values):
-        plant_name = row[0]
+        # make sure we know the county, before we take the data
         if plant_name in dict_counties:
-            row[1] = dict_counties[plant_name]  # returns county
-            print row
-            completed_df = completed_df.append(DataFrame(data=row))
+            county = dict_counties[plant_name]  # update county, for each plant (each row)
 
-    # now filter the new df, to only include plants where we have the county.
-    #   meaning, where county != 'CA'
-    # completed_df = df_plant_fuel[(df_plant_fuel['county'] != 'CA')]
+            # get all the data, and insert into nested dict
+            plant_name, fuel_type, mwh_gen = row[0], row[2], row[3:]
+            # convert fuel code, to actual fuel name
+            fuel_type_name = fuel_codes[fuel_type]
 
-    print completed_df
+            # add to dict, summing the list per month:
+            already_in_dict = fuel_per_county[county][fuel_type_name]
+            replace_in_dict = [ (mwh_gen[i]+int(already_in_dict[i]) ) for i in range(len(mwh_gen)) ]
+
+            fuel_per_county[county][fuel_type_name] = replace_in_dict
+
+    # add the december fuel data. make sure to add the 12th month
+    for idx,row in enumerate(df_dec.values):
+        plant_name = row[0]     # for each row, get the plant name
+
+        # make sure we know the county, before we take the data
+        if plant_name in dict_counties:
+            county = dict_counties[plant_name]  # update county, for each plant (each row)
+
+        # get all the data, and insert into nested dict
+            plant_name, fuel_type, mwh_gen = row[0], row[2], row[3:]
+            # convert fuel code, to actual fuel name
+            fuel_type_name = fuel_codes[fuel_type]
+
+            # add to dict, as the 12th month in the list:
+            in_dict = fuel_per_county[county][fuel_type_name]
+            if len(in_dict) < 12:
+                in_dict.append(int(mwh_gen))
+            else:
+                in_dict[11] += int(mwh_gen)
+            fuel_per_county[county][fuel_type_name] = in_dict
+
+    return fuel_per_county
 
 
-
-# def make_df_byplant_byfuel (df):
-
-#     by_fuel_plant = df.groupby(['plant_name', 'fuel_type'])
-#     agg_counts = by_fuel_plant.sum()
-
-#     return agg_counts
-
-
-
-
-
-    ##############################################
-
-    # TODO:  make sure to ignore (remove) for plant_name ="State-Fuel Level Increment"
-
-    ##############################################
-
-    ############################################
 
 
 
@@ -116,14 +130,58 @@ def percentage_fuel_type():
 
 
 
+fuel_codes = {
+    "BIT":'coal',
+    "ANT":'coal',
+    "LIG":'coal',
+    "SUB":'coal',
+    "RC":'coal',
+    "WC":'coal',
+    "CBL":'coal',
+    "DFO":'other',  # technically, fuel oil
+    "RFO":'other',  # technically, refined oil
+    "JF":'other',   # jet fuel
+    "KER":'other',  # kerosene
+    "WO":'other',   # waste oil
+    "PC":'other',    # pertro coke
+    "NG":'gas',
+    "BFG":'gas',
+    "OG":'gas',
+    "PG":'gas',     # propane gas
+    "SG":'other',   # syngas from petro
+    "SGC":'coal',   # syngas from coal
+    "AB":'other',   # agri waste
+    "MSW":'other',  # muni waste
+    "OBS":'other',  # other solid biomass waste
+    "WDS":'other',  # wood waste
+    "OBL":'other',  # biomass liquid
+    "SLW":'other',  # sludge
+    "BLQ":'other',  # black liqour
+    "WDL":'other',   # wood waste liquids
+    "WAT":'hydro',
+    "OBG":'other',
+    "GEO":'other',
+    "LFG":'other',  # landfill gas...not gas from drilling
+    "SUN":'solar',
+    "NUC":'nuclear',
+    "WND":'wind',
+    "TDF":'other',
+    "MSB":'other',
+    "MSN":'other',
+    "WH":'other'
+}
+
+
 
 if __name__ == "__main__":
     df2013, df2014, dict_counties = retrieve_from_db()
 
-    completed_df_2013 = assign_county_to_plant(dict_counties, df2013)
-    completed_df_2014 = assign_county_to_plant(dict_counties, df2014)
+    df2013_by_fuel = df2013.groupby(['fuel_type'])
+    agg_counts = df2013_by_fuel.sum()
+    print agg_counts
 
-    print completed_df_2013
-    print completed_df_2014
+    assign_county_and_agg(dict_counties, fuel_codes, df2014, df2013)
+
+
 
 
