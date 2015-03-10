@@ -8,13 +8,15 @@ test = "pandas is connected"
 
 ##########################################################################
 
-"""These calculations are used for 1 of 2 purposes:
+"""These calculations are used for 1 of 3 purposes:
 
-    (1) to create the starting counts of fuel percentages for the topojson map on the frontend.
+    (1) PER COUNTY (in California) -- to create the starting counts of fuel percentages for the topojson map on the frontend.
 
-    (2) to provide data to for the prediction of current fuel usage
+    (2) PER STATE (in USA) -- to create the starting counts of fuel percentages for the topojson map on the frontend.
 
-The first two functions below, are for these purposes.  And call to other functions, as needed, to perform specific tasks."""
+    (3) to provide data to for the prediction of current fuel usage
+
+The first three functions below, are for these purposes.  And call to other functions, as needed, to perform specific tasks."""
 
 ##########################################################################
 
@@ -22,18 +24,38 @@ The first two functions below, are for these purposes.  And call to other functi
 def fuel_mix_for_map():
     # retrieve raw data from persistent database
     df2013, df2014, dict_counties = retrieve_from_db()
+
     # process data into a single, nested dict.  listing all 12 months (per fuel, per county)
     fuel_mix_12mo = assign_county_and_agg(dict_counties, fuel_codes, df2014, df2013)
-    print "FUEL MIX 12 MO:\n",fuel_mix_12mo
-    print
+
     # sum annually,
     annual_mix = sum_annual(fuel_mix_12mo)
-    print "FUEL MIX ANNUAL:\n",annual_mix
-    print
+
     #  then convert to percentages, for frontend data map
     fuel_mix_for_map = annual_percentages(annual_mix)
-    print "FUEL MIX PERCENTS:\n",fuel_mix_for_map
-    print
+
+    # return to the flask route calling this py file.
+    return fuel_mix_for_map
+
+
+
+
+def fuel_mix_for_map_usa():
+    # retrieve raw data from persistent database
+    df2013_states, df2014_states = retrieve_from_db_usa()
+
+    # process data into a single, nested dict.  listing all 12 months (per fuel, per state)
+    fuel_mix_12mo = agg_by_state(fuel_codes, df2014_states, df2013_states)
+    # print "FUEL MIX 12 MO:\n",fuel_mix_12mo
+    # print
+    # sum annually,
+    annual_mix = sum_annual(fuel_mix_12mo)
+    # print "FUEL MIX ANNUAL:\n",annual_mix
+    # print
+    #  then convert to percentages, for frontend data map
+    fuel_mix_for_map = annual_percentages(annual_mix)
+    # print "FUEL MIX PERCENTS:\n",fuel_mix_for_map
+    # print
 
     # return to the flask route calling this py file.
     return fuel_mix_for_map
@@ -41,7 +63,8 @@ def fuel_mix_for_map():
 
 
 ###########################################################################
-
+##########################################################################
+# FUNCTIONS SPECIFIC FOR COUNTY MAP
 
 def retrieve_from_db():
     """imports model, pulls mwh production data from db, and places into pandas df.
@@ -155,12 +178,126 @@ def assign_county_and_agg(dict_counties, fuel_codes, df_jan_to_nov, df_dec):
 
 
 
+
+def counties_into_CAISO():
+    """takes panda df, and sorts by counties in each CAISO zone."""
+
+    pass
+
+
+
+###########################################################################
+##########################################################################
+# FUNCTIONS SPECIFIC FOR USA (STATES)
+
+
+def retrieve_from_db_usa():
+    """imports model, pulls mwh production data from db, and places into pandas df.
+    Also pulls state for each plant_name, and places into dict."""
+
+    # add parent directory to the path, so can import model.py
+    #  need model in order to update the database when this task is activated by cron
+    import os
+    parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    os.sys.path.insert(0,parentdir)
+    import model
+    s = model.connect()
+
+    # retrive DECEMBER production data, for all turbines at all power plants in California
+    USA_gen_dec13_obj = s.execute('SELECT plant_name, state, fuel_type, dec_mwh_gen FROM ProdGensDec2013 ')
+    USA_gen_dec13_data = USA_gen_dec13_obj.fetchall()
+    df_dec2013 = DataFrame(USA_gen_dec13_data)
+    df_dec2013.columns = ['plant_name', 'state', 'fuel_type', 'dec_mwh_gen']
+
+    # retrive JAN-NOV 2014 production data, for all turbines at all power plants in USA
+    USA_gen_2014_obj = s.execute('SELECT plant_name, state, fuel_type, jan_mwh_gen, feb_mwh_gen, mar_mwh_gen, apr_mwh_gen, may_mwh_gen, jun_mwh_gen, jul_mwh_gen, aug_mwh_gen, sep_mwh_gen, oct_mwh_gen, nov_mwh_gen FROM ProdGens ')
+    USA_gen_2014_data = USA_gen_2014_obj.fetchall()
+    df_2014 = DataFrame(USA_gen_2014_data)
+    df_2014.columns = ['plant_name', 'state', 'fuel_type', 'jan_mwh_gen', 'feb_mwh_gen', 'mar_mwh_gen', 'apr_mwh_gen', 'may_mwh_gen', 'jun_mwh_gen', 'jul_mwh_gen', 'aug_mwh_gen', 'sep_mwh_gen', 'oct_mwh_gen', 'nov_mwh_gen']
+
+    return df_dec2013, df_2014
+
+
+
+
+
+def agg_by_state(fuel_codes, df_jan_to_nov, df_dec):
+    """takes all 12 months of data, spread across two df's, and combines.
+    places into more mutable nested dict structure.
+    assigns, and aggregates, by county (using plant_name/county dict)."""
+
+    # output of function  = makes dictionary of states
+    fuel_per_state = { }
+
+    #  note -- the retrieved row in only a copy, not the original. Dataframes are good for data manipulation (e.g. pivot table), but are not very mutable.
+    for idx,row in enumerate(df_jan_to_nov.values):
+        # plant_name = row[0]     # for each row, get the plant name
+
+
+        # get all the data, and insert into nested dict
+        plant_name, state, fuel_type, mwh_gen = row[0], row[1], row[2], row[3:]
+        # convert fuel code, to actual fuel name
+        fuel_type_name = fuel_codes[fuel_type]
+
+        starting_totals = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+        # only add to dict, if not "State Incremental Fuel Level":
+        if plant_name != "State-Fuel Level Increment":
+            print plant_name
+            # add to dict, summing the list per month:
+            if state not in fuel_per_state:
+                fuel_per_state[state] = {
+                "gas":starting_totals,
+                "coal":starting_totals,
+                "solar":starting_totals,
+                "wind":starting_totals,
+                "nuclear": starting_totals,
+                "hydro":starting_totals,
+                "other":starting_totals
+                }
+
+            already_in_dict = fuel_per_state[state][fuel_type_name]
+            replace_in_dict = [ (mwh_gen[i]+int(already_in_dict[i]) ) for i in range(len(mwh_gen)) ]
+
+            fuel_per_state[state][fuel_type_name] = replace_in_dict
+
+    # add the december fuel data. make sure to add the 12th month
+    for idx,row in enumerate(df_dec.values):
+        plant_name = row[0]     # for each row, get the plant name
+
+        # make sure we know the state, before we take the data
+        if plant_name != "State-Fuel Level Increment":
+            print plant_name
+
+        # get all the data, and insert into nested dict
+            plant_name, state, fuel_type, mwh_gen = row[0], row[1], row[2], row[3:]
+            # convert fuel code, to actual fuel name
+            fuel_type_name = fuel_codes[fuel_type]
+
+            # add to dict, as the 12th month in the list:
+            in_dict = fuel_per_state[state][fuel_type_name]
+            if len(in_dict) < 12:
+                in_dict.append(int(mwh_gen))
+            else:
+                in_dict[11] += int(mwh_gen)
+            fuel_per_state[state][fuel_type_name] = in_dict
+
+    return fuel_per_state
+
+
+
+
+###########################################################################
+##########################################################################
+# NOT SPECIFIC FUNCTIONS.  Used for counties and states.
+
+
 def sum_annual(nested_dict):
-    """takes nested dict {county:{fuel: [jan,feb,...]} }, and adds up annual usage."""
+    """takes nested dict {county/state:{fuel: [jan,feb,...]} }, and adds up annual usage."""
 
     annual_fuel_mix = {}
-    # look at the mix per county.  {fuel: [jan,feb,...], fuel: ...}
-    for county, fuel_mix in nested_dict.items():
+    # look at the mix per county/state.  {fuel: [jan,feb,...], fuel: ...}
+    for geo_pt, fuel_mix in nested_dict.items():
         add_to_dict = {}
         # look at each fuel, in the mix.  fuel: [jan,feb,...].  per month
         for fuel_type, per_mo in fuel_mix.items():
@@ -169,25 +306,24 @@ def sum_annual(nested_dict):
                 mwh = per_mo[i]
                 annual_sum += mwh
             add_to_dict[fuel_type] = annual_sum
-        annual_fuel_mix[county] = add_to_dict
+        annual_fuel_mix[geo_pt] = add_to_dict
 
     return annual_fuel_mix
 
 
 
 
-
 def annual_percentages(nested_dict):
     """takes nested dict of annual mwh gen,
-        {county:{fuel:int, fuel:int, ...}, county:...},
+        {county/state:{fuel:int, fuel:int, ...}, county/state:...},
          and converts to a percentage per each fuel type"""
 
     #new output dict
     dict_with_percentage = {}
 
-    # look at the mix per county.  {fuel:...,fuel:...}
-    for county, fuel_mix in nested_dict.items():
-        dict_with_percentage[county] = {
+    # look at the mix per county/state.  {fuel:...,fuel:...}
+    for geo_pt, fuel_mix in nested_dict.items():
+        dict_with_percentage[geo_pt] = {
             "gas":0,
             "coal":0,
             "solar":0,
@@ -204,18 +340,9 @@ def annual_percentages(nested_dict):
         for fuel,mwh in fuel_mix.items():
             if mwh != 0:
                 percent_as_num = (mwh/sum_mwh)*100
-                dict_with_percentage[county][fuel] = round(percent_as_num,0)
+                dict_with_percentage[geo_pt][fuel] = round(percent_as_num,0)
 
     return dict_with_percentage
-
-
-
-
-
-def counties_into_CAISO():
-    """takes panda df, and sorts by counties in each CAISO zone."""
-
-    pass
 
 
 
@@ -259,7 +386,12 @@ fuel_codes = {
     "TDF":'other',
     "MSB":'other',
     "MSN":'other',
-    "WH":'other'
+    "WH":'other',
+    "SC": 'coal',    # syncoal (low ash)
+    "OTH":'gas',     # other gases
+    "PUR": 'other',  # I could not identify
+    "SGP": 'other',     # I coudl not identify
+    "MWH": 'other'      # bad data entry
 }
 
 

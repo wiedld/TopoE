@@ -10,6 +10,7 @@
   color: black;
 }
 
+  /*styling for the county maps*/
 #CA_counties {
   fill: #aaa;
 }
@@ -26,6 +27,28 @@
   stroke-linecap: round;
   pointer-events: none;
 }
+
+
+  /*styling for the usa map*/
+
+#states {
+  fill: #aaa;
+}
+
+#states .active {
+  fill: orange;
+}
+
+#state-borders {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+
 
 
 /*STYLING FOR SLIDERS*/

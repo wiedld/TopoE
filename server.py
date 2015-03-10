@@ -23,7 +23,6 @@ def index():
 
 
 
-
 @app.route("/county-map", methods=['POST'])
 def county_map_data():
     """get data for topojson map of counties.  Called during initial rendering."""
@@ -43,6 +42,39 @@ def scenario_result():
 
     user_input = request.json
     result = bdt.bdt_on_user_input(user_input)
+
+    return jsonify(result)
+
+
+#########################################################
+#########################################################
+# TRYING OUT ANOTHER MAP
+
+@app.route("/usa")
+def index2():
+    """Initial rendering when begin on page"""
+    return render_template("index2.html")
+
+
+@app.route("/usa-map", methods=['POST'])
+def usa_map_data():
+    """get data for topojson map of counties.  Called during initial rendering."""
+
+    data_for_topojson = pdm.fuel_mix_for_map_usa()
+    return jsonify(data_for_topojson)
+
+
+
+
+@app.route("/scenario-result-usa", methods=['POST'])
+def scenario_result_usa():
+    """Take data structure from frontend, pipe through binary_decision_tree, return result to front."""
+
+    from calculations import binary_decision_tree as bdt
+    print bdt.test
+
+    user_input = request.json
+    result = bdt.bdt_on_user_input_usa(user_input)
 
     return jsonify(result)
 

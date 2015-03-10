@@ -107,6 +107,24 @@ def bdt_on_user_input(user_input_dict, bdt_root_test=bdt_root_test):
     return results_dict
 
 
+
+# TESTING ANOTHER INTERACTIVE MAP, WITH WHOLE USA
+def bdt_on_user_input_usa(user_input_dict, bdt_root_test=bdt_root_test):
+    results_dict = {}
+
+    for state,condition in user_input_dict.items():
+
+        # enter into condition dict, the two additional values used in the decision tree
+        user_input_dict[state]["renewables_total"] = int(user_input_dict[state]["solar"]) + int(user_input_dict[state]["wind"]) + int(user_input_dict[state]["hydro"])
+        user_input_dict[state]["baseload_total"] = int(user_input_dict[state]["gas"]) + int(user_input_dict[state]["coal"]) + int(user_input_dict[state]["nuclear"])
+
+        # run condition through the decision tree, and assign result to dict per state
+        results_dict[state] = bdt_root_test.testing_condition(condition)
+
+    return results_dict
+
+
+
 ###################################################################
 
 # #  TEST THE DECISION TREE!
