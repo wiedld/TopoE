@@ -18,7 +18,20 @@ app.secret_key = os.environ["flask_app_key"]
 @app.route("/")
 def index():
     """Initial rendering when begin on page"""
+
     return render_template("index.html")
+
+
+
+
+@app.route("/county-map", methods=['POST'])
+def county_map_data():
+    """get data for topojson map of counties.  Called during initial rendering."""
+
+    data_for_topojson = pdm.fuel_mix_for_map()
+    print data_for_topojson
+    return jsonify(data_for_topojson)
+
 
 
 
@@ -33,13 +46,6 @@ def scenario_result():
     result = bdt.bdt_on_user_input(user_input)
 
     return jsonify(result)
-
-
-
-@app.route("/zip-county-zone")
-def zip_county_zone():
-    """translate the user input zip code into: county, and the CAISO load zone.  Save all three values in session for user."""
-    pass
 
 
 

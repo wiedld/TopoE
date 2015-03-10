@@ -23,8 +23,10 @@ def fuel_mix_for_map():
     df2013, df2014, dict_counties = retrieve_from_db()
     # process data into a single, nested dict.  listing all 12 months (per fuel, per county)
     fuel_mix_12mo = assign_county_and_agg(dict_counties, fuel_codes, df2014, df2013)
-    # sum annually, for frontend data map
-    fuel_mix_for_map = sum_annual(fuel_mix_12mo)
+    # sum annually,
+    annual_mix = sum_annual(fuel_mix_12mo)
+    #  then convert to percentages, for frontend data map
+    fuel_mix_for_map = annual_percentages(annual_mix)
 
     # return to the flask route calling this py file.
     return fuel_mix_for_map
@@ -144,14 +146,13 @@ def assign_county_and_agg(dict_counties, fuel_codes, df_jan_to_nov, df_dec):
 
 def sum_annual(nested_dict):
     """takes nested dict {county:{fuel: [jan,feb,...]} }, and adds up annual usage."""
+
     annual_fuel_mix = {}
     # look at the mix per county.  {fuel: [jan,feb,...], fuel: ...}
     for county, fuel_mix in nested_dict.items():
         add_to_dict = {}
         # look at each fuel, in the mix.  fuel: [jan,feb,...].  per month
         for fuel_type, per_mo in fuel_mix.items():
-            print "fuel:", fuel_type
-            print per_mo
             annual_sum = 0
             for i in range(len(per_mo)):
                 mwh = per_mo[i]
@@ -165,19 +166,36 @@ def sum_annual(nested_dict):
 
 
 
+def annual_percentages(nested_dict):
+    """takes nested dict of annual mwh gen,
+        {county:{fuel:int, fuel:int, ...}, county:...},
+         and converts to a percentage per each fuel type"""
+    dict_with_percentage = {}
+    # look at the mix per county.  {fuel:...,fuel:...}
+    for county, fuel_mix in nested_dict.items():
+        sum_mwh = 0
+        into_dict = {}
+        # get sum of mwh across fuels
+        for fuel,mwh in fuel_mix.items():
+            sum_mwh += mwh
+        # convert to ratios, enter into new dict
+        for fuel,mwh in fuel_mix.items():
+            if mwh != 0:
+                percent_as_num = (mwh/sum_mwh)*100
+                into_dict[fuel] = round(percent_as_num,0)
+        #insert new dict, into dict with key=county
+        dict_with_percentage[county] = into_dict
+
+    return dict_with_percentage
+
+
+
+
+
 def counties_into_CAISO():
     """takes panda df, and sorts by counties in each CAISO zone."""
 
     pass
-
-
-
-def percentage_fuel_type():
-    """takes panda df, and makes a percentage per each fuel type"""
-
-    pass
-
-
 
 
 
@@ -227,7 +245,7 @@ fuel_codes = {
 
 
 if __name__ == "__main__":
-    pass
+    fuel_mix_for_map()
 
 
 
