@@ -1,14 +1,43 @@
-from pandas import DataFrame, Series
+from pandas import DataFrame
 
 
 # when launching server.py, this statement prints to confirm is connected
 test = "pandas is connected"
 
 
+##########################################################################
+
+"""These calculations are used for 1 of 2 purposes:
+
+    (1) to create the starting counts of fuel percentages for the topojson map on the frontend.
+
+    (2) to provide data to for the prediction of current fuel usage
+
+The first two functions below, are for these purposes.  And call to other functions, as needed, to perform specific tasks."""
+
+##########################################################################
+
+
+def fuel_mix_for_map():
+    # retrieve raw data from persistent database
+    df2013, df2014, dict_counties = retrieve_from_db()
+    # process data into a single, nested dict.  listing all 12 months (per fuel, per county)
+    fuel_mix_12mo = assign_county_and_agg(dict_counties, fuel_codes, df2014, df2013)
+    # sum annually, for frontend data map
+    fuel_mix_for_map = sum_annual(fuel_mix_12mo)
+
+    # return to the flask route calling this py file.
+    return fuel_mix_for_map
+
+
+
+
+###########################################################################
 
 
 def retrieve_from_db():
-    """imports model, pulls mwh production data from db, and places into pandas df.  Merges together for 12 annual months, and includes county for each plant_name."""
+    """imports model, pulls mwh production data from db, and places into pandas df.
+    Also pulls county for each plant_name, and places into dict."""
 
     # add parent directory to the path, so can import model.py
     #  need model in order to update the database when this task is activated by cron
@@ -49,6 +78,10 @@ def retrieve_from_db():
 
 
 def assign_county_and_agg(dict_counties, fuel_codes, df_jan_to_nov, df_dec):
+    """takes all 12 months of data, spread across two df's, and combines.
+    places into more mutable nested dict structure.
+    assigns, and aggregates, by county (using plant_name/county dict)."""
+
     # output of function  = makes dictionary of counties
     fuel_per_county = { }
     for county in dict_counties.values():
@@ -109,15 +142,31 @@ def assign_county_and_agg(dict_counties, fuel_codes, df_jan_to_nov, df_dec):
 
 
 
+def sum_annual(nested_dict):
+    """takes nested dict {county:{fuel: [jan,feb,...]} }, and adds up annual usage."""
+    annual_fuel_mix = {}
+    # look at the mix per county.  {fuel: [jan,feb,...], fuel: ...}
+    for county, fuel_mix in nested_dict.items():
+        add_to_dict = {}
+        # look at each fuel, in the mix.  fuel: [jan,feb,...].  per month
+        for fuel_type, per_mo in fuel_mix.items():
+            print "fuel:", fuel_type
+            print per_mo
+            annual_sum = 0
+            for i in range(len(per_mo)):
+                mwh = per_mo[i]
+                annual_sum += mwh
+            add_to_dict[fuel_type] = annual_sum
+        annual_fuel_mix[county] = add_to_dict
+
+    return annual_fuel_mix
+
+
+
+
+
 def counties_into_CAISO():
     """takes panda df, and sorts by counties in each CAISO zone."""
-
-    pass
-
-
-
-def sum_annual():
-    """takes panda df, and adds up annual usage."""
 
     pass
 
@@ -127,6 +176,10 @@ def percentage_fuel_type():
     """takes panda df, and makes a percentage per each fuel type"""
 
     pass
+
+
+
+
 
 
 
@@ -174,14 +227,7 @@ fuel_codes = {
 
 
 if __name__ == "__main__":
-    df2013, df2014, dict_counties = retrieve_from_db()
-
-    df2013_by_fuel = df2013.groupby(['fuel_type'])
-    agg_counts = df2013_by_fuel.sum()
-    print agg_counts
-
-    assign_county_and_agg(dict_counties, fuel_codes, df2014, df2013)
-
+    pass
 
 
 
