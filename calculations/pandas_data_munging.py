@@ -1,4 +1,5 @@
 from pandas import DataFrame
+import unicodedata
 
 
 # when launching server.py, this statement prints to confirm is connected
@@ -23,14 +24,19 @@ def fuel_mix_for_map():
     df2013, df2014, dict_counties = retrieve_from_db()
     # process data into a single, nested dict.  listing all 12 months (per fuel, per county)
     fuel_mix_12mo = assign_county_and_agg(dict_counties, fuel_codes, df2014, df2013)
+    print "FUEL MIX 12 MO:\n",fuel_mix_12mo
+    print
     # sum annually,
     annual_mix = sum_annual(fuel_mix_12mo)
+    print "FUEL MIX ANNUAL:\n",annual_mix
+    print
     #  then convert to percentages, for frontend data map
     fuel_mix_for_map = annual_percentages(annual_mix)
+    print "FUEL MIX PERCENTS:\n",fuel_mix_for_map
+    print
 
     # return to the flask route calling this py file.
     return fuel_mix_for_map
-
 
 
 
@@ -70,6 +76,10 @@ def retrieve_from_db():
     dict_counties={}
     for idx, row in enumerate(df_counties.values):
         plant_name, county = row
+        # clean the county name
+        county = unicodedata.normalize('NFKD',county).encode('ascii','ignore')
+        county = county.lower().title()
+        county = county.replace(" County","")
         dict_counties[plant_name] = county
 
 
@@ -104,7 +114,8 @@ def assign_county_and_agg(dict_counties, fuel_codes, df_jan_to_nov, df_dec):
 
         # make sure we know the county, before we take the data
         if plant_name in dict_counties:
-            county = dict_counties[plant_name]  # update county, for each plant (each row)
+            county = dict_counties[plant_name]
+
 
             # get all the data, and insert into nested dict
             plant_name, fuel_type, mwh_gen = row[0], row[2], row[3:]
@@ -170,11 +181,22 @@ def annual_percentages(nested_dict):
     """takes nested dict of annual mwh gen,
         {county:{fuel:int, fuel:int, ...}, county:...},
          and converts to a percentage per each fuel type"""
+
+    #new output dict
     dict_with_percentage = {}
+
     # look at the mix per county.  {fuel:...,fuel:...}
     for county, fuel_mix in nested_dict.items():
+        dict_with_percentage[county] = {
+            "gas":0,
+            "coal":0,
+            "solar":0,
+            "wind":0,
+            "nuclear": 0,
+            "hydro":0,
+            "other":0
+            }
         sum_mwh = 0
-        into_dict = {}
         # get sum of mwh across fuels
         for fuel,mwh in fuel_mix.items():
             sum_mwh += mwh
@@ -182,9 +204,7 @@ def annual_percentages(nested_dict):
         for fuel,mwh in fuel_mix.items():
             if mwh != 0:
                 percent_as_num = (mwh/sum_mwh)*100
-                into_dict[fuel] = round(percent_as_num,0)
-        #insert new dict, into dict with key=county
-        dict_with_percentage[county] = into_dict
+                dict_with_percentage[county][fuel] = round(percent_as_num,0)
 
     return dict_with_percentage
 
