@@ -79,23 +79,13 @@ def retrieve_from_db(state_code):
     s = model.connect()
 
     # retrive DECEMBER production data, for all turbines at all power plants in California
-
-    ###########################
-
     CA_gen_dec13_obj = s.execute('SELECT plant_name, state, fuel_type, dec_mwh_gen FROM ProdGensDec2013 WHERE state="%s" ' % state_code)
-
-
-    # CA_gen_dec13_obj = s.query(model.ProdGenDec2013).select(plant_name, state, fuel_type, dec_mwh_gen).filter_by(state=state_code)
-
-    #############################
-
     CA_gen_dec13_data = CA_gen_dec13_obj.fetchall()
     df_dec2013 = DataFrame(CA_gen_dec13_data)
     df_dec2013.columns = ['plant_name', 'state', 'fuel_type', 'dec_mwh_gen']
 
     # retrive JAN-NOV 2014 production data, for all turbines at all power plants in California
     CA_gen_2014_obj = s.execute('SELECT plant_name, state, fuel_type, jan_mwh_gen, feb_mwh_gen, mar_mwh_gen, apr_mwh_gen, may_mwh_gen, jun_mwh_gen, jul_mwh_gen, aug_mwh_gen, sep_mwh_gen, oct_mwh_gen, nov_mwh_gen FROM ProdGens WHERE state="%s" ' % state_code)
-    # CA_gen_2014_obj = s.query(model.ProdGen).select(plant_name, state, fuel_type, jan_mwh_gen, feb_mwh_gen, mar_mwh_gen, apr_mwh_gen, may_mwh_gen, jun_mwh_gen, jul_mwh_gen, aug_mwh_gen, sep_mwh_gen, oct_mwh_gen, nov_mwh_gen).filter_by(state=state_code)
 
     CA_gen_2014_data = CA_gen_2014_obj.fetchall()
     df_2014 = DataFrame(CA_gen_2014_data)
@@ -104,7 +94,6 @@ def retrieve_from_db(state_code):
     # retrieve county name, assigned to each turbine at each plant in California
     # query =
     CA_counties_obj = s.execute('SELECT plant_name, county FROM StatsGens WHERE state="%s" GROUP BY plant_name' % state_code)
-    # CA_counties_obj = s.query(model.StatsGen).select(plant_name, county).filter_by(state=state_code)
     CA_plant_counties = CA_counties_obj.fetchall()
     df_counties = DataFrame(CA_plant_counties)
     df_counties.columns = ['plant_name', 'county']

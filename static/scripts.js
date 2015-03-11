@@ -1,23 +1,95 @@
-// DATA STRUCTURE -- GET FROM BACKEND/////////////////////////////////////
+// UNIQUE CODING FOR COUNTY MAP/////////////////////////////////////
 
-// triggered when the topojson map is created
-function get_map_data(for_state){
-  // evt.preventDefault();
-  console.log("get_map_data js function");
+// get map data structure
+    // triggered when the topojson map is created
+    function get_map_data(for_state){
+      // evt.preventDefault();
+      console.log("get_map_data js function");
 
-  var data = for_state;
-  $.ajax('county-map', {
-    type: 'POST',
-    data: data,
-    contentType: 'application/json',
-    success: function(data, status, result){
-      fuel_mix = JSON.parse(result.responseText);
-      console.log(fuel_mix);
+      var data = for_state;
+      $.ajax('county-map', {
+        type: 'POST',
+        data: data,
+        contentType: 'application/json',
+        success: function(data, status, result){
+          fuel_mix = JSON.parse(result.responseText);
+          console.log(fuel_mix);
+        }
+      });
     }
-  });
-}
 
-var fuel_mix = {};
+    var fuel_mix = {};
+
+
+// allow choice of different states from autocomplete box
+   var auto = completely(document.getElementById('enter-state'), {
+      fontSize : '24px',
+      fontFamily : 'Arial',
+      color:'#933',
+   });
+   auto.options = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
+   auto.repaint();
+   setTimeout(function() {
+    auto.input.focus();
+   },0);
+
+
+// dict used for event listener.
+  // user entered state, and listener then draws county topojson map.
+    //  look for code after the topojson map is defined!!!
+
+var state_name_to_abbv = {
+  "Alabama": "AL",
+  "Alaska": "AK",
+  "Arizona": "AZ",
+  "Arkansas": "AR",
+  "California": "CA",
+  "Colorado": "CO",
+  "Connecticut": "CT",
+  "Delaware": "DE",
+  "Florida": "FL",
+  "Georgia": "GA",
+  "Hawaii": "HI",
+  "Idaho": "ID",
+  "Illinois": "IL",
+  "Indiana": "IN",
+  "Iowa": "IA",
+  "Kansas": "KS",
+  "Kentucky": "KY",
+  "Louisiana": "LA",
+  "Maine": "ME",
+  "Maryland": "MD",
+  "Massachusetts": "MA",
+  "Michigan": "MI",
+  "Minnesota": "MN",
+  "Mississippi": "MS",
+  "Missouri": "MO",
+  "Montana": "MT",
+  "Nebraska": "NE",
+  "Nevada": "NV",
+  "New Hampshire": "NH",
+  "New Jersey": "NJ",
+  "New Mexico": "NM",
+  "New York": "NY",
+  "North Carolina": "NC",
+  "North Dakota": "ND",
+  "Ohio": "OH",
+  "Oklahoma": "OK",
+  "Oregon": "OR",
+  "Pennsylvania": "PA",
+  "Rhode Island": "RI",
+  "South Carolina": "SC",
+  "South Dakota": "SD",
+  "Tennessee": "TN",
+  "Texas": "TX",
+  "Utah": "UT",
+  "Vermont": "VT",
+  "Virginia": "VA",
+  "Washington": "WA",
+  "West Virginia": "WV",
+  "Wisconsin": "WI",
+  "Wyoming": "WY"
+};
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -128,7 +200,7 @@ var make_topojson_map_counties = function(for_state){
   // GIVE THE MAP DATA TO DRAW
 
       // take the json data
-      var file_path = "/static/"+for_state+"_counties.json";
+      var file_path = "/static/maps/"+for_state+"_counties.json";
       d3.json(file_path, function(error, us) {
         // append another "g" DOM element to the already present (bigger) g? Making a child?
         g.append("g")
@@ -229,7 +301,20 @@ var make_topojson_map_counties = function(for_state){
 
 };
 
-make_topojson_map_counties("NY");
+
+
+//  event listener.  Takes the state entered by the user, and triggers the creation of the county map.
+  function get_state_and_draw_map(evt){
+    $('#topomap').empty();
+    var state_name = $('#enter-state input').val();
+    console.log(state_name);
+    var entered_state_abbv = state_name_to_abbv[state_name];
+    make_topojson_map_counties(entered_state_abbv);
+    $('#instructions').css('visibility','visible');
+  }
+
+  $('#get-data-draw-map').on("click",get_state_and_draw_map);
+
 
 
 

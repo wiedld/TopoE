@@ -48,12 +48,25 @@
   <br>
   <br>
 
-  <main class="container">
+  <main class="container-fluid">
+
+    <div class="row">
+    <!-- Above the row displaying all the data, include an option to sitch states. -->
+      <section class="col-sm-8">
+          <!-- <form id='enter-state'> -->
+            <div id='enter-state' style='border:1px solid #999;'>
+            </div>
+          <!-- </form> -->
+              <button id='get-data-draw-map'>Find power plants for counties in this state.</button>
+      </section>
+    </div>
+
     <div class="row">
 
-      <section class="col-sm-8">
+      <!-- Section for the map, map instructions, and scenario outcome text. -->
+      <section class="col-sm-7 col-sm-offset-1">
         <div class="row">
-          <h2 id="instructions">Click on each county, and adjust the fuel mix!</h2>
+          <h2 id="instructions" style='visibility:hidden'>Click on each county, and adjust the fuel mix!</h2>
 
           <div id="see-results" style='visibility:hidden'>
             <h2>To see your results, click on each county again!</h2>
@@ -72,7 +85,8 @@
         </div>
       </section>
 
-      <section id="fuels-per-county" class="col-sm-4">
+      <!-- Section for the scenario button (upper left corner, near instructions from the section above), fuel donut, and sliders. -->
+      <section id="fuels-per-county" class="col-sm-3">
         <div class = "row">
           <div class = "col-sm-3">
               <div id="scenario-div">
@@ -141,6 +155,7 @@
         </div>
 
       </section>
+      <section class="col-sm-1"></section>
 
     </div>
   </main>
@@ -152,6 +167,7 @@
   <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
   <!-- Scripts for this specific website -->
   <script src="/static/d3.slider.js"></script>
+  <script src='/static/complete.ly.1.0.1.min.js'></script>
   <script src="/static/scripts.js"></script>
 
 </body>

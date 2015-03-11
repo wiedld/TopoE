@@ -15,6 +15,11 @@ app.secret_key = os.environ["flask_app_key"]
 
 
 
+#########################################################
+#########################################################
+# STATE MAP -- CLICK ON COUNTIES
+
+
 @app.route("/")
 def index():
     """Initial rendering when begin on page"""
@@ -51,7 +56,7 @@ def scenario_result():
 
 #########################################################
 #########################################################
-# TRYING OUT ANOTHER MAP
+# USA MAP -- CLICK ON STATES
 
 @app.route("/usa")
 def index2():
@@ -85,7 +90,19 @@ def scenario_result_usa():
 
 ###########################################################
 ###########################################################
+#  CURRENT MIX
 
+@app.route("/current")
+def current_mix():
+    """Take data structure for current fuel mix, and pipe through to frontend object"""
+
+    return render_template("current2.html")
+
+
+
+
+###########################################################
+###########################################################
 
 
 def main():

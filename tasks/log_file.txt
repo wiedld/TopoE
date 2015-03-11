@@ -32,3 +32,15 @@ Error.  historic_renewables_seeding failure at: 2015-02-23 16:32:42.525322
 Error.  historic_renewables_seeding failure at: 2015-02-23 16:33:20.822210
 
 Error.  CAISO_hrly_data_scraper failure at: 2015-02-26 22:00:07.459996
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 11:27:43.296127
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 11:28:22.384244
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 14:09:06.727662
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 14:10:08.634401
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 14:10:25.513561
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 14:12:32.740632
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 14:14:14.008481
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 14:15:06.462174
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 14:16:20.612717
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 14:26:38.016521
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 14:26:51.732358
+Error.  CAISO_hrly_data_scraper failure at: 2015-03-11 14:31:24.882124

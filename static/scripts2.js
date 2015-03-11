@@ -1,4 +1,4 @@
-// FULLY UNIQUE CODING FOR THE STATES USA MAP /////////////////////////////////////
+// UNIQUE CODING FOR THE STATES USA MAP /////////////////////////////////////
 
   // list of what is different for this scripts2 (versus original):
     // changed all references of "county" --> "state".  "counties" --> "states"
@@ -194,7 +194,7 @@ var make_topojson_map_usa = function(){
   // GIVE THE MAP DATA TO DRAW
 
       // take the json data
-      d3.json("/static/us.json", function(error, us) {
+      d3.json("/static/maps/us.json", function(error, us) {
         // append another "g" DOM element to the already present (bigger) g? Making a child?
         g.append("g")
           // each new "g" has the property "id", as taken from the json object "states"?

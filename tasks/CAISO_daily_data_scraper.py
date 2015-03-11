@@ -84,13 +84,16 @@ def get_historic_mw_by_fuel(date):
                 fuel_mw['small_hydro'] = int(data[4])
                 fuel_mw['wind'] = int(data[5])
                 fuel_mw['solar'] = int(data[6])
+                fuel_mw['thermal'] = int(data[7])
                 hour = int(data[0])
                 insert_row_db(date, hour, fuel_mw)
 
             if count_lines >30:
                 data = line.split()
+                fuel_mw['other_renewables'] = int(data[1])
                 fuel_mw['nuclear'] = int(data[2])
                 fuel_mw['thermal'] = int(data[3])
+                fuel_mw['imports'] = int(data[4])
                 fuel_mw['hydro'] = int(data[5])
                 hour = int(data[0])
                 insert_row_db(date, hour, fuel_mw)
@@ -117,19 +120,25 @@ def insert_row_db(date, hr, adict):
     import os
     parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.sys.path.insert(0,parentdir)
+    print parentdir
     import model
+    print "model imported"
     session = model.connect()
+
 
     for k,v in adict.items():
         fuel_obj = model.HistoricCAISOProdByFuel()
+        print fuel_obj
         fuel_obj.date = datetime.strptime(date,'%Y%m%d')
         fuel_obj.hour = hr
         fuel_obj.fuel_type = k
         fuel_obj.mw_gen = v
 
         session.add(fuel_obj)
+        print "got past add"
 
     session.commit()
+    print "got past commit"
     print ("Inserted data for date: "+date+" and hour: "+str(hr))
 
 
