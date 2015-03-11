@@ -20,10 +20,10 @@ The first three functions below, are for these purposes.  And call to other func
 
 ##########################################################################
 
-
-def fuel_mix_for_map():
+# get county data for 1 state, as chosen by the user
+def fuel_mix_for_map(for_state):
     # retrieve raw data from persistent database
-    df2013, df2014, dict_counties = retrieve_from_db()
+    df2013, df2014, dict_counties = retrieve_from_db(for_state)
 
     # process data into a single, nested dict.  listing all 12 months (per fuel, per county)
     fuel_mix_12mo = assign_county_and_agg(dict_counties, fuel_codes, df2014, df2013)
@@ -39,7 +39,7 @@ def fuel_mix_for_map():
 
 
 
-
+# all of the usa, per state
 def fuel_mix_for_map_usa():
     # retrieve raw data from persistent database
     df2013_states, df2014_states = retrieve_from_db_usa()
@@ -66,7 +66,7 @@ def fuel_mix_for_map_usa():
 ##########################################################################
 # FUNCTIONS SPECIFIC FOR COUNTY MAP
 
-def retrieve_from_db():
+def retrieve_from_db(state_code):
     """imports model, pulls mwh production data from db, and places into pandas df.
     Also pulls county for each plant_name, and places into dict."""
 
@@ -79,19 +79,32 @@ def retrieve_from_db():
     s = model.connect()
 
     # retrive DECEMBER production data, for all turbines at all power plants in California
-    CA_gen_dec13_obj = s.execute('SELECT plant_name, state, fuel_type, dec_mwh_gen FROM ProdGensDec2013 WHERE state="CA" ')
+
+    ###########################
+
+    CA_gen_dec13_obj = s.execute('SELECT plant_name, state, fuel_type, dec_mwh_gen FROM ProdGensDec2013 WHERE state="%s" ' % state_code)
+
+
+    # CA_gen_dec13_obj = s.query(model.ProdGenDec2013).select(plant_name, state, fuel_type, dec_mwh_gen).filter_by(state=state_code)
+
+    #############################
+
     CA_gen_dec13_data = CA_gen_dec13_obj.fetchall()
     df_dec2013 = DataFrame(CA_gen_dec13_data)
     df_dec2013.columns = ['plant_name', 'state', 'fuel_type', 'dec_mwh_gen']
 
     # retrive JAN-NOV 2014 production data, for all turbines at all power plants in California
-    CA_gen_2014_obj = s.execute('SELECT plant_name, state, fuel_type, jan_mwh_gen, feb_mwh_gen, mar_mwh_gen, apr_mwh_gen, may_mwh_gen, jun_mwh_gen, jul_mwh_gen, aug_mwh_gen, sep_mwh_gen, oct_mwh_gen, nov_mwh_gen FROM ProdGens WHERE state="CA" ')
+    CA_gen_2014_obj = s.execute('SELECT plant_name, state, fuel_type, jan_mwh_gen, feb_mwh_gen, mar_mwh_gen, apr_mwh_gen, may_mwh_gen, jun_mwh_gen, jul_mwh_gen, aug_mwh_gen, sep_mwh_gen, oct_mwh_gen, nov_mwh_gen FROM ProdGens WHERE state="%s" ' % state_code)
+    # CA_gen_2014_obj = s.query(model.ProdGen).select(plant_name, state, fuel_type, jan_mwh_gen, feb_mwh_gen, mar_mwh_gen, apr_mwh_gen, may_mwh_gen, jun_mwh_gen, jul_mwh_gen, aug_mwh_gen, sep_mwh_gen, oct_mwh_gen, nov_mwh_gen).filter_by(state=state_code)
+
     CA_gen_2014_data = CA_gen_2014_obj.fetchall()
     df_2014 = DataFrame(CA_gen_2014_data)
     df_2014.columns = ['plant_name', 'state', 'fuel_type', 'jan_mwh_gen', 'feb_mwh_gen', 'mar_mwh_gen', 'apr_mwh_gen', 'may_mwh_gen', 'jun_mwh_gen', 'jul_mwh_gen', 'aug_mwh_gen', 'sep_mwh_gen', 'oct_mwh_gen', 'nov_mwh_gen']
 
-    # retrieve county name, assigned to each turbine at each plant in Californis
-    CA_counties_obj = s.execute('SELECT plant_name, county FROM StatsGens WHERE state="CA" GROUP BY plant_name')
+    # retrieve county name, assigned to each turbine at each plant in California
+    # query =
+    CA_counties_obj = s.execute('SELECT plant_name, county FROM StatsGens WHERE state="%s" GROUP BY plant_name' % state_code)
+    # CA_counties_obj = s.query(model.StatsGen).select(plant_name, county).filter_by(state=state_code)
     CA_plant_counties = CA_counties_obj.fetchall()
     df_counties = DataFrame(CA_plant_counties)
     df_counties.columns = ['plant_name', 'county']

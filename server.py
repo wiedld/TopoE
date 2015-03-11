@@ -27,7 +27,8 @@ def index():
 def county_map_data():
     """get data for topojson map of counties.  Called during initial rendering."""
 
-    data_for_topojson = pdm.fuel_mix_for_map()
+    data_for_topojson = pdm.fuel_mix_for_map("CA")
+    print "DATA FOR MAP: \n", data_for_topojson
     return jsonify(data_for_topojson)
 
 

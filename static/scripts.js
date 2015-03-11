@@ -104,7 +104,6 @@ var set_slider_values = function(data_list,county_name){
           )
         );
     });
-    console.log(axis);
 
 
     // show the starting values in the html
@@ -143,7 +142,7 @@ var set_slider_values = function(data_list,county_name){
 // TOPOJSON -- COUNTY MAP  ///////////////////////////////////////////////
 
 
-var make_topojson_map = function(){
+var make_topojson_map_counties = function(){
 
     // MAKE THE SVG
 
@@ -288,7 +287,7 @@ var make_topojson_map = function(){
 
 };
 
-make_topojson_map();
+make_topojson_map_counties();
 
 
 
