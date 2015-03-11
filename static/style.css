@@ -11,15 +11,15 @@
 }
 
   /*styling for the county maps*/
-#CA_counties {
+#counties {
   fill: #aaa;
 }
 
-#CA_counties .active {
+#counties .active {
   fill: orange;
 }
 
-#CA_countie-borders {
+#county-borders {
   fill: none;
   stroke: #fff;
   stroke-width: 1.5px;

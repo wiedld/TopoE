@@ -26,9 +26,11 @@ def index():
 @app.route("/county-map", methods=['POST'])
 def county_map_data():
     """get data for topojson map of counties.  Called during initial rendering."""
+    chosen_state = request.data
+    # print "CHOSEN STATE:", chosen_state
 
-    data_for_topojson = pdm.fuel_mix_for_map("CA")
-    print "DATA FOR MAP: \n", data_for_topojson
+    data_for_topojson = pdm.fuel_mix_for_map(chosen_state)
+    # print "DATA FOR MAP: \n", data_for_topojson
     return jsonify(data_for_topojson)
 
 

@@ -1,71 +1,11 @@
-// DATA STRUCTURE -- FOR TESTING /////////////////////////////////////
+// DATA STRUCTURE -- GET FROM BACKEND/////////////////////////////////////
 
-// var fuel_mix = {
-//   "Alameda": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Alpine": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Amador": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Butte": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Calaveras": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Colusa": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Contra Costa": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Del Norte": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "El Dorado": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Fresno": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Glenn": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Humboldt": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Imperial": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Inyo": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Kern": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Kings": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Lake": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Lassen": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Los Angeles": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Madera": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Marin": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Mariposa": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Mendocino": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Merced": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Modoc": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Mono": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Monterey": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Napa": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Nevada": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Orange": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Placer": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Plumas": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Riverside": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Sacramento": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "San Benito": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "San Bernardino": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "San Diego": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "San Francisco": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "San Joaquin": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "San Luis Obispo": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "San Mateo": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Santa Barbara": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Santa Clara": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Santa Cruz": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Shasta": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Sierra": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Siskiyou": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Solano": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Sonoma": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Stanislaus": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Sutter": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Tehama": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Trinity": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Tulare": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Tuolumne": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Ventura": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Yolo": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14},
-//   "Yuba": {"gas":16, "coal":14, "solar":14, "wind":14, "nuclear": 14, "hydro":14, "other":14}
-// };
-
-function get_map_data(evt){
-  evt.preventDefault();
+// triggered when the topojson map is created
+function get_map_data(for_state){
+  // evt.preventDefault();
   console.log("get_map_data js function");
 
-  var data = "yo";
+  var data = for_state;
   $.ajax('county-map', {
     type: 'POST',
     data: data,
@@ -78,7 +18,6 @@ function get_map_data(evt){
 }
 
 var fuel_mix = {};
-window.onload = get_map_data;
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -142,7 +81,9 @@ var set_slider_values = function(data_list,county_name){
 // TOPOJSON -- COUNTY MAP  ///////////////////////////////////////////////
 
 
-var make_topojson_map_counties = function(){
+var make_topojson_map_counties = function(for_state){
+
+    get_map_data(for_state);
 
     // MAKE THE SVG
 
@@ -187,15 +128,16 @@ var make_topojson_map_counties = function(){
   // GIVE THE MAP DATA TO DRAW
 
       // take the json data
-      d3.json("/static/counties.json", function(error, us) {
+      var file_path = "/static/"+for_state+"_counties.json";
+      d3.json(file_path, function(error, us) {
         // append another "g" DOM element to the already present (bigger) g? Making a child?
         g.append("g")
           // each new "g" has the property "id", as taken from the json object "CA_counties"?
-          .attr("id", "CA_counties")
+          .attr("id", "counties")
           // select all "path" properties from witin the svg object g,
           .selectAll("path")
           // and assign the topojson vector info to the "path" attr of the g object
-            .data(topojson.feature(us, us.objects.CA_counties).features)
+            .data(topojson.feature(us, us.objects.State_counties).features)
           .enter().append("path")
             .attr("d", path)
             // add event listener
@@ -205,8 +147,8 @@ var make_topojson_map_counties = function(){
         // to the g object, also add the path association with the borders.
         // unclear how it knows this is the borders
         g.append("path")
-            .datum(topojson.mesh(us, us.objects.CA_counties, function(a, b) { return a !== b; }))
-            .attr("id", "CA_countie-borders")
+            .datum(topojson.mesh(us, us.objects.State_counties, function(a, b) { return a !== b; }))
+            .attr("id", "county-borders")
             .attr("d", path);
       });
 
@@ -287,7 +229,7 @@ var make_topojson_map_counties = function(){
 
 };
 
-make_topojson_map_counties();
+make_topojson_map_counties("NY");
 
 
 
