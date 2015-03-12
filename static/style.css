@@ -1,5 +1,20 @@
+/*STYLING FOR INDEX PAGE*/
+html, body, .container {
+    height: 100%;
+}
+.container {
+    display: table;
+    vertical-align: middle;
+}
+.vertical-center-row {
+    display: table-cell;
+    vertical-align: middle;
+}
 
-/*STYLING FOR TOPOMAP*/
+
+
+
+/*STYLING FOR ALL TOPOMAP*/
 .background {
   fill: none;
   pointer-events: all;
@@ -11,7 +26,8 @@
   color: black;
 }
 
-  /*styling for the county maps*/
+
+  /*STYLING FOR COUNTY MAP*/
 #counties {
   fill: #aaa;
 }
@@ -30,7 +46,8 @@
 }
 
 
-  /*styling for the usa map*/
+
+  /*STYLING FOR USA MAP*/
 
 #states {
   fill: #aaa;
