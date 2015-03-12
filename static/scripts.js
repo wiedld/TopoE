@@ -1,3 +1,5 @@
+var county_name;
+
 // UNIQUE CODING FOR COUNTY MAP/////////////////////////////////////
 
 // get map data structure
@@ -101,7 +103,7 @@ var set_slider_values = function(data_list,county_name){
 
     // make the sliders
 
-    var axis = d3.svg.axis().orient("top").ticks(5);
+    var axis = d3.svg.axis().orient("bottom").ticks(5);
 
     var fuel_names = ["gas", "coal", "solar", "wind", "nuclear", "hydro", "other"],
         slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4", "#slider5", "#slider6"];
@@ -109,7 +111,7 @@ var set_slider_values = function(data_list,county_name){
     $.each(slider_elements, function(idx, slider_element){
         d3.select(slider_element).call(
           d3.slider()
-          .axis(true)
+          .axis(axis)
           .value(data_list[idx])
           .on("slide", function(evt, value){
             slide_event(value, fuel_names[idx], idx);
@@ -183,9 +185,17 @@ var make_topojson_map_counties = function(for_state){
 
       // "projection" -- how to display this svg vector data.
       //  geo.albersUSA is like a dictionary of how to translate geojson vector numbers?
-      var projection = d3.geo.albersUsa()
+      var projection = d3.geo.albers()
+          .center([15,20])
+          // .rotate
+          // .scale(3000)
+          // .translate([width / 2, height / 2]);
+          .rotate([96, 0])
+          // .center([-.6, 38.7])
+          .parallels([29.5, 45.5])
           .scale(1070)
-          .translate([width / 2, height / 2]);
+          .translate([width / 2, height / 2])
+          .precision(.1);
 
       // d3.geo.path maps geocoordinates to svg.
       // .projection() links the projection var to the geo.path
@@ -207,6 +217,9 @@ var make_topojson_map_counties = function(for_state){
         // append another "g" DOM element to the already present (bigger) g? Making a child?
         g.append("g")
           // each new "g" has the property "id", as taken from the json object "CA_counties"?
+          .on("mouseover", function() {
+            d3.select(this).style("cursor","zoom-in");
+          })
           .attr("id", "counties")
           // select all "path" properties from witin the svg object g,
           .selectAll("path")
@@ -244,18 +257,29 @@ var make_topojson_map_counties = function(for_state){
               centered = d;
 
               // get the id of the county, which == county name, and should match db info!!!
-                var county_name = d.id;
+                county_name = d.id;
                 console.log(d.id);
 
               //get fuel_mix info, place into list.
-                var v0 = fuel_mix[county_name]["gas"],
-                    v1 = fuel_mix[county_name]["coal"],
-                    v2 = fuel_mix[county_name]["solar"],
-                    v3 = fuel_mix[county_name]["wind"],
-                    v4 = fuel_mix[county_name]["nuclear"],
-                    v5 = fuel_mix[county_name]["hydro"],
-                    v6 = fuel_mix[county_name]["other"];
-                var data_list = [v0,v1,v2,v3,v4,v5,v6];
+                if (!fuel_mix[county_name]){
+                  fuel_mix[county_name] = {};
+                  fuel_mix[county_name]["gas"] = 0;
+                  fuel_mix[county_name]["coal"] = 0;
+                  fuel_mix[county_name]["solar"] = 0;
+                  fuel_mix[county_name]["wind"] = 0;
+                  fuel_mix[county_name]["nuclear"] = 0;
+                  fuel_mix[county_name]["hydro"] = 0;
+                  fuel_mix[county_name]["other"] = 0;
+                };
+
+                  var v0 = fuel_mix[county_name]["gas"],
+                      v1 = fuel_mix[county_name]["coal"],
+                      v2 = fuel_mix[county_name]["solar"],
+                      v3 = fuel_mix[county_name]["wind"],
+                      v4 = fuel_mix[county_name]["nuclear"],
+                      v5 = fuel_mix[county_name]["hydro"],
+                      v6 = fuel_mix[county_name]["other"];
+                  var data_list = [v0,v1,v2,v3,v4,v5,v6];
 
               // display the c3 donut, with county-specific data.
                 //  empty old
@@ -410,10 +434,10 @@ function runScenario(evt){
     contentType: 'application/json',
     success: function(data, status, result){
       scenario_result = JSON.parse(result.responseText);
-      console.log(scenario_result);
       $('#instructions').empty();
       $('#display-results').css('visibility','visible');
       $('#see-results').css('visibility','visible');
+      $('#display-results').text(scenario_result[county_name]);
 
     }
   });
