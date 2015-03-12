@@ -1,25 +1,5 @@
-
-<!DOCTYPE html>
-<html>
-<head>
-
-
-    <!-- CSS -->
-
-        <!-- Bootstrap -->
-
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  <!-- Optional theme -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-  <!-- Bootstraps's js requires jquery. -->
-  <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-
-    </head>
-
-    <body>
+{% extends 'base.html' %}
+{% block body %}
         <div class="container" style="margin-top:30px;min-height:500px;">
             <div class="ng-cloak">
 
@@ -50,25 +30,15 @@
             </div>
         </div>
 
-
-
-
-        <!-- Javascript -->
+       <!-- Javascript -->
 
             <!-- jQuery -->
             <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
-
-            <!-- Plugins -->
-<!--             // <script src="/static/current-mix/jquery.sliderotator.js" type="text/javascript"></script>
-            // <script src="/static/current-mix/jquery.lightbox-0.5.pack.js" type="text/javascript"></script>
-            // <script src="/static/current-mix/jquery-layer.js" type="text/javascript"></script> -->
-
-
             <!-- D3js -->
             <script src="http://d3js.org/d3.v3.min.js"></script>
-            <!-- User javascript modules -->
+            <!-- Local javascript modules -->
             <script src="/static/current-mix/scripts.js"></script>
 
-    </body>
-    <!-- Web Development: Kristijan Burnik @ InVision Web Development :: http://www.invision-web.net -->
-</html>
+
+{% endblock %}
+

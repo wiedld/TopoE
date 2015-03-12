@@ -15,20 +15,27 @@ app.secret_key = os.environ["flask_app_key"]
 
 
 
-#########################################################
+# HOMEPAGE
+@app.route("/")
+def index():
+    """Initial rendering when begin on page"""
+    pass
+
+
 #########################################################
 # STATE MAP -- CLICK ON COUNTIES
 
 
-@app.route("/")
-def index():
-    """Initial rendering when begin on page"""
+@app.route("/county_map")
+def county_map():
+    """rendering the county-map. has js file with insertion of interactive d3 elements (slider, donut)."""
 
-    return render_template("index.html")
+    return render_template("county_map.html")
 
 
 
-@app.route("/county-map", methods=['POST'])
+
+@app.route("/county-map-data", methods=['POST'])
 def county_map_data():
     """get data for topojson map of counties.  Called during initial rendering."""
     chosen_state = request.data
@@ -55,16 +62,18 @@ def scenario_result():
 
 
 #########################################################
-#########################################################
 # USA MAP -- CLICK ON STATES
 
-@app.route("/usa")
-def index2():
-    """Initial rendering when begin on page"""
-    return render_template("index2.html")
+@app.route("/usa_map")
+def usa_map():
+    """rendering the usa-map. has js file with insertion of interactive d3 elements (slider, donut)."""
+
+    return render_template("usa_map.html")
 
 
-@app.route("/usa-map", methods=['POST'])
+
+
+@app.route("/usa-map-data", methods=['POST'])
 def usa_map_data():
     """get data for topojson map of counties.  Called during initial rendering."""
 
@@ -88,17 +97,13 @@ def scenario_result_usa():
 
 
 
-###########################################################
-###########################################################
+#########################################################
 #  CURRENT MIX
-
 @app.route("/current")
 def current_mix():
     """Take data structure for current fuel mix, and pipe through to frontend object"""
 
     return render_template("current_mix.html")
-
-
 
 
 ###########################################################

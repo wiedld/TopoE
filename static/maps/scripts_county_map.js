@@ -1,91 +1,97 @@
-// UNIQUE CODING FOR THE STATES USA MAP /////////////////////////////////////
+var county_name;
 
-  // list of what is different for this scripts2 (versus original):
-    // changed all references of "county" --> "state".  "counties" --> "states"
-    // added the novel functionality below
-    // used mbostock's us.json file.  Had to search state_name_dict to get the code used in the map data pass up to the frontend (see make topojson function)
-    // RunScenarioUSA -- function name, and flask route name
-    // make_topojson_map_usa -- function name, and size of map rendering (ver height=650
+// UNIQUE CODING FOR COUNTY MAP/////////////////////////////////////
 
+// get map data structure
+    // triggered when the topojson map is created
+    function get_map_data(for_state){
+      // evt.preventDefault();
+      console.log("get_map_data js function");
 
-
-function get_map_data_usa(evt){
-  evt.preventDefault();
-  console.log("get_map_data js function");
-
-  var data = "yo";
-  $.ajax('usa-map', {
-    type: 'POST',
-    data: data,
-    contentType: 'application/json',
-    success: function(data, status, result){
-      fuel_mix = JSON.parse(result.responseText);
-      console.log(fuel_mix);
+      var data = for_state;
+      $.ajax('county-map-data', {
+        type: 'POST',
+        data: data,
+        contentType: 'application/json',
+        success: function(data, status, result){
+          fuel_mix = JSON.parse(result.responseText);
+          console.log(fuel_mix);
+        }
+      });
     }
-  });
-}
 
-var fuel_mix = {};
-window.onload = get_map_data_usa;
+    var fuel_mix = {};
 
 
+// allow choice of different states from autocomplete box
+   var auto = completely(document.getElementById('enter-state'), {
+      fontSize : '24px',
+      fontFamily : 'Arial',
+      color:'#933',
+   });
+   auto.options = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
+   auto.repaint();
+   setTimeout(function() {
+    auto.input.focus();
+   },0);
 
-var state_name_dict = {
-  1: "AL",
-  2: "AK",
-  4: "AZ",
-  5: "AR",
-  6: "CA",
-  8: "CO",
-  9: "CT",
-  10: "DE",
-  11: "DC",
-  12: "FL",
-  13: "GA",
-  15: "HI",
-  16: "ID",
-  17: "IL",
-  18: "IN",
-  19: "IA",
-  20: "KS",
-  21: "KY",
-  22: "LA",
-  23: "ME",
-  24: "MD",
-  25: "MA",
-  26: "MI",
-  27: "MN",
-  28: "MS",
-  29: "MO",
-  30: "MT",
-  31: "NE",
-  32: "NV",
-  33: "NH",
-  34: "NJ",
-  35: "NM",
-  36: "NY",
-  37: "NC",
-  38: "ND",
-  39: "OH",
-  40: "OK",
-  41: "OR",
-  42: "PA",
-  44: "RI",
-  45: "SC",
-  46: "SD",
-  47: "TN",
-  48: "TX",
-  49: "UT",
-  50: "VT",
-  51: "VA",
-  53: "WA",
-  54: "WV",
-  55: "WI",
-  56: "WY"
+
+// dict used for event listener.
+  // user entered state, and listener then draws county topojson map.
+    //  look for code after the topojson map is defined!!!
+
+var state_name_to_abbv = {
+  "Alabama": "AL",
+  "Alaska": "AK",
+  "Arizona": "AZ",
+  "Arkansas": "AR",
+  "California": "CA",
+  "Colorado": "CO",
+  "Connecticut": "CT",
+  "Delaware": "DE",
+  "Florida": "FL",
+  "Georgia": "GA",
+  "Hawaii": "HI",
+  "Idaho": "ID",
+  "Illinois": "IL",
+  "Indiana": "IN",
+  "Iowa": "IA",
+  "Kansas": "KS",
+  "Kentucky": "KY",
+  "Louisiana": "LA",
+  "Maine": "ME",
+  "Maryland": "MD",
+  "Massachusetts": "MA",
+  "Michigan": "MI",
+  "Minnesota": "MN",
+  "Mississippi": "MS",
+  "Missouri": "MO",
+  "Montana": "MT",
+  "Nebraska": "NE",
+  "Nevada": "NV",
+  "New Hampshire": "NH",
+  "New Jersey": "NJ",
+  "New Mexico": "NM",
+  "New York": "NY",
+  "North Carolina": "NC",
+  "North Dakota": "ND",
+  "Ohio": "OH",
+  "Oklahoma": "OK",
+  "Oregon": "OR",
+  "Pennsylvania": "PA",
+  "Rhode Island": "RI",
+  "South Carolina": "SC",
+  "South Dakota": "SD",
+  "Tennessee": "TN",
+  "Texas": "TX",
+  "Utah": "UT",
+  "Vermont": "VT",
+  "Virginia": "VA",
+  "Washington": "WA",
+  "West Virginia": "WV",
+  "Wisconsin": "WI",
+  "Wyoming": "WY"
 };
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -93,17 +99,19 @@ var state_name_dict = {
 //  SLIDERS, with src js script import in html DOM, before this js file
 
 
-var set_slider_values = function(data_list,state_name){
+var set_slider_values = function(data_list,county_name){
 
     // make the sliders
 
-    var axis = d3.svg.axis().orient("top").ticks(5);
+    var axis = d3.svg.axis().orient("bottom").ticks(5);
 
     var fuel_names = ["gas", "coal", "solar", "wind", "nuclear", "hydro", "other"],
         slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4", "#slider5", "#slider6"];
 
     $.each(slider_elements, function(idx, slider_element){
-        d3.select(slider_element).call(d3.slider().axis(axis)
+        d3.select(slider_element).call(
+          d3.slider()
+          .axis(axis)
           .value(data_list[idx])
           .on("slide", function(evt, value){
             slide_event(value, fuel_names[idx], idx);
@@ -126,7 +134,7 @@ var set_slider_values = function(data_list,state_name){
         // change values in the html label of the slider
         d3.select('#slider'+index+'text').text(value);
         // changle values in the fuel_mix dict
-        fuel_mix[state_name][fuel_type] = value;
+        fuel_mix[county_name][fuel_type] = value;
         //update the donut
         $('#fuel-donut').empty();
         make_donut(data_list);
@@ -149,12 +157,14 @@ var set_slider_values = function(data_list,state_name){
 // TOPOJSON -- COUNTY MAP  ///////////////////////////////////////////////
 
 
-var make_topojson_map_usa = function(){
+var make_topojson_map_counties = function(for_state){
+
+    get_map_data(for_state);
 
     // MAKE THE SVG
 
       // define variables, to use later.
-      var width = (960),
+      var width = (760),
           height = (650),
           centered;
 
@@ -175,9 +185,17 @@ var make_topojson_map_usa = function(){
 
       // "projection" -- how to display this svg vector data.
       //  geo.albersUSA is like a dictionary of how to translate geojson vector numbers?
-      var projection = d3.geo.albersUsa()
+      var projection = d3.geo.albers()
+          // .center([15,20])
+          // .rotate
+          // .scale(3000)
+          // .translate([width / 2, height / 2]);
+          .rotate([96, 0])
+          // .center([-.6, 38.7])
+          .parallels([29.5, 45.5])
           .scale(1070)
-          .translate([width / 2, height / 2]);
+          .translate([width / 2, height / 2])
+          .precision(.1);
 
       // d3.geo.path maps geocoordinates to svg.
       // .projection() links the projection var to the geo.path
@@ -194,15 +212,19 @@ var make_topojson_map_usa = function(){
   // GIVE THE MAP DATA TO DRAW
 
       // take the json data
-      d3.json("/static/maps/us.json", function(error, us) {
+      var file_path = "/static/maps/"+for_state+"_counties.json";
+      d3.json(file_path, function(error, us) {
         // append another "g" DOM element to the already present (bigger) g? Making a child?
         g.append("g")
-          // each new "g" has the property "id", as taken from the json object "states"?
-          .attr("id", "states")
+          // each new "g" has the property "id", as taken from the json object "CA_counties"?
+          .on("mouseover", function() {
+            d3.select(this).style("cursor","zoom-in");
+          })
+          .attr("id", "counties")
           // select all "path" properties from witin the svg object g,
           .selectAll("path")
           // and assign the topojson vector info to the "path" attr of the g object
-            .data(topojson.feature(us, us.objects.states).features)
+            .data(topojson.feature(us, us.objects.State_counties).features)
           .enter().append("path")
             .attr("d", path)
             // add event listener
@@ -212,8 +234,8 @@ var make_topojson_map_usa = function(){
         // to the g object, also add the path association with the borders.
         // unclear how it knows this is the borders
         g.append("path")
-            .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-            .attr("id", "state-borders")
+            .datum(topojson.mesh(us, us.objects.State_counties, function(a, b) { return a !== b; }))
+            .attr("id", "county-borders")
             .attr("d", path);
       });
 
@@ -221,12 +243,12 @@ var make_topojson_map_usa = function(){
 
     //JS INTERACTIVITY
 
-      // js function.  for moving the clicked state to the center
+      // js function.  for moving the clicked county to the center
       function clicked(d) {
 
         var x, y, k;
 
-            // if clicking on a state (d)
+            // if clicking on a county (d)
             if (d && centered !== d) {
               var centroid = path.centroid(d);
               x = centroid[0];
@@ -234,27 +256,38 @@ var make_topojson_map_usa = function(){
               k = 4;
               centered = d;
 
-              // get the id of the state, which == state name, and should match db info!!!
-                var state_name = state_name_dict[d.id];
+              // get the id of the county, which == county name, and should match db info!!!
+                county_name = d.id;
                 console.log(d.id);
 
               //get fuel_mix info, place into list.
-                var v0 = fuel_mix[state_name]["gas"],
-                    v1 = fuel_mix[state_name]["coal"],
-                    v2 = fuel_mix[state_name]["solar"],
-                    v3 = fuel_mix[state_name]["wind"],
-                    v4 = fuel_mix[state_name]["nuclear"],
-                    v5 = fuel_mix[state_name]["hydro"],
-                    v6 = fuel_mix[state_name]["other"];
-                var data_list = [v0,v1,v2,v3,v4,v5,v6];
+                if (!fuel_mix[county_name]){
+                  fuel_mix[county_name] = {};
+                  fuel_mix[county_name]["gas"] = 0;
+                  fuel_mix[county_name]["coal"] = 0;
+                  fuel_mix[county_name]["solar"] = 0;
+                  fuel_mix[county_name]["wind"] = 0;
+                  fuel_mix[county_name]["nuclear"] = 0;
+                  fuel_mix[county_name]["hydro"] = 0;
+                  fuel_mix[county_name]["other"] = 0;
+                };
 
-              // display the c3 donut, with state-specific data.
+                  var v0 = fuel_mix[county_name]["gas"],
+                      v1 = fuel_mix[county_name]["coal"],
+                      v2 = fuel_mix[county_name]["solar"],
+                      v3 = fuel_mix[county_name]["wind"],
+                      v4 = fuel_mix[county_name]["nuclear"],
+                      v5 = fuel_mix[county_name]["hydro"],
+                      v6 = fuel_mix[county_name]["other"];
+                  var data_list = [v0,v1,v2,v3,v4,v5,v6];
+
+              // display the c3 donut, with county-specific data.
                 //  empty old
                   $('#fuel-donut').empty();
                 //  make new
                   make_donut(data_list);
 
-              // display the d3 sliders, with state-specific data.
+              // display the d3 sliders, with county-specific data.
                 // make visible
                   $('#slider-wrapper').css('visibility','visible');
                 // get ride of old sliders & values.
@@ -266,10 +299,10 @@ var make_topojson_map_usa = function(){
                   $('#slider5').empty();
                   $('#slider6').empty();
                 // re-make sliders with new values
-                  set_slider_values(data_list, state_name);
+                  set_slider_values(data_list, county_name);
 
               // input the scenario results.  Note: this div is hidden until after the scenario is run!
-                  $('#display-results').text(scenario_result[state_name]);
+                  $('#display-results').text(scenario_result[county_name]);
 
 
             } else {
@@ -294,7 +327,20 @@ var make_topojson_map_usa = function(){
 
 };
 
-make_topojson_map_usa();
+
+
+//  event listener.  Takes the state entered by the user, and triggers the creation of the county map.
+  function get_state_and_draw_map(evt){
+    $('#topomap').empty();
+    var state_name = $('#enter-state input').val();
+    console.log(state_name);
+    var entered_state_abbv = state_name_to_abbv[state_name];
+    make_topojson_map_counties(entered_state_abbv);
+    $('#instructions').css('visibility','visible');
+  }
+
+  $('#get-data-draw-map').on("click",get_state_and_draw_map);
+
 
 
 
@@ -378,20 +424,20 @@ make_topojson_map_usa();
   // SCENARIO RESULT -- EVENT HANDLING /////////////////////////////
 
 
-function runScenarioUSA(evt){
+function runScenario(evt){
   evt.preventDefault();
   console.log("runScenario js function");
 
-  $.ajax('scenario-result-usa', {
+  $.ajax('scenario-result', {
     type: 'POST',
     data: JSON.stringify(fuel_mix),
     contentType: 'application/json',
     success: function(data, status, result){
       scenario_result = JSON.parse(result.responseText);
-      console.log(scenario_result);
       $('#instructions').empty();
       $('#display-results').css('visibility','visible');
       $('#see-results').css('visibility','visible');
+      $('#display-results').text(scenario_result[county_name]);
 
     }
   });
@@ -399,7 +445,7 @@ function runScenarioUSA(evt){
 }
 
 var scenario_result = {};
-$('#submit').on("click", runScenarioUSA);
+$('#submit').on("click", runScenario);
 
 
 

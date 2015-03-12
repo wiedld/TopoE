@@ -31,6 +31,23 @@ from xml.dom import minidom
         #     RENEW_FCST_5MIN_MW    operating interval RTD forecast, 5 min
 
 ###################################################################
+# RENEW_FCST_ACT_MW
+
+    # http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_REN_FCST&market_run_id=ACTUAL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1
+
+    # <REPORT_DATA>
+    # <DATA_ITEM>RENEW_FCST_ACT_MW</DATA_ITEM>
+    # <OPR_DATE>2013-09-19</OPR_DATE>
+    # <INTERVAL_NUM>2</INTERVAL_NUM>
+    # <INTERVAL_START_GMT>2013-09-19T08:00:00-00:00</INTERVAL_START_GMT>
+    # <INTERVAL_END_GMT>2013-09-19T09:00:00-00:00</INTERVAL_END_GMT>
+    # <VALUE>-0.86949</VALUE>
+    # <TRADING_HUB>NP15</TRADING_HUB>
+    # <RENEWABLE_TYPE>Solar</RENEWABLE_TYPE>
+    # </REPORT_DATA>
+
+
+###################################################################
 
 # SYS_FCST_5MIN_MW
 

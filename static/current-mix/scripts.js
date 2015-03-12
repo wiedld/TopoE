@@ -118,6 +118,7 @@
 
             clip = svg.selectAll("clipPath")
                 .data( dataPoints )
+                .style("color","black")
 
             clip.exit().remove();
 

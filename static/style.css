@@ -5,8 +5,9 @@
   pointer-events: all;
 }
 
+/*fill:none was in the original d3 for the topojson maps, not sure why.  It was screwing up rendering of other d3 elements -- so it is commented out.*/
 .application{
-  fill: none;
+  /*fill: none;*/
   color: black;
 }
 

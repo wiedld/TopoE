@@ -1,59 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>TBD</title>
-
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  <!-- Optional theme -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-  <!-- Bootstraps's js requires jquery. -->
-  <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-  <!-- custom styling -->
-  <link rel="stylesheet" type="text/css" href="/static/style.css">
-
-
-</head>
-
-
-<body class="application">
-<!-- TODO:  NAV BAR -->
-  <!-- <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="../">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-        </a>
-        <a class="navbar-brand" href="./">Dashboard Starter UI</a>
-      </div>
-      <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-left">
-          <li><a href="">Home</a></li>
-          <li><a href="">About</a></li>
-          <li><a href="">What am I using now?</a></li>
-        </ul>
-      </div>
-    </div> -->
-  <!-- </div> -->
+{% extends 'base.html' %}
+{% block body %}
 
 
   <br>
   <br>
 
   <main class="container-fluid">
+
+    <div class="row">
+    <!-- Above the row displaying all the data, include an option to sitch states. -->
+      <section class="col-sm-8">
+          <!-- <form id='enter-state'> -->
+            <div id='enter-state' style='border:1px solid #999;'>
+            </div>
+          <!-- </form> -->
+              <button id='get-data-draw-map'>Find power plants for counties in this state.</button>
+      </section>
+    </div>
+
     <div class="row">
 
+      <!-- Section for the map, map instructions, and scenario outcome text. -->
       <section class="col-sm-7 col-sm-offset-1">
         <div class="row">
-          <h2 id="instructions">Click on each county, and adjust the fuel mix!</h2>
+          <h2 id="instructions" style='visibility:hidden'>Click on each county, and adjust the fuel mix!</h2>
 
           <div id="see-results" style='visibility:hidden'>
             <h2>To see your results, click on each county again!</h2>
@@ -72,6 +42,7 @@
         </div>
       </section>
 
+      <!-- Section for the scenario button (upper left corner, near instructions from the section above), fuel donut, and sliders. -->
       <section id="fuels-per-county" class="col-sm-3">
         <div class = "row">
           <div class = "col-sm-3">
@@ -146,14 +117,18 @@
     </div>
   </main>
 
-  <!-- d3, topojson, ajax, jquery, underscore.js -->
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="http://d3js.org/topojson.v1.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/c3/0.4.9/c3.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
-  <!-- Scripts for this specific website -->
-  <script src="/static/d3.slider.js"></script>
-  <script src="/static/scripts2.js"></script>
+  <!-- Javascript -->
 
-</body>
-</html>
+      <!-- d3, topojson, ajax, jquery, underscore.js -->
+      <script src="http://d3js.org/d3.v3.min.js"></script>
+      <script src="http://d3js.org/topojson.v1.min.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/c3/0.4.9/c3.min.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
+      <!-- Scripts for this specific website -->
+      <script src="/static/maps/d3.slider.js"></script>
+      <script src='/static/maps/complete.ly.1.0.1.min.js'></script>
+      <script src="/static/maps/scripts_county_map.js"></script>
+
+{% endblock %}
+
+
