@@ -96,7 +96,7 @@ def scenario_result_usa():
 def current_mix():
     """Take data structure for current fuel mix, and pipe through to frontend object"""
 
-    return render_template("current2.html")
+    return render_template("current_mix.html")
 
 
 

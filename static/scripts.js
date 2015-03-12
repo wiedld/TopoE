@@ -107,7 +107,9 @@ var set_slider_values = function(data_list,county_name){
         slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4", "#slider5", "#slider6"];
 
     $.each(slider_elements, function(idx, slider_element){
-        d3.select(slider_element).call(d3.slider().axis(axis)
+        d3.select(slider_element).call(
+          d3.slider()
+          .axis(true)
           .value(data_list[idx])
           .on("slide", function(evt, value){
             slide_event(value, fuel_names[idx], idx);
@@ -160,8 +162,8 @@ var make_topojson_map_counties = function(for_state){
     // MAKE THE SVG
 
       // define variables, to use later.
-      var width = (960),
-          height = (750),
+      var width = (760),
+          height = (650),
           centered;
 
       // creates the svg object and adds to the body in the DOM.
