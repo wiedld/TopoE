@@ -32,46 +32,22 @@ from xml.dom import minidom
         #     RENEW_FCST_ACT_MW     actual renewables, hrly
         #     RENEW_FCST_5MIN_MW    operating interval RTD forecast, 5 min
 
+###################################################################
 
-####################################################################
-##### WHAT IS USED NOW, for db and web app #############
+# SYS_FCST_5MIN_MW
 
-# SYS_FCST_ACT_MW
-
-    # http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&market_run_id=ACTUAL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1&as_region=ALL
+    # http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&market_run_id=RTM&execution_type=RTD&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1&as_region=ALL
 
     # <REPORT_DATA>
-    # <DATA_ITEM>SYS_FCST_ACT_MW</DATA_ITEM>
+    # <DATA_ITEM>SYS_FCST_5MIN_MW</DATA_ITEM>
     # <RESOURCE_NAME>CA ISO-TAC</RESOURCE_NAME>
     # <OPR_DATE>2013-09-19</OPR_DATE>
-    # <INTERVAL_NUM>18</INTERVAL_NUM>
-    # <INTERVAL_START_GMT>2013-09-20T00:00:00-00:00</INTERVAL_START_GMT>
-    # <INTERVAL_END_GMT>2013-09-20T01:00:00-00:00</INTERVAL_END_GMT>
-    # <VALUE>33493</VALUE>
+    # <INTERVAL_NUM>98</INTERVAL_NUM>
+    # <INTERVAL_START_GMT>2013-09-19T15:05:00-00:00</INTERVAL_START_GMT>
+    # <INTERVAL_END_GMT>2013-09-19T15:10:00-00:00</INTERVAL_END_GMT>
+    # <VALUE>26255</VALUE>
     # </REPORT_DATA>
 
-
-###################################################################
-##### FUTURE POSSIBILITIES -- may use this later #############
-
-
-# RENEW_FCST_ACT_MW
-
-    # http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_REN_FCST&market_run_id=ACTUAL&startdatetime=20130919T07:00-0000&enddatetime=20130920T07:00-0000&version=1
-
-    # <REPORT_DATA>
-    # <DATA_ITEM>RENEW_FCST_ACT_MW</DATA_ITEM>
-    # <OPR_DATE>2013-09-19</OPR_DATE>
-    # <INTERVAL_NUM>2</INTERVAL_NUM>
-    # <INTERVAL_START_GMT>2013-09-19T08:00:00-00:00</INTERVAL_START_GMT>
-    # <INTERVAL_END_GMT>2013-09-19T09:00:00-00:00</INTERVAL_END_GMT>
-    # <VALUE>-0.86949</VALUE>
-    # <TRADING_HUB>NP15</TRADING_HUB>
-    # <RENEWABLE_TYPE>Solar</RENEWABLE_TYPE>
-    # </REPORT_DATA>
-
-
-####################################################################
 ####################################################################
 ####################################################################
 # INITIAL SEEDING OF DB
@@ -81,8 +57,8 @@ def initial_db_seeding(seed_startdate,seed_enddate):
 
     # since this function is called from seeding.py, import datetime libraries as need to iterate over daterange for seeding.
     from datetime import datetime, timedelta
-    start_loop = datetime.strptime(seed_startdate,'%Y%m%d')
-    end_loop = datetime.strptime(seed_enddate,'%Y%m%d')
+    start_loop = datetime.strptime(startdate,'%Y%m%d')
+    end_loop = datetime.strptime(enddate,'%Y%m%d')
 
     for single_date in daterange(start_loop, end_loop):
         url_startdate = single_date.strftime('%Y%m%d')
@@ -159,22 +135,22 @@ def get_historic_api_data(api_startdate, api_enddate):
                     })
             print data
 
-             ## TODO: check values within expected bounds, confirm timestamp is new, and update into db of dynamic data
+            ## TODO: check values within expected bounds, confirm timestamp is new, and update into db of dynamic data
             insert_row_db(api_startdate, data)
 
-
         except:
-            print ("Error.  CAISO_daily_api failure at",current_str)
+            print ("Error.  CAISO_flask_api failure at",current_str)
 
             f = open('tasks/logs/log_file.txt','a')
-            f.write("\nError.  CAISO_daily_api failure at: " +current_str+" for date "+api_startdate)
+            f.write("\nError.  CAISO_flask_api failure at: " +current_str+" for date "+api_startdate)
             f.close
 
+
     except URLError:
-        print ("Error.  CAISO_daily_api failure at",current_str)
+        print ("Error.  CAISO_flask_api failure at",current_str)
 
         f = open('tasks/logs/log_file.txt','a')
-        f.write("\nError.  CAISO_daily_api failure at: " +current_str+" for date "+api_startdate)
+        f.write("\nError.  CAISO__flask_api failure at: " +current_str+" for date "+api_startdate)
         f.close
 
 

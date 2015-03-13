@@ -104,10 +104,11 @@ def get_historic_mw_by_fuel(date):
     except:
         print ("Error. CAISO_hrly_data_scraper failure at",current_str)
 
-        f = open('log_file.txt','a')
-        f.write("\nError.  CAISO_hrly_data_scraper failure at: " +current_str)
+        f = open('tasks/logs/log_file.txt','a')
+        f.write("\nError.  CAISO_daily_data_scraper failure at: " +current_str+" for date "+date)
         f.close
         # TODO: write a timeout funtion (delay), and recall function attempt again...call the main function (daily_scraper_db_update)?  Python library -- try up to x times until succeeds, and then would error and print to log file.  Once production -- use trigger email (make http request to email service, for fee).
+
 
 
 
@@ -128,17 +129,16 @@ def insert_row_db(date, hr, adict):
 
     for k,v in adict.items():
         fuel_obj = model.HistoricCAISOProdByFuel()
-        print fuel_obj
+
         fuel_obj.date = datetime.strptime(date,'%Y%m%d')
         fuel_obj.hour = hr
         fuel_obj.fuel_type = k
         fuel_obj.mw_gen = v
 
         session.add(fuel_obj)
-        print "got past add"
 
     session.commit()
-    print "got past commit"
+
     print ("Inserted data for date: "+date+" and hour: "+str(hr))
 
 

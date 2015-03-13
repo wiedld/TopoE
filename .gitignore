@@ -2,3 +2,7 @@ env/
 *pyc
 secrets.sh
 *.DS_Store
+*.db
+
+tasks/tmp/
+tasks/logs/

@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<!-- Make container spacing standard across pages -->
+<main class="container-fluid">
+<br>
+<br>
+    <section class="container" style="height:600px">
+        <div class="row" style="height:70%">
+            <div class="col-lg-12">
+                <div class="row ">
+                    <div class="col-sm-8 col-xs-offset-2">
+                        <div class="jumbotron">
+                          <h3>Technologies and the Stack</h3>
+                          <p>Data provided to TopoE includes open data provided by the federal government (EIA) and the California electric grid (CAISO).  Technologies include python (flask, pandas), javascript (D3, AJAX,JQuery), SQLAlchemy and a SQLite3 database, created a tasks package (web scraping, CAISO api) to be triggered by cron/celery, a calculations package used by the flask router (pandas data munging, binary decision tree, machine learning), HTML5, CSS, jinja.</p>
+                          <p><!-- <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+<!-- FIRST ROW - of explanation. -->
+  <div class="row" id="about-1" style="height:600px">
+    <section class="col-sm-6 col-sm-offset-1">
+      <div class="row">
+      <!-- Inserted Image -->
+        <img src="/static/img/bdt.jpg" style="width:500px">
+<!-- closing bootstrap container row and col (spacing)             -->
+      </div> <!-- row -->
+    </section>  <!-- col 7, offset 1 -->
+
+<!-- adding another bootstrap element (for description) -->
+    <section class="col-sm-4" id="description">
+
+            <div class="row vertical-center-row">
+                <div class="thumbnail"><!-- keep the thumbnail formatting -->
+                  <div class="caption">
+                    <h3>Calculating Scenarios with a BDT</h3>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.
+
+                    </p>
+                   <!--  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p> -->
+                  </div>
+                </div>
+
+            </div>
+    </section>
+
+  </div>  <!-- row -->
+
+
+
+
+
+
+<!-- SECOND ROW - of explanation. -->
+  <div class="row" id="about-2" style="height:600px">
+    <section class="col-sm-4 col-sm-offset-1" id="description">
+
+            <div class="row vertical-center-row">
+                <div class="thumbnail"> <!-- keep the thumbnail formatting -->
+                  <div class="caption">
+                    <h3>Basic Machine Learning</h3>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.
+
+                    </p>
+                   <!--  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p> -->
+                  </div>
+                </div>
+
+            </div>
+    </section>
+
+
+    <section class="col-sm-6">
+      <div class="row">
+
+      <!-- Inserted Image -->
+          <img src="/static/img/ml_fun.jpg" style="width:700px">
+<!-- closing bootstrap container row and col (spacing)             -->
+      </div> <!-- row -->
+    </section>  <!-- col 7, offset 1 -->
+
+<!-- adding another bootstrap element (for description) -->
+  </div>  <!-- row -->
+
+
+
+
+
+
+
+<!-- THIRD ROW - of explanation. -->
+  <div class="row" id="about-1" style="height:600px">
+    <section class="col-sm-6 col-sm-offset-1">
+      <div class="row">
+      <!-- Inserted Image -->
+        <img src="/static/img/tasks_run.png" style="width:500px">
+<!-- closing bootstrap container row and col (spacing)             -->
+      </div> <!-- row -->
+    </section>  <!-- col 7, offset 1 -->
+
+<!-- adding another bootstrap element (for description) -->
+    <section class="col-sm-4" id="description">
+
+            <div class="row vertical-center-row">
+                <div class="thumbnail"><!-- keep the thumbnail formatting -->
+                  <div class="caption">
+                    <h3>Open Data, Web scrapers, and API</h3>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.
+
+                    </p>
+                   <!--  <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p> -->
+                  </div>
+                </div>
+
+            </div>
+    </section>
+
+  </div>  <!-- row -->
+
+
+
+
+</main> <!-- container -->
+
+{% endblock %}
+

@@ -23,6 +23,7 @@ def index():
 
 
 #########################################################
+#########################################################
 # STATE MAP -- CLICK ON COUNTIES
 
 
@@ -62,6 +63,7 @@ def scenario_result():
 
 
 #########################################################
+#########################################################
 # USA MAP -- CLICK ON STATES
 
 @app.route("/usa_map")
@@ -98,7 +100,9 @@ def scenario_result_usa():
 
 
 #########################################################
+#########################################################
 #  CURRENT MIX
+
 @app.route("/current")
 def current_mix():
     """Take data structure for current fuel mix, and pipe through to frontend object"""
@@ -108,6 +112,18 @@ def current_mix():
 
 ###########################################################
 ###########################################################
+# ABOUT
+
+@app.route("/about")
+def about_HB_project():
+    """Explains how the under-the-cover works."""
+
+    return render_template("about.html")
+
+
+
+#########################################################
+#########################################################
 
 
 def main():

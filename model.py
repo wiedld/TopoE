@@ -10,7 +10,7 @@ Base = declarative_base()
 #######################################################################
 
 ##  STEP1 = make the db file and metadata.  In python shell:
-# -i model.py  >  create_engine  >  Base.metadata.create
+# -i model.py  >  create_engine  >  Base.metadata.create_all(eng)
 
 ##  STEP 2 = Perform seeding.
 ENGINE = None
@@ -145,7 +145,9 @@ class StatsGen(Base):
 
 
 
-## This table is for the historic production information from CAISO.  This data is in HOURLY AMOUNTS, versus the monthly amounts in the production tables above.
+## PRODUCTION / GENERATION.
+# This table is for the historic production information from CAISO.
+# This data is in HOURLY AMOUNTS, versus the monthly amounts in the production tables above.
 # Data in this table will be populated in two ways: the initial seeding, and the updates from tasks/historic_renewables_seeding which is activated daily by cron.
 
 class HistoricCAISOProdByFuel(Base):
@@ -153,9 +155,27 @@ class HistoricCAISOProdByFuel(Base):
 	id = Column(Integer, primary_key=True)
 	date = Column(DateTime)
 	hour = Column(Integer)
-	minute = Column(Integer)
+	minute = Column(Integer)	# not used so far.
 	fuel_type = Column(String(20))
 	mw_gen = Column(Integer)
+
+
+
+
+
+## DEMAND.
+# This table is for the historic demand information from CAISO.
+# This data is in HOURLY AMOUNTS, and is used to calculate the estimated breakdown of all fuels in the mix (and not just those fuel mw provided by CAISO.
+# Data in this table will be populated in two ways: the initial seeding, and the updates from tasks/historic_renewables_seeding which is activated daily by cron.
+
+class HistoricCAISODemand(Base):
+	__tablename__ = "HistoricCAISODemands"
+	id = Column(Integer, primary_key=True)
+	date = Column(DateTime)
+	hour = Column(Integer)
+	minute = Column(Integer)	# not used so far
+	CAISO_tac = Column(String(20))
+	mw_demand = Column(Integer)
 
 
 
