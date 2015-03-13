@@ -198,6 +198,9 @@ var make_topojson_map_usa = function(){
         // append another "g" DOM element to the already present (bigger) g? Making a child?
         g.append("g")
           // each new "g" has the property "id", as taken from the json object "states"?
+          .on("mouseover", function() {
+            d3.select(this).style("cursor","zoom-in");
+          })
           .attr("id", "states")
           // select all "path" properties from witin the svg object g,
           .selectAll("path")
@@ -392,6 +395,7 @@ function runScenarioUSA(evt){
       $('#instructions').empty();
       $('#display-results').css('visibility','visible');
       $('#see-results').css('visibility','visible');
+      $('#display-results').text(scenario_result[county_name]);
 
     }
   });
