@@ -67,6 +67,8 @@ def daily_scraper_db_update():
 def get_historic_mw_by_fuel(date):
     """This is a separate function for the CAISO web scraping renewables mw.  Logs errors.  Feeds scraped data to insert_row_db()."""
 
+    from datetime import datetime
+
     current = datetime.now()
     current_str = str(current)
 
@@ -85,7 +87,8 @@ def get_historic_mw_by_fuel(date):
                 fuel_mw['wind'] = int(data[5])
                 fuel_mw['solar'] = int(data[6])
                 fuel_mw['thermal'] = int(data[7])
-                hour = int(data[0])
+                hour = int(data[0])-1
+                hour = datetime.strptime((date+"T"+str(hour)),'%Y%m%dT%H')
                 insert_row_db(date, hour, fuel_mw)
 
             if count_lines >30:
@@ -95,11 +98,11 @@ def get_historic_mw_by_fuel(date):
                 fuel_mw['thermal'] = int(data[3])
                 fuel_mw['imports'] = int(data[4])
                 fuel_mw['hydro'] = int(data[5])
-                hour = int(data[0])
+                hour = int(data[0])-1
+                hour = datetime.strptime((date+"T"+str(hour)),'%Y%m%dT%H')
                 insert_row_db(date, hour, fuel_mw)
 
             count_lines+=1
-
 
     except:
         print ("Error. CAISO_hrly_data_scraper failure at",current_str)
@@ -121,7 +124,7 @@ def insert_row_db(date, hr, adict):
     import os
     parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.sys.path.insert(0,parentdir)
-    print parentdir
+
     import model
     print "model imported"
     session = model.connect()
@@ -131,15 +134,16 @@ def insert_row_db(date, hr, adict):
         fuel_obj = model.HistoricCAISOProdByFuel()
 
         fuel_obj.date = datetime.strptime(date,'%Y%m%d')
-        fuel_obj.hour = hr
+        fuel_obj.time_start = hr
         fuel_obj.fuel_type = k
         fuel_obj.mw_gen = v
 
         session.add(fuel_obj)
+        print fuel_obj
 
     session.commit()
 
-    print ("Inserted data for date: "+date+" and hour: "+str(hr))
+    print ("Inserted data for date: "+str(hr))
 
 
 

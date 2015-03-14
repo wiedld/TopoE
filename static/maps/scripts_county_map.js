@@ -103,7 +103,7 @@ var set_slider_values = function(data_list,county_name){
 
     // make the sliders
 
-    var axis = d3.svg.axis().orient("bottom").ticks(5);
+    // var axis = d3.svg.axis().orient("bottom").ticks(5);
 
     var fuel_names = ["gas", "coal", "solar", "wind", "nuclear", "hydro", "other"],
         slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4", "#slider5", "#slider6"];
@@ -111,7 +111,7 @@ var set_slider_values = function(data_list,county_name){
     $.each(slider_elements, function(idx, slider_element){
         d3.select(slider_element).call(
           d3.slider()
-          .axis(axis)
+          // .axis(axis)
           .value(data_list[idx])
           .on("slide", function(evt, value){
             slide_event(value, fuel_names[idx], idx);

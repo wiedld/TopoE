@@ -154,10 +154,14 @@ class HistoricCAISOProdByFuel(Base):
 	__tablename__ = "HistoricCAISOProdByFuels"
 	id = Column(Integer, primary_key=True)
 	date = Column(DateTime)
-	hour = Column(Integer)
+	time_start = Column(DateTime)
 	minute = Column(Integer)	# not used so far.
 	fuel_type = Column(String(20))
 	mw_gen = Column(Integer)
+
+	def __repr__(self):
+		"""Show info about object"""
+		return "<date: %s, time_start: %s, fuel_type: %s, mw_gen: %d>" % (str(self.date), str(self.time_start), self.fuel_type, self.mw_gen)
 
 
 
@@ -172,10 +176,15 @@ class HistoricCAISODemand(Base):
 	__tablename__ = "HistoricCAISODemands"
 	id = Column(Integer, primary_key=True)
 	date = Column(DateTime)
-	hour = Column(Integer)
-	minute = Column(Integer)	# not used so far
+	time_start = Column(DateTime)
+	time_end = Column(DateTime)
 	CAISO_tac = Column(String(20))
 	mw_demand = Column(Integer)
+
+	def __repr__(self):
+		"""Show info about object"""
+		return "<date: %s, time_start: %s, CAISO_tac: %s, mw_demand: %d>" % (str(self.date), str(self.time_start), self.CAISO_tac, self.mw_demand)
+
 
 
 

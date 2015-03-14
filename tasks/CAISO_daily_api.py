@@ -122,6 +122,8 @@ def get_historic_api_data(api_startdate, api_enddate):
         # TODO: update for Daylight Savings time
         url = "http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&market_run_id=ACTUAL&startdatetime="+api_startdate+"T07:00-0000&enddatetime="+api_enddate+"T07:00-0000&version=1&as_region=ALL"
 
+        print url
+
         # API call, downloads and saves the zipped file.
         file_name = url.split('/')[-1]  # zipped filename
 
@@ -151,15 +153,25 @@ def get_historic_api_data(api_startdate, api_enddate):
             xml_dom = minidom.parse(str(name))
             data = []
             for node in xml_dom.getElementsByTagName("REPORT_DATA"):
+
+                # slice out the date/time, start & end interval
+                # u ' %Y-%m-%dT%H:%M:00-00:00'
+                interval_start = (handleTok(node.getElementsByTagName("INTERVAL_START_GMT"))).encode("utf8").strip()
+                interval_end = (handleTok(node.getElementsByTagName("INTERVAL_END_GMT"))).encode("utf8").strip()
+
+                interval_start = interval_start[0:16]
+                interval_end = interval_end[0:16]
+
                 data.append({
-                    'opr_date': handleTok(node.getElementsByTagName("OPR_DATE")),
-                    'hour': handleTok(node.getElementsByTagName("INTERVAL_NUM")),
-                    'CAISO_tac': handleTok(node.getElementsByTagName("RESOURCE_NAME")),
-                    'mw_demand': handleTok(node.getElementsByTagName("VALUE"))
+                    'opr_date': (handleTok(node.getElementsByTagName("OPR_DATE"))).encode("utf8").strip(),
+                    'time_start': datetime.strptime(interval_start,'%Y-%m-%dT%H:%M'),
+                    'time_end': datetime.strptime(interval_end,'%Y-%m-%dT%H:%M'),
+                    'CAISO_tac': (handleTok(node.getElementsByTagName("RESOURCE_NAME"))).encode("utf8").strip(),
+                    'mw_demand': (handleTok(node.getElementsByTagName("VALUE"))).encode("utf8").strip()
                     })
-            print data
 
              ## TODO: check values within expected bounds, confirm timestamp is new, and update into db of dynamic data
+
             insert_row_db(api_startdate, data)
 
 
@@ -171,6 +183,7 @@ def get_historic_api_data(api_startdate, api_enddate):
             f.close
 
     except URLError:
+        print "error on line 185"
         print ("Error.  CAISO_daily_api failure at",current_str)
 
         f = open('tasks/logs/log_file.txt','a')
@@ -181,32 +194,36 @@ def get_historic_api_data(api_startdate, api_enddate):
 
 
 
+
 def insert_row_db(date, list_of_dicts):
     """Takes in a list of dicts, with each list item equal to a timepoint. inserts into HistoricCAISODemand"""
 
     # add parent directory to the path, so can import model.py
     #  need model in order to update the database when this task is activated by cron
+
     import os
     parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.sys.path.insert(0,parentdir)
-    print parentdir
     import model
+
     print "model imported"
     session = model.connect()
 
     from datetime import datetime
 
     for timept_dict in list_of_dicts:
+        print timept_dict
         demand_obj = model.HistoricCAISODemand()
 
-        opr_date = (timept_dict['opr_date']).strip()
+        opr_date = timept_dict['opr_date']
         demand_obj.date = datetime.strptime(opr_date,'%Y-%m-%d')
-        demand_obj.hour = int(timept_dict['hour'])
+
+        demand_obj.time_start = timept_dict['time_start']
+        demand_obj.time_end = timept_dict['time_end']
         demand_obj.CAISO_tac = (timept_dict['CAISO_tac']).strip()
         demand_obj.mw_demand = int(timept_dict['mw_demand'])
 
         session.add(demand_obj)
-        print "added to session:", demand_obj.date, demand_obj.hour, demand_obj.CAISO_tac, demand_obj.mw_demand
 
     session.commit()
 

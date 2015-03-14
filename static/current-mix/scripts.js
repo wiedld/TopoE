@@ -1,6 +1,6 @@
 
 
-    var data = {"open":9640,"pending":33423,"cancelled":8230,"failed":35118,"complete":17414};
+    var data = {"natural gas":9640,"coal":33423,"nuclear":8230,"wind":35118,"solar":17414};
     var info = {};
 
     // update every 3 seconds

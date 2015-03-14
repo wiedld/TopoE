@@ -188,9 +188,9 @@ def load_CAISO_production():
 	# # re-seeded on 3/12/2015
 	# CAISO_daily_data_scraper.initial_db_seeding("20140101","20150311")
 
-	from tasks import CAISO_daily_api
-	# re-seeded on 3/12/2015
-	CAISO_daily_api.initial_db_seeding("20140101","20150311")
+	# from tasks import CAISO_daily_api
+	# # re-seeded on 3/12/2015
+	# CAISO_daily_api.initial_db_seeding("20140101","20150311")
 
 
 

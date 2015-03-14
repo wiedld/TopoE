@@ -63,7 +63,7 @@ def initial_db_seeding(seed_startdate,seed_enddate):
     for single_date in daterange(start_loop, end_loop):
         url_startdate = single_date.strftime('%Y%m%d')
         url_enddate = (single_date + timedelta(1)).strftime('%Y%m%d')
-        get_historic_api_data(url_startdate, url_enddate)
+        get_realtime_api_data(url_startdate, url_enddate)
 
 
 
@@ -77,18 +77,20 @@ def daterange(start_date, end_date):
 
 def daily_api_update():
     """This function will be called by the daily task (cron), to update demand in the db"""
+    # update based on flask triggers
+    pass
 
-    yesterday = date.today() - timedelta(1)
-    url_startdate = yesterday.strftime('%Y%m%d')
-    url_enddate = date.today().strftime('%Y%m%d')
-    get_historic_api_data(url_startdate, url_enddate)
+    # yesterday = date.today() - timedelta(1)
+    # url_startdate = yesterday.strftime('%Y%m%d')
+    # url_enddate = date.today().strftime('%Y%m%d')
+    # get_realtime_api_data(url_startdate, url_enddate)
 
 
 ###################################################################
 # BELOW FUNCTIONS ARE USED FOR BOTH OF THE TASKS SUMMARIZED ABOVE
 
 
-def get_historic_api_data(api_startdate, api_enddate):
+def get_realtime_api_data(api_startdate, api_enddate):
     from datetime import datetime
     current = datetime.now()
     current_str = str(current)
@@ -96,7 +98,7 @@ def get_historic_api_data(api_startdate, api_enddate):
     try:
         # note that is GMT time.  use T0:700 for now.
         # TODO: update for Daylight Savings time
-        url = "http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&market_run_id=ACTUAL&startdatetime="+api_startdate+"T07:00-0000&enddatetime="+api_enddate+"T07:00-0000&version=1&as_region=ALL"
+        url = "http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&market_run_id=RTM&execution_type=RTD&startdatetime="+api_startdate+"T07:00-0000&enddatetime="+api_enddate+"T07:00-0000&version=1&as_region=ALL"
 
         # API call, downloads and saves the zipped file.
         file_name = url.split('/')[-1]  # zipped filename
@@ -127,9 +129,10 @@ def get_historic_api_data(api_startdate, api_enddate):
             xml_dom = minidom.parse(str(name))
             data = []
             for node in xml_dom.getElementsByTagName("REPORT_DATA"):
+                # TODO:  make hour and minutes
                 data.append({
                     'opr_date': handleTok(node.getElementsByTagName("OPR_DATE")),
-                    'hour': handleTok(node.getElementsByTagName("INTERVAL_NUM")),
+                    # 'hour': handleTok(node.getElementsByTagName("INTERVAL_NUM")),
                     'CAISO_tac': handleTok(node.getElementsByTagName("RESOURCE_NAME")),
                     'mw_demand': handleTok(node.getElementsByTagName("VALUE"))
                     })
@@ -184,7 +187,7 @@ def insert_row_db(date, list_of_dicts):
         session.add(demand_obj)
         print "added to session:", demand_obj.date, demand_obj.hour, demand_obj.CAISO_tac, demand_obj.mw_demand
 
-    session.commit()
+    # session.commit()
 
     print ("Inserted data for date: "+date)
 
