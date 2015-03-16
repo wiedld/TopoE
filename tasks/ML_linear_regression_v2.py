@@ -41,10 +41,10 @@ def predict_current_mix(solar, wind, demand):
     """using the CAISO values avilable every 5-10 minutes, and the coeffs found by multivariable linear regression models (monthly data), the outcome predict the total fuel mix displayed on the frontend: gas, coal, solar, wind, nuclear, hydro, other."""
 
     # correlation built from hrly data
-    hydro, nuclear = predict_using_hrly_data(solar, wind, demand)
+    hydro = predict_using_hrly_data(solar, wind, demand)
 
     # correlation built from monthly data
-    gas,coal,other = predict_using_mo_data(solar,wind,hydro,nuclear,demand)
+    gas,coal,nuclear,other = predict_using_mo_data(solar,wind,hydro,demand)
 
     curr_fuel_mix_prediction = {
         'gas': round(gas),
@@ -114,42 +114,42 @@ def predict_using_hrly_data(curr_solar, curr_wind, curr_demand):
     print "hydro_prediction", hydro_prediction
 
 
-    # #### PREDICTING NUCLEAR #####
-    x_vars_dict_b = {'solar': solar_series,
-                    'wind': wind_series,
-                    'demand':demand_series,
-                    'hydro': hydro_series
-                    }
+    # # #### PREDICTING NUCLEAR #####
+    # x_vars_dict = {'solar': solar_series,
+    #                 'wind': wind_series,
+    #                 'demand':demand_series,
+    #                 'hydro': hyd
+    #                 }
 
-    df_x_vars_b = DataFrame(x_vars_dict_b)
-    Xb = np.asarray(df_x_vars_b)
+    # df_x_vars = DataFrame(x_vars_dict)
 
-    # get series with y values
-    series_y_var_b = hydro_series
-    Yb = np.asarray(series_y_var_b)
+    # # get series with y values
+    # series_y_var_b = hydro_series
 
-    print "PREDICTING NUCLEAR"
-    print "shape X", Xb.shape
-    print "shape y", Yb.shape
+    # Yb = np.asarray(series_y_var_b)
 
-    print "est.fit(X, Y)", estB.fit(Xb,Yb)
-    print "est.coef_", estB.coef_
+    # print "PREDICTING HYDRO"
+    # print "shape X", Xb.shape
+    # print "shape y", Yb.shape
 
-    curr_dict_B = {'solar':curr_solar, 'wind':curr_wind, 'demand':curr_demand, 'hydro':hydro_prediction}
-    curr_series_B = Series(curr_dict_B)
-    curr_input_B = np.asarray(curr_series_B)
+    # print "est.fit(X, Y)", estB.fit(Xb,Yb)
+    # print "est.coef_", estB.coef_
 
-    nuclear_prediction = estB.predict(curr_input_B)
-    print "nuclear_prediction:", nuclear_prediction
+    # curr_dict_A = {'solar':curr_solar, 'wind':curr_wind, 'demand':curr_demand, 'hydro':hydro_prediction}
+    # curr_series_A = Series(curr_dict_A)
+    # curr_input_A = np.asarray(curr_series_A)
 
-
-    return hydro_prediction, nuclear_prediction
+    # nuclear_prediction = estB.predict(curr_input_B)
+    # print "nuclear_prediction:", nuclear_prediction
 
 
+    return hydro_prediction
 
 
 
-def predict_using_mo_data(curr_solar,curr_wind,hydro_prediction,nuclear_prediction,curr_demand):
+
+
+def predict_using_mo_data(curr_solar,curr_wind,hydro_prediction,curr_demand):
     #### PREDICTING COAL ###
     solar_mo_series = query_EIA_fuel_monthly_Series('solar')
     wind_mo_series = query_EIA_fuel_monthly_Series('wind')
@@ -230,35 +230,35 @@ def predict_using_mo_data(curr_solar,curr_wind,hydro_prediction,nuclear_predicti
 
 
 
-    # #### PREDICTING NUCLEAR #####
+    #### PREDICTING NUCLEAR #####
 
-    # x_vars_dict_3 = {'solar': solar_mo_series,
-    #                 'wind': wind_mo_series,
-    #                 'hydro': hydro_mo_series,
-    #                 'gas': gas_mo_series
-    #                 }
+    x_vars_dict_3 = {'solar': solar_mo_series,
+                    'wind': wind_mo_series,
+                    'hydro': hydro_mo_series,
+                    'gas': gas_mo_series
+                    }
 
-    # df_x_vars_3 = DataFrame(x_vars_dict_3)
+    df_x_vars_3 = DataFrame(x_vars_dict_3)
 
-    # # get series with y values
-    # series_y_var_3 = nuclear_mo_series
+    # get series with y values
+    series_y_var_3 = nuclear_mo_series
 
-    # Y3 = np.asarray(series_y_var_3)
-    # X3 = np.asarray(df_x_vars_3)
+    Y3 = np.asarray(series_y_var_3)
+    X3 = np.asarray(df_x_vars_3)
 
-    # print "PREDICTING NUCLEAR"
-    # print "shape X", X3.shape
-    # print "shape y", Y3.shape
+    print "PREDICTING NUCLEAR"
+    print "shape X", X3.shape
+    print "shape y", Y3.shape
 
-    # print "est.fit(X, Y)", est3.fit(X3,Y3)
-    # print "est.coef_", est3.coef_
+    print "est.fit(X, Y)", est3.fit(X3,Y3)
+    print "est.coef_", est3.coef_
 
-    # curr_dict_3 = {'solar':curr_solar, 'wind':curr_wind, 'hydro':hydro_prediction, 'gas':gas_prediction}
-    # curr_series_3 = Series(curr_dict_3)
-    # curr_input_3 = np.asarray(curr_series_3)
+    curr_dict_3 = {'solar':curr_solar, 'wind':curr_wind, 'hydro':hydro_prediction, 'gas':gas_prediction}
+    curr_series_3 = Series(curr_dict_3)
+    curr_input_3 = np.asarray(curr_series_3)
 
-    # nuclear_prediction = est3.predict(curr_input_3)
-    # print "nuclear_prediction:", nuclear_prediction
+    nuclear_prediction = est3.predict(curr_input_3)
+    print "nuclear_prediction:", nuclear_prediction
 
 
     #### PREDICTING OTHER #####
@@ -313,13 +313,13 @@ def predict_using_mo_data(curr_solar,curr_wind,hydro_prediction,nuclear_predicti
 
     #### STANDARDIZE RESULT #####
 
-    remaining = curr_demand - (curr_solar + curr_wind + hydro_prediction + nuclear_prediction)
-    scaler =  remaining / (gas_prediction + coal_prediction + other_prediction)
+    remaining = curr_demand - (curr_solar + curr_wind + hydro_prediction)
+    scaler =  remaining / (gas_prediction + coal_prediction + nuclear_prediction + other_prediction)
 
-    gas_prediction, coal_prediction, other_prediction = gas_prediction*scaler, coal_prediction*scaler, other_prediction*scaler
+    gas_prediction, coal_prediction, nuclear_prediction, other_prediction = gas_prediction*scaler, coal_prediction*scaler, nuclear_prediction*scaler, other_prediction*scaler
 
 
-    return gas_prediction, coal_prediction, other_prediction
+    return gas_prediction, coal_prediction, nuclear_prediction, other_prediction
 
 
 
@@ -499,8 +499,8 @@ def check_if_bad_date(datetime_obj_as_str):
 #############################################################
 
 if __name__ == "__main__":
-    # predict_current_mix(5200,800,24000)       # solar, wind, demand # hr 13-14
-    predict_current_mix(0,2078,20000)       # solar, wind, demand.  # hr 6
+    predict_current_mix(5200,800,24000)       # solar, wind, demand # hr 13-14
+    # predict_current_mix(0,2078,20000)       # solar, wind, demand.  # hr 6
 
 
 
