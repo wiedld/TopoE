@@ -187,6 +187,25 @@ class HistoricCAISODemand(Base):
 
 
 
+## NET IMPORTS.
+# This table is for the historic net imports information from CAISO.
+# This data is in HOURLY AMOUNTS, and is used to calculate the estimated breakdown of all fuels in the mix (and not just those fuel mw provided by CAISO.
+# Data in this table will be populated in two ways: the initial seeding, and the updates from tasks/historic_renewables_seeding which is activated daily by cron.
+
+class HistoricCAISONetImport(Base):
+	__tablename__ = "HistoricCAISONetImports"
+	id = Column(Integer, primary_key=True)
+	date = Column(DateTime)
+	time_start = Column(DateTime)
+	time_end = Column(DateTime)
+	resource = Column(String(20))
+	mw_imports = Column(Float)
+
+	def __repr__(self):
+		"""Show info about object"""
+		return "<date: %s, time_start: %s, resource: %s, mw_imports: %d>" % (str(self.date), str(self.time_start), self.resource, self.mw_imports)
+
+
 
 ######################################################################
 

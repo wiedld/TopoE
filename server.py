@@ -104,6 +104,7 @@ def scenario_result_usa():
 #  CURRENT MIX
 
 @app.route("/current")
+# def current_mix(mix=predicted_curr_mix):
 def current_mix():
     """Take data structure for current fuel mix, and pipe through to frontend object"""
 
@@ -126,6 +127,7 @@ def about_HB_project():
 #########################################################
 
 
+
 def main():
     """For future use."""
     pass
@@ -136,4 +138,22 @@ if __name__ == "__main__":
     # app.run(host="0.0.0.0", debug=False)
     app.run(debug=True)
 
+
+
+#########################################################
+#########################################################
+
+
+"""Countinously updates the global variable predicted_curr_mix while server is running.  At end of flask route, so everything above is executed first when server is launched."""
+
+# while True:
+    # call to CAISO_flask_api for recent demand, import values
+    # call to CAISO_10min_data_scraper for wind, solar values
+    # call to ML_linear_regression, given X vars.
+        # return predicted curr mix
+        # overwrite global predicted_curr_mix
+
+##  make sure to define global predicted_curr_mix at the top of this file, and provide default values!
+
+##  then updated flask route to receive this data, and the html template
 
