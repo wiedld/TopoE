@@ -8,6 +8,11 @@ import os
 from xml.dom import minidom
 
 
+test = "CAISO api for RT demand, is connected"
+
+
+####################################################################
+
 """This file is used to update the database table: HistoricCAISODemand.
 
     There are two basic tasks this file contains:

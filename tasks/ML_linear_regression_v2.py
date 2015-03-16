@@ -8,6 +8,11 @@ import sklearn
 from sklearn import svm
 from sklearn.linear_model import LinearRegression
 
+
+test = "ML linear regression is connected"
+
+
+
 estA = LinearRegression(fit_intercept=True)
 estB = LinearRegression(fit_intercept=True)
 est1 = LinearRegression(fit_intercept=True)
@@ -56,8 +61,9 @@ def predict_current_mix(solar, wind, demand):
         'other': round(other)
     }
 
-    print demand
     print curr_fuel_mix_prediction
+
+    return curr_fuel_mix_prediction
 
 
 
@@ -499,8 +505,9 @@ def check_if_bad_date(datetime_obj_as_str):
 #############################################################
 
 if __name__ == "__main__":
-    predict_current_mix(5200,800,24000)       # solar, wind, demand # hr 13-14
+    # predict_current_mix(5200,800,24000)       # solar, wind, demand # hr 13-14
     # predict_current_mix(0,2078,20000)       # solar, wind, demand.  # hr 6
+    predict_current_mix(3678,272,22405)       # solar, wind, demand.  # hr 10
 
 
 

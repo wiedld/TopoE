@@ -2,11 +2,21 @@ from flask import Flask, render_template, redirect, request, jsonify
 import model
 import os
 
+##  these are used within functions.
+# on server startup, the messages print to confirm flask can find
 from calculations import pandas_data_munging as pdm
 print pdm.test
+from calculations import binary_decision_tree as bdt
+print bdt.test
 
-# from calculations import binary_decision_tree as bdt
-# print bdt.test
+
+## this is used outside of a function
+from tasks import CAISO_flask_data_scraper as RT_scrape
+print RT_scrape.test
+from tasks import CAISO_flask_api as RT_api
+print RT_api.test
+from tasks import ML_linear_regression_v2 as ML
+print ML.test
 
 
 
@@ -103,12 +113,38 @@ def scenario_result_usa():
 #########################################################
 #  CURRENT MIX
 
+# default to use:
+predicted_curr_mix = {'nuclear': 1094.0, 'gas': 12314.0, 'coal': 1795.0, 'other': 1795.0, 'solar': 3678.0, 'wind': 272.0, 'hydro': 1457.0}
+# default is updated by the "While True" function at the end of this server, which queries CAISO and updates every 10 minutes.
+
+
 @app.route("/current")
 # def current_mix(mix=predicted_curr_mix):
 def current_mix():
-    """Take data structure for current fuel mix, and pipe through to frontend object"""
 
     return render_template("current_mix.html")
+
+
+@app.route("/current-mix-data", methods=['POST'])
+def current_mix_data():
+    """Take data structure for current fuel mix, and pipe through to frontend object"""
+
+    solar, wind = RT_scrape.get_solar_wind()
+    print "solar:", solar
+    print "wind:", wind
+
+    demand = 22000
+    # call to CAISO_flask_api for recent demand
+
+    predicted_curr_mix = ML.predict_current_mix(solar,wind,demand)
+
+    print predicted_curr_mix
+
+    now_data = {'nuclear': 1328.0, 'gas': 14937.0, 'coal': 2180.0, 'other': 2180.0, 'solar': 0.0, 'wind': 614.0, 'hydro': 760.0}
+
+    return jsonify(now_data)
+
+
 
 
 ###########################################################
@@ -147,13 +183,13 @@ if __name__ == "__main__":
 """Countinously updates the global variable predicted_curr_mix while server is running.  At end of flask route, so everything above is executed first when server is launched."""
 
 # while True:
-    # call to CAISO_flask_api for recent demand, import values
-    # call to CAISO_10min_data_scraper for wind, solar values
-    # call to ML_linear_regression, given X vars.
-        # return predicted curr mix
-        # overwrite global predicted_curr_mix
+#     solar, wind = RT_scrape.get_solar_wind()
+#     print "solar:", solar
+#     print "wind:", wind
 
-##  make sure to define global predicted_curr_mix at the top of this file, and provide default values!
+#     demand = 22000
+#     # call to CAISO_flask_api for recent demand
 
-##  then updated flask route to receive this data, and the html template
+#     predicted_curr_mix = ML.predict_current_mix(solar,wind,demand)
+
 

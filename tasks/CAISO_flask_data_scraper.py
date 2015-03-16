@@ -22,8 +22,10 @@ soup = BeautifulSoup(urllib2.urlopen("http://content.caiso.com/outlook/SP/renewa
 
 ##############################################################
 
+test = "CAISO scraper for RT solar and wind, is connected"
 
-def main():
+
+def get_solar_wind():
     current = datetime.datetime.now()
     current_str = str(current)
 
@@ -34,8 +36,12 @@ def main():
         str_wind = wind.string
         mw_solar = int(str_solar.replace(" MW",""))
         mw_wind = int(str_wind.replace(" MW",""))
+
         print ("solar:", mw_solar)
         print ("wind:", mw_wind)
+
+        return mw_solar, mw_wind
+
          ## TODO: check values within expected bounds, confirm timestamp is new, and update into db of dynamic data
 
     except:
@@ -48,5 +54,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    pass
 
