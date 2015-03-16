@@ -70,8 +70,8 @@ var make_d3 = function(data){
                 var diffAngle = 2 * PI / dataCount ;
 
                 // colors in order
-                var fillColors = ["steelblue" , "orange" , "purple" , "darkred" , "green"];
-                var strokeColors = ["steelblue" , "darkorange" , "purple" , "darkred" , "darkgreen"];
+                var fillColors = ["steelblue" , "orange" , "green", "darkred", "purple", "brown","pink" ];
+                var strokeColors = ["steelblue" , "darkorange" , "darkgreen", "darkred", "purple","brown","lightred"];
 
                 // offset for the center of bowles
                 var offsetX = canvasWidth / 2;

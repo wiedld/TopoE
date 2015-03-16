@@ -82,7 +82,7 @@ def predict_using_hrly_data(curr_solar, curr_wind, curr_demand):
     nuclear_series = query_CAISOProdByFuel_Series('nuclear')
     hydro_series = query_CAISOProdByFuel_Series('hydro')
     demand_series = query_CAISODemand_hrly_Series()
-    imports_series = query_CAISONetImports_hrly_Series()
+    # imports_series = query_CAISONetImports_hrly_Series()
     # series will index on datetime
 
     #########################################
