@@ -384,7 +384,6 @@ var make_topojson_map_counties = function(for_state){
           .enter().append("g")
             .attr("class", "arc")
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-
           // MAKE THE VISUAL PATH be the color(i) and data(d)
           .append("path")
             .attr("fill", function(d, i) { return color(i); })
@@ -396,6 +395,16 @@ var make_topojson_map_counties = function(for_state){
         //       .attr("dy", ".35em")
         //       .style("text-anchor", "middle")
         //       .text("test");
+
+
+    // TODO:  add data labels to each arc in the donut.
+          // var g = svg.append("g");
+
+      //   g.append("text")
+      // .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      // .attr("dy", ".35em")
+      // .style("text-anchor", "middle")
+      // .text(function(d) { return d.data.age; })
 
 
     // ARCS function

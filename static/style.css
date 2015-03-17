@@ -92,12 +92,15 @@ html, body, .container {
     position: relative;
     font-family: Verdana,Arial,sans-serif;
     font-size: 0.7em;
-    border: 1px solid #aaaaaa;
+    border: 1px solid black;
     z-index: 2
-    fill: none ;
+    fill: white;
 }
 
-
+.slider-label{
+  padding: none;
+  font-size: 1.2em;
+}
 
 /*FUEL DONUT*/
 
