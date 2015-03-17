@@ -358,7 +358,7 @@ var make_topojson_map_counties = function(for_state){
     console.log(state_name);
     var entered_state_abbv = state_name_to_abbv[state_name];
     make_topojson_map_counties(entered_state_abbv);
-    $('#instructions').css('visibility','visible');
+    $('#scenario-div').css('visibility','visible');
   }
 
   $('#get-data-draw-map').on("click",get_state_and_draw_map);

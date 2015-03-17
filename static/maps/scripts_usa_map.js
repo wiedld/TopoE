@@ -252,6 +252,7 @@ var make_topojson_map_usa = function(){
                     v5 = fuel_mix[state_name]["hydro"],
                     v6 = fuel_mix[state_name]["other"];
                 var data_list = [v0,v1,v2,v3,v4,v5,v6];
+                  console.log("v0:",v0)
 
               // display the c3 donut, with state-specific data.
                 //  empty old
@@ -356,6 +357,12 @@ make_topojson_map_usa();
             .attr("height", height);
 
 
+////////////////////////////////////
+      tip = d3.tip().attr('class', 'd3-tip').html(function(d) { console.log("d:",d); return .data+"%"; });
+      svg.call(tip);
+////////////////////////////////////
+
+
     // ADD DATA TO EACH ARC
         svg.selectAll(".arc")
             .data(arcs(data0))
@@ -363,27 +370,14 @@ make_topojson_map_usa();
           .enter().append("g")
             .attr("class", "arc")
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+////////////////////////////////////
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide)
+////////////////////////////////////
           // MAKE THE VISUAL PATH be the color(i) and data(d)
           .append("path")
             .attr("fill", function(d, i) { return color(i); })
             .attr("d", arc);
-
-        // svg.selectAll(".arc")
-        //     g.append("text")
-        //       .attr("transform", "translate(" + arc.centroid(d) + ")")
-        //       .attr("dy", ".35em")
-        //       .style("text-anchor", "middle")
-        //       .text("test");
-
-
-    // TODO:  add data labels to each arc in the donut.
-          // var g = svg.append("g");
-
-      //   g.append("text")
-      // .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-      // .attr("dy", ".35em")
-      // .style("text-anchor", "middle")
-      // .text(function(d) { return d.data.age; })
 
 
     // ARCS function
@@ -426,7 +420,6 @@ function runScenarioUSA(evt){
       $('#instructions').empty();
       $('#display-results').css('visibility','visible');
       $('#see-results').css('visibility','visible');
-      // $('#display-results').text(scenario_result[state_name][1]);
       $('#display-results').attr("class",scenario_result[state_name][0]).text(scenario_result[state_name][1]);
 
     }

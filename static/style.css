@@ -1,3 +1,29 @@
+/*STYLING FOR ALL element*/
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+
+
+/*fill:none was in the original d3 for the topojson maps, not sure why.  It was screwing up rendering of other d3 elements -- so it is commented out.*/
+.application{
+  /*fill: none;*/
+  color: black;
+}
+
+.front-page{
+  background-image: url("/static/img/electric_grid.jpg");
+  position: absolute;   /*pulls out of normal flow, reassign to top left*/
+  top: 0;
+  left: 0;
+  width:100%;
+  height:100%;
+  z-index:0;
+}
+
+
+
 /*STYLING FOR INDEX PAGE*/
 html, body, .container {
     height: 100%;
@@ -11,19 +37,24 @@ html, body, .container {
     vertical-align: middle;
 }
 
-
-
-
-/*STYLING FOR ALL element*/
-.background {
-  fill: none;
-  pointer-events: all;
+.navbar.navbar-default.navbar-topoE {
+    background-color: #333366;
+    background-image: url("/static/img/denim.png");
+    z-index: 1;
+    /*background-image: url("/static/img/grey_wash_wall.png");*/
 }
 
-/*fill:none was in the original d3 for the topojson maps, not sure why.  It was screwing up rendering of other d3 elements -- so it is commented out.*/
-.application{
-  /*fill: none;*/
-  color: black;
+.navbar.navbar-default.navbar-topoE .navbar-brand {
+    color: white;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white;
+}
+
+
+.jumbotron{
+  background-color: rgba(238, 238, 238, 0.77);
 }
 
 
@@ -103,6 +134,13 @@ html, body, .container {
   padding: none;
   font-size: 1.2em;
 }
+
+.d3-slider-axis path {
+  fill:none;
+}
+
+
+
 
 /*FUEL DONUT*/
 

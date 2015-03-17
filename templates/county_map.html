@@ -17,19 +17,21 @@
         <div class="row">
               <div id='enter-state' style='border:1px solid #999;'>
               </div>
-                <button id='get-data-draw-map'>Find power plants for counties in this state!</button>
-
-              <h4 id="instructions" style='visibility:hidden'></h4>
-
-                <div id="scenario-div">
+                <button class='btn btn-primary' id='get-data-draw-map'>Find power plants for counties in this state!</button>
+              <br>
+              <br>
+                <div id="scenario-div" style='visibility:hidden'>
+                  <h4 id="instructions">Click on each county, and adjust the fuel mix!</h4>
                   <form id="scenario">
-                    <button id='submit'>Run Scenario</button>
+                    <button class="btn btn-primary" id='submit'>
+                    <span class="glyphicon glyphicon-play"></span>
+                        Run Scenario</button>
                     <!-- Submit button will go here. -->
                   </form>
                 </div>
 
               <div id="see-results" style='visibility:hidden'>
-                <h2>To see your results, click on each county again!</h2>
+                <h2></h2>
               </div>
 
               <div id="display-results" style='visibility:hidden'>
@@ -135,6 +137,7 @@
       <!-- Scripts for this specific website -->
       <script src="/static/maps/d3.slider.js"></script>
       <script src='/static/maps/complete.ly.1.0.1.min.js'></script>
+      <script src="/static/maps/d3.tip.js"></script>
       <script src="/static/maps/scripts_county_map.js"></script>
 
 {% endblock %}
