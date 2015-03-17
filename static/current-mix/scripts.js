@@ -70,8 +70,8 @@ var make_d3 = function(data){
                 var diffAngle = 2 * PI / dataCount ;
 
                 // colors in order
-                var fillColors = ["steelblue" , "orange" , "green", "darkred", "purple", "brown","pink" ];
-                var strokeColors = ["steelblue" , "darkorange" , "darkgreen", "darkred", "purple","brown","lightred"];
+                var fillColors = ["steelblue" , "orange" , "green", "#FF0F2F", "purple", "brown","pink" ];
+                var strokeColors = ["steelblue" , "darkorange" , "darkgreen", "#FF0F2F", "purple","brown","pink"];
 
                 // offset for the center of bowles
                 var offsetX = canvasWidth / 2;
@@ -80,7 +80,7 @@ var make_d3 = function(data){
                 var minDimension = Math.min( canvasWidth , canvasHeight ) * 0.80;
 
                 // bowl size and distance
-                var circleRadius = 100;
+                var circleRadius = 80;
                 var circleDistance = 200;
 
                 // animation duration in ms
@@ -88,9 +88,13 @@ var make_d3 = function(data){
 
                 var i = 0;
 
+                // create datapoints in a certain order:
+                var data_order = ['gas','coal','solar','wind','nuclear','hydro','other']
                 // create datapoints
-                for (var field in data)
-                {
+                // for (var field in data)
+                // {
+                for (var ix=0;ix<data_order.length;ix++) {
+                    var field = data_order[ix];
 
                     var value = data[field];
                     var percentage = (value / dataSum);
@@ -176,7 +180,7 @@ var make_d3 = function(data){
 
                     circleStroked.enter().append("circle")
                         .attr("r", circleRadius )
-                        .attr("style",function(d){return"stroke:"+d.strokeColor+";stroke-width:2;fill:white;filter:url(#dropshadow)"; })
+                        .attr("style",function(d){return"stroke:"+d.strokeColor+";stroke-width:3;fill:white;filter:url(#dropshadow)"; })
                         .attr("cx", function(d) { return d.x; })
                         .attr("cy", function(d) { return d.y; })
                     ;

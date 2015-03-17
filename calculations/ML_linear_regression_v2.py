@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from pandas import DataFrame, merge, Series
+from collections import OrderedDict
 
 
 import numpy as np
@@ -51,15 +52,15 @@ def predict_current_mix(solar, wind, demand):
     # correlation built from monthly data
     gas,coal,nuclear,other = predict_using_mo_data(solar,wind,hydro,demand)
 
-    curr_fuel_mix_prediction = {
-        'gas': round(gas),
-        'coal': round(coal),
-        'solar': round(solar),
-        'wind': round(wind),
-        'nuclear': round(nuclear),
-        'hydro': round(hydro),
-        'other': round(other)
-    }
+    curr_fuel_mix_prediction = OrderedDict([
+        ('gas', round(gas)),
+        ('coal', round(coal)),
+        ('solar', round(solar)),
+        ('wind', round(wind)),
+        ('nuclear', round(nuclear)),
+        ('hydro', round(hydro)),
+        ('other', round(other))
+    ])
 
     print curr_fuel_mix_prediction
 

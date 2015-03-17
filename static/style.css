@@ -71,13 +71,6 @@ html, body, .container {
 
 /*STYLING FOR SLIDERS*/
 
-.d3-slider {
-    position: relative;
-    font-family: Verdana,Arial,sans-serif;
-    font-size: 1.1em;
-    border: 1px solid #aaaaaa;
-    z-index: 2;
-}
 
 .d3-slider-horizontal {
     height: .8em;
@@ -93,3 +86,24 @@ html, body, .container {
     background: linear-gradient(to bottom, #eee 0%, #ddd 100%);
     z-index: 3;
 }
+
+
+.d3-slider {
+    position: relative;
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 0.7em;
+    border: 1px solid #aaaaaa;
+    z-index: 2
+    fill: none ;
+}
+
+
+
+/*FUEL DONUT*/
+
+#fuel-donut{
+  width: 40%;
+  margin: 0 auto;
+}
+
+

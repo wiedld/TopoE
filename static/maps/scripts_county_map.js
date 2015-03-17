@@ -164,8 +164,8 @@ var make_topojson_map_counties = function(for_state){
     // MAKE THE SVG
 
       // define variables, to use later.
-      var width = (760),
-          height = (650),
+      var width = (800),
+          height = (500),
           centered;
 
       // creates the svg object and adds to the body in the DOM.
@@ -352,8 +352,8 @@ var make_topojson_map_counties = function(for_state){
 
     // MAKE THE IDEA OF THE SVG
 
-        var width = 960/2,
-            height = 500/2,
+        var width = 170,
+            height = 170,
             outerRadius = Math.min(width, height) * .5 - 10,
             innerRadius = outerRadius * .6;
 

@@ -8,113 +8,121 @@
   <main class="container-fluid">
 
     <div class="row">
-    <!-- Above the row displaying all the data, include an option to sitch states. -->
-      <section class="col-sm-8">
-          <!-- <form id='enter-state'> -->
-            <div id='enter-state' style='border:1px solid #999;'>
-            </div>
-          <!-- </form> -->
-              <button id='get-data-draw-map'>Find power plants for counties in this state.</button>
-      </section>
-    </div>
 
-    <div class="row">
+      <!-- SECTION #1 = stuff above map, and map itself -->
+      <section class="col-sm-6 col-sm-offset-1">
 
-      <!-- Section for the map, map instructions, and scenario outcome text. -->
-      <section class="col-sm-7 col-sm-offset-1">
+<!-- FIX THIS -->
+        <!-- info above map -->
         <div class="row">
-          <h4 id="instructions" style='visibility:hidden'>Click on each county, and adjust the fuel mix!</h4>
+              <div id='enter-state' style='border:1px solid #999;'>
+              </div>
+                <button id='get-data-draw-map'>Find power plants for counties in this state.</button>
 
-          <div id="see-results" style='visibility:hidden'>
-            <h2>To see your results, click on each county again!</h2>
-          </div>
-          <div id="display-results" style='visibility:hidden'>
-                <!-- This is where the scenario results will be displayed. -->
-          </div>
+              <h4 id="instructions" style='visibility:hidden'>Click on each county, and adjust the fuel mix!</h4>
+
+                <div id="scenario-div">
+                  <form id="scenario">
+                    <button id='submit'>Run Scenario</button>
+                    <!-- Submit button will go here. -->
+                  </form>
+                </div>
+
+              <div id="see-results" style='visibility:hidden'>
+                <h2>To see your results, click on each county again!</h2>
+              </div>
+
+              <div id="display-results" style='visibility:hidden'>
+                    <!-- This is where the scenario results will be displayed. -->
+              </div>
         </div>
 
-        <div class="row">
-          <div class="chart-wrapper">
-              <div id="topomap">
-                <!-- This is where the topojson is rendered. -->
-              </div>
-          </div>
-        </div>
-      </section>
+<!-- FIX THIS END -->
 
-      <!-- Section for the scenario button (upper left corner, near instructions from the section above), fuel donut, and sliders. -->
-      <section id="fuels-per-county" class="col-sm-3">
-        <div class = "row">
-          <div class = "col-sm-3">
-              <div id="scenario-div">
-                <form id="scenario">
-                  <button id='submit'>Run Scenario</button>
-                  <!-- Submit button will go here. -->
-                </form>
-              </div>
-          </div>
-          <div class = "col-sm-9">
+        <div class="row">
               <div class="chart-wrapper">
-                <div id="fuel-donut">
-                  <!-- Fuel donut will go here. -->
-                </div>
+                    <div id="topomap">
+                      <!-- This is where the topojson is rendered. -->
+                    </div>
               </div>
-          </div>
-        </div>
-
-        <div class = "row">
-          <div class = "col-sm-12">
-            <div id="slider-wrapper" style='visibility:hidden'>
-            <!-- <div id="slider-wrapper"> -->
-              <h4>Natural Gas</h4>
-              <span id="slider0text"></span>
-                <div id="slider0">
-                  <!-- Slider0 will go here. -->
-                </div>
-              <br>
-              <h4>Coal</h4>
-              <span id="slider1text"></span>
-                <div id="slider1">
-                  <!-- Slider1 will go here. -->
-                </div>
-              <br>
-              <h4>Solar</h4>
-              <span id="slider2text"></span>
-                <div id="slider2">
-                  <!-- Slider2 will go here. -->
-                </div>
-              <br>
-              <h4>Wind</h4>
-              <span id="slider3text"></span>
-                <div id="slider3">
-                  <!-- Slider3 will go here. -->
-                </div>
-              <br>
-              <h4>Nuclear</h4>
-              <span id="slider4text"></span>
-                <div id="slider4">
-                  <!-- Slider4 will go here. -->
-                </div>
-              <br>
-              <h4>Hydro</h4>
-              <span id="slider5text"></span>
-                <div id="slider5">
-                  <!-- Slider5 will go here. -->
-                </div>
-              <br>
-              <h4>Other (geothermal, biomass)</h4>
-              <span id="slider6text"></span>
-                <div id="slider6">
-                  <!-- Slider6 will go here. -->
-                </div>
-            </div>
-          </div>
         </div>
 
       </section>
-      <section class="col-sm-1"></section>
+
+
+
+      <!-- SECTION #2 = DONUT AND SLIDERS -->
+      <section id="fuels-per-county" class="col-sm-3 col-sm-offset-1">
+
+            <div class = "row">
+                  <div class="chart-wrapper">
+                    <div id="fuel-donut">
+                      <!-- Fuel donut will go here. -->
+                    </div>
+                  </div>
+            </div>
+
+            <div class = "row">
+              <div class = "col-sm-8 col-sm-offset-2">
+                <div id="slider-wrapper" style='visibility:hidden'>
+                <!-- <div id="slider-wrapper"> -->
+                  <h4>Natural Gas</h4>
+                  <span id="slider0text"></span>
+                    <div id="slider0">
+                      <!-- Slider0 will go here. -->
+                    </div>
+                  <br>
+                  <h4>Coal</h4>
+                  <span id="slider1text"></span>
+                    <div id="slider1">
+                      <!-- Slider1 will go here. -->
+                    </div>
+                  <br>
+                  <h4>Solar</h4>
+                  <span id="slider2text"></span>
+                    <div id="slider2">
+                      <!-- Slider2 will go here. -->
+                    </div>
+                  <br>
+                  <h4>Wind</h4>
+                  <span id="slider3text"></span>
+                    <div id="slider3">
+                      <!-- Slider3 will go here. -->
+                    </div>
+                  <br>
+                  <h4>Nuclear</h4>
+                  <span id="slider4text"></span>
+                    <div id="slider4">
+                      <!-- Slider4 will go here. -->
+                    </div>
+                  <br>
+                  <h4>Hydro</h4>
+                  <span id="slider5text"></span>
+                    <div id="slider5">
+                      <!-- Slider5 will go here. -->
+                    </div>
+                  <br>
+                  <h4>Other (geothermal, biomass)</h4>
+                  <span id="slider6text"></span>
+                    <div id="slider6">
+                      <!-- Slider6 will go here. -->
+                    </div>
+                </div>
+              </div>
+            </div>
+
+      </section>
+
+
+      <section class="col-sm-1">
+        <!-- right hand space/column -->
+      </section>
+
 
     </div>
+<!-- END ROW WITH THE MAP, DONUT, SLIDERS -->
+
+
   </main>
 
   <!-- Javascript -->

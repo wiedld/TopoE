@@ -128,6 +128,7 @@ def current_mix_data():
     demand = RT_scrape.get_demand()
 
     predicted_curr_mix = ML.predict_current_mix(solar,wind,demand)
+    print predicted_curr_mix
 
 
     return jsonify(predicted_curr_mix)

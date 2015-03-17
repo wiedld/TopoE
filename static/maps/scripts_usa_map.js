@@ -1,3 +1,5 @@
+var state_name;
+
 // UNIQUE CODING FOR THE STATES USA MAP /////////////////////////////////////
 
   // list of what is different for this scripts2 (versus original):
@@ -104,7 +106,6 @@ var set_slider_values = function(data_list,state_name){
 
     $.each(slider_elements, function(idx, slider_element){
         d3.select(slider_element).call(d3.slider()
-          // .axis(axis)
           .value(data_list[idx])
           .on("slide", function(evt, value){
             slide_event(value, fuel_names[idx], idx);
@@ -155,8 +156,8 @@ var make_topojson_map_usa = function(){
     // MAKE THE SVG
 
       // define variables, to use later.
-      var width = (960),
-          height = (650),
+      var width = 800,
+          height = 500,
           centered;
 
       // creates the svg object and adds to the body in the DOM.
@@ -239,7 +240,7 @@ var make_topojson_map_usa = function(){
               centered = d;
 
               // get the id of the state, which == state name, and should match db info!!!
-                var state_name = state_name_dict[d.id];
+                state_name = state_name_dict[d.id];
                 console.log(d.id);
 
               //get fuel_mix info, place into list.
@@ -310,8 +311,8 @@ make_topojson_map_usa();
 
     // MAKE THE IDEA OF THE SVG
 
-        var width = 960/2,
-            height = 500/2,
+        var width = 170,
+            height = 170,
             outerRadius = Math.min(width, height) * .5 - 10,
             innerRadius = outerRadius * .6;
 
