@@ -1,5 +1,17 @@
 var county_name;
 
+
+// function called by donut arc tip tool
+var getKeyByValue = function( value, obj ) {
+    for( var prop in obj ) {
+        if( obj.hasOwnProperty( prop ) ) {
+             if( obj[ prop ] === value )
+                 return prop;
+        }
+    }
+}
+
+
 // UNIQUE CODING FOR COUNTY MAP/////////////////////////////////////
 
 // get map data structure
@@ -25,9 +37,9 @@ var county_name;
 
 // allow choice of different states from autocomplete box
    var auto = completely(document.getElementById('enter-state'), {
-      fontSize : '24px',
+      fontSize : '16px',
       fontFamily : 'Arial',
-      color:'#933',
+      color:'#000',
    });
    auto.options = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
    auto.repaint();
@@ -194,7 +206,7 @@ var make_topojson_map_counties = function(for_state){
           // .center([-.6, 38.7])
           .parallels([29.5, 45.5])
           .scale(1070)
-          .translate([width / 2, height / 2])
+          // .translate([width / 2, height / 2])
           .precision(.1);
 
       // d3.geo.path maps geocoordinates to svg.
@@ -258,7 +270,11 @@ var make_topojson_map_counties = function(for_state){
 
               // get the id of the county, which == county name, and should match db info!!!
                 county_name = d.id;
-                console.log(d.id);
+
+              // location-name
+                $('#location-name').text(county_name);
+                console.log("county_name:", county_name);
+
 
               //get fuel_mix info, place into list.
                 if (!fuel_mix[county_name]){
@@ -320,6 +336,7 @@ var make_topojson_map_counties = function(for_state){
               k = 1;
               centered = null;
               $('#fuel-donut').empty();
+              $('#location-name').empty();
               $('#slider-wrapper').css('visibility','hidden');
 
               // hide/remove the scenario results.  Note: the variable does not exist, until after the scenario is run!
@@ -399,6 +416,14 @@ var make_topojson_map_counties = function(for_state){
             .attr("height", height);
 
 
+    // make the tip tool
+      tip = d3.tip().attr('class', 'd3-tip').html(function(d) {
+        var label = getKeyByValue(d.data,fuel_mix[county_name]);
+        return label+": "+d.data+"%";
+      });
+      svg.call(tip);
+
+
     // ADD DATA TO EACH ARC
         svg.selectAll(".arc")
             .data(arcs(data0))
@@ -406,6 +431,8 @@ var make_topojson_map_counties = function(for_state){
           .enter().append("g")
             .attr("class", "arc")
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide)
           // MAKE THE VISUAL PATH be the color(i) and data(d)
           .append("path")
             .attr("fill", function(d, i) { return color(i); })

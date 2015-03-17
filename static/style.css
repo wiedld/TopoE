@@ -4,6 +4,18 @@
   pointer-events: all;
 }
 
+.btn-primary{
+  background-image: none;
+  background-color: rgb(55, 53, 134);
+  transition: all 0.5s ease;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: white;
+  color: rgb(55, 53, 134);
+
+}
+
 
 
 /*fill:none was in the original d3 for the topojson maps, not sure why.  It was screwing up rendering of other d3 elements -- so it is commented out.*/

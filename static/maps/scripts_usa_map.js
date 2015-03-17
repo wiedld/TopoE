@@ -1,5 +1,17 @@
 var state_name;
 
+
+// function called by donut arc tip tool
+var getKeyByValue = function( value, obj ) {
+    for( var prop in obj ) {
+        if( obj.hasOwnProperty( prop ) ) {
+             if( obj[ prop ] === value )
+                 return prop;
+        }
+    }
+}
+
+
 // UNIQUE CODING FOR THE STATES USA MAP /////////////////////////////////////
 
   // list of what is different for this scripts2 (versus original):
@@ -37,7 +49,7 @@ var state_name_dict = {
   2: "AK",
   4: "AZ",
   5: "AR",
-  6: "CA",
+  6: ["CA","California"],
   8: "CO",
   9: "CT",
   10: "DE",
@@ -240,8 +252,10 @@ var make_topojson_map_usa = function(){
               centered = d;
 
               // get the id of the state, which == state name, and should match db info!!!
-                state_name = state_name_dict[d.id];
-                console.log(d.id);
+                state_name = state_name_dict[d.id][0];
+
+              // location-name  state_name_dict[d.id][1]
+                $('#location-name').text(state_name_dict[d.id][1]);
 
               //get fuel_mix info, place into list.
                 var v0 = fuel_mix[state_name]["gas"],
@@ -252,7 +266,6 @@ var make_topojson_map_usa = function(){
                     v5 = fuel_mix[state_name]["hydro"],
                     v6 = fuel_mix[state_name]["other"];
                 var data_list = [v0,v1,v2,v3,v4,v5,v6];
-                  console.log("v0:",v0)
 
               // display the c3 donut, with state-specific data.
                 //  empty old
@@ -293,6 +306,7 @@ var make_topojson_map_usa = function(){
               k = 1;
               centered = null;
               $('#fuel-donut').empty();
+              $('#location-name').empty();
               $('#slider-wrapper').css('visibility','hidden');
               // hide/remove the scenario results.  Note: the variable does not exist, until after the scenario is run!
                   var exists = false;
@@ -356,11 +370,12 @@ make_topojson_map_usa();
             .attr("width", width)
             .attr("height", height);
 
-
-////////////////////////////////////
-      tip = d3.tip().attr('class', 'd3-tip').html(function(d) { console.log("d:",d); return .data+"%"; });
+    // make the tip tool
+      tip = d3.tip().attr('class', 'd3-tip').html(function(d) {
+        var label = getKeyByValue(d.data,fuel_mix[state_name]);
+        return label+": "+d.data+"%";
+      });
       svg.call(tip);
-////////////////////////////////////
 
 
     // ADD DATA TO EACH ARC
@@ -370,10 +385,8 @@ make_topojson_map_usa();
           .enter().append("g")
             .attr("class", "arc")
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-////////////////////////////////////
             .on('mouseover', tip.show)
             .on('mouseout', tip.hide)
-////////////////////////////////////
           // MAKE THE VISUAL PATH be the color(i) and data(d)
           .append("path")
             .attr("fill", function(d, i) { return color(i); })
