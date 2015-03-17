@@ -14,7 +14,7 @@ html, body, .container {
 
 
 
-/*STYLING FOR ALL TOPOMAP*/
+/*STYLING FOR ALL element*/
 .background {
   fill: none;
   pointer-events: all;
@@ -25,6 +25,8 @@ html, body, .container {
   /*fill: none;*/
   color: black;
 }
+
+
 
 
   /*STYLING FOR COUNTY MAP*/

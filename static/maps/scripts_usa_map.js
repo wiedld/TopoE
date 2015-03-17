@@ -273,8 +273,17 @@ var make_topojson_map_usa = function(){
                 // re-make sliders with new values
                   set_slider_values(data_list, state_name);
 
-              // input the scenario results.  Note: this div is hidden until after the scenario is run!
-                  $('#display-results').text(scenario_result[state_name]);
+              // input the scenario results.  Note: this div is hidden, and the variable does not exist, until after the scenario is run!
+                  var exists = false;
+                  try {
+                      eval(scenario_result);
+                      exists = true;
+                  } catch(e) {
+                      exists = false;
+                  }
+                  if (exists){
+                    $('#display-results').attr("class",scenario_result[state_name][0]).text(scenario_result[state_name][1]);
+                  }
 
 
             } else {
@@ -284,8 +293,19 @@ var make_topojson_map_usa = function(){
               centered = null;
               $('#fuel-donut').empty();
               $('#slider-wrapper').css('visibility','hidden');
-              $('#display-results').empty();
-            }
+              // hide/remove the scenario results.  Note: the variable does not exist, until after the scenario is run!
+                  var exists = false;
+                  try {
+                      eval(scenario_result);
+                      exists = true;
+                  } catch(e) {
+                      exists = false;
+                  }
+                  if (exists){
+                        $('#display-results').attr("class","none").empty();
+                  }
+
+            }         // closes if/else for the clicked evt function
 
             // bind all the clicked paths to the class .active
             g.selectAll("path")
@@ -406,14 +426,14 @@ function runScenarioUSA(evt){
       $('#instructions').empty();
       $('#display-results').css('visibility','visible');
       $('#see-results').css('visibility','visible');
-      $('#display-results').text(scenario_result[state_name]);
+      // $('#display-results').text(scenario_result[state_name][1]);
+      $('#display-results').attr("class",scenario_result[state_name][0]).text(scenario_result[state_name][1]);
 
     }
   });
 
 }
 
-var scenario_result = {};
 $('#submit').on("click", runScenarioUSA);
 
 

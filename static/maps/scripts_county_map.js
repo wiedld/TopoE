@@ -302,7 +302,16 @@ var make_topojson_map_counties = function(for_state){
                   set_slider_values(data_list, county_name);
 
               // input the scenario results.  Note: this div is hidden until after the scenario is run!
-                  $('#display-results').text(scenario_result[county_name]);
+                  var exists = false;
+                  try {
+                      eval(scenario_result);
+                      exists = true;
+                  } catch(e) {
+                      exists = false;
+                  }
+                  if (exists){
+                    $('#display-results').attr("class",scenario_result[county_name][0]).text(scenario_result[county_name][1]);
+                  }
 
 
             } else {
@@ -312,8 +321,21 @@ var make_topojson_map_counties = function(for_state){
               centered = null;
               $('#fuel-donut').empty();
               $('#slider-wrapper').css('visibility','hidden');
-              $('#display-results').empty();
-            }
+
+              // hide/remove the scenario results.  Note: the variable does not exist, until after the scenario is run!
+              var exists = false;
+              try {
+                  eval(scenario_result);
+                  exists = true;
+              } catch(e) {
+                  exists = false;
+              }
+              if (exists){
+                $('#display-results').attr("class","none").empty();
+              }
+
+            }   // closes the else
+
 
             // bind all the clicked paths to the class .active
             g.selectAll("path")
@@ -446,14 +468,13 @@ function runScenario(evt){
       $('#instructions').empty();
       $('#display-results').css('visibility','visible');
       $('#see-results').css('visibility','visible');
-      $('#display-results').text(scenario_result[county_name]);
+      $('#display-results').attr("class",scenario_result[county_name][0]).text(scenario_result[county_name][1]);
 
     }
   });
 
 }
 
-var scenario_result = {};
 $('#submit').on("click", runScenario);
 
 

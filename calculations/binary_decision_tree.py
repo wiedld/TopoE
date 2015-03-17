@@ -62,12 +62,12 @@ class Node(object):
 # BUILD THE TREE!
 
 # leaves are the resultant decisions.  msg is pulled from dict of msg_condition_results.
-bdt_leaf_1 = Node(msg=msg_condition_results[1])
-bdt_leaf_2 = Node(msg=msg_condition_results[2])
-bdt_leaf_3 = Node(msg=msg_condition_results[3])
-bdt_leaf_4 = Node(msg=msg_condition_results[4])
-bdt_leaf_5 = Node(msg=msg_condition_results[5])
-bdt_leaf_6 = Node(msg=msg_condition_results[6])
+bdt_leaf_1 = Node(msg=["alert alert-danger", msg_condition_results[1] ])
+bdt_leaf_2 = Node(msg=["alert alert-warning", msg_condition_results[2] ])
+bdt_leaf_3 = Node(msg=["alert alert-danger", msg_condition_results[3] ])
+bdt_leaf_4 = Node(msg=["alert alert-warning", msg_condition_results[4] ])
+bdt_leaf_5 = Node(msg=["alert alert-success", msg_condition_results[5] ])
+bdt_leaf_6 = Node(msg=["alert alert-danger", msg_condition_results[6] ])
 
 
 # leaves 1&2 and 4&5 all undergo the renewables-target-test, to see if above 30% threshold
