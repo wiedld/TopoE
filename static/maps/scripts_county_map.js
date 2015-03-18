@@ -1,4 +1,5 @@
 var county_name;
+var state_name;
 
 
 // function called by donut arc tip tool
@@ -41,7 +42,8 @@ var getKeyByValue = function( value, obj ) {
       fontFamily : 'Arial',
       color:'#000',
    });
-   auto.options = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
+   // place back in alaska
+   auto.options = ["Alabama", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
    auto.repaint();
    setTimeout(function() {
     auto.input.focus();
@@ -53,56 +55,56 @@ var getKeyByValue = function( value, obj ) {
     //  look for code after the topojson map is defined!!!
 
 var state_name_to_abbv = {
-  "Alabama": "AL",
-  "Alaska": "AK",
-  "Arizona": "AZ",
-  "Arkansas": "AR",
-  "California": "CA",
-  "Colorado": "CO",
-  "Connecticut": "CT",
-  "Delaware": "DE",
-  "Florida": "FL",
-  "Georgia": "GA",
-  "Hawaii": "HI",
-  "Idaho": "ID",
-  "Illinois": "IL",
-  "Indiana": "IN",
-  "Iowa": "IA",
-  "Kansas": "KS",
-  "Kentucky": "KY",
-  "Louisiana": "LA",
-  "Maine": "ME",
-  "Maryland": "MD",
-  "Massachusetts": "MA",
-  "Michigan": "MI",
-  "Minnesota": "MN",
-  "Mississippi": "MS",
-  "Missouri": "MO",
-  "Montana": "MT",
-  "Nebraska": "NE",
-  "Nevada": "NV",
-  "New Hampshire": "NH",
-  "New Jersey": "NJ",
-  "New Mexico": "NM",
-  "New York": "NY",
-  "North Carolina": "NC",
-  "North Dakota": "ND",
-  "Ohio": "OH",
-  "Oklahoma": "OK",
-  "Oregon": "OR",
-  "Pennsylvania": "PA",
-  "Rhode Island": "RI",
-  "South Carolina": "SC",
-  "South Dakota": "SD",
-  "Tennessee": "TN",
-  "Texas": "TX",
-  "Utah": "UT",
-  "Vermont": "VT",
-  "Virginia": "VA",
-  "Washington": "WA",
-  "West Virginia": "WV",
-  "Wisconsin": "WI",
-  "Wyoming": "WY"
+  "Alabama": ["AL",[88,10]],
+  "Alaska": ["AK",[179,25]],   // need to complete [179,25]
+  "Arizona": ["AZ",[114,7]],
+  "Arkansas": ["AR",[94,7]],
+  "California": ["CA",[124,5]],
+  "Colorado": ["CO",[109,6]],
+  "Connecticut": ["CT",[73,2]],
+  "Delaware": ["DE",[75,6]],
+  "Florida": ["FL",[87,14]],
+  "Georgia": ["GA",[85,10]],
+  "Hawaii": ["HI",[178,-5]],
+  "Idaho": ["ID",[79,5]],
+  "Illinois": ["IL",[0,0]],
+  "Indiana": ["IN",[0,0]],
+  "Iowa": ["IA",[0,0]],
+  "Kansas": ["KS",[0,0]],
+  "Kentucky": ["KY",[0,0]],
+  "Louisiana": ["LA",[0,0]],
+  "Maine": ["ME",[0,0]],
+  "Maryland": ["MD",[0,0]],
+  "Massachusetts": ["MA",[0,0]],
+  "Michigan": ["MI",[0,0]],
+  "Minnesota": ["MN",[0,0]],
+  "Mississippi": ["MS",[0,0]],
+  "Missouri": ["MO",[0,0]],
+  "Montana": ["MT",[0,0]],
+  "Nebraska": ["NE",[0,0]],
+  "Nevada": ["NV",[0,0]],
+  "New Hampshire": ["NH",[0,0]],
+  "New Jersey": ["NJ",[0,0]],
+  "New Mexico": ["NM",[0,0]],
+  "New York": ["NY",[0,0]],
+  "North Carolina": ["NC",[0,0]],
+  "North Dakota": ["ND",[0,0]],
+  "Ohio": ["OH",[0,0]],
+  "Oklahoma": ["OK",[0,0]],
+  "Oregon": ["OR",[0,0]],
+  "Pennsylvania": ["PA",[0,0]],
+  "Rhode Island": ["RI",[0,0]],
+  "South Carolina": ["SC",[0,0]],
+  "South Dakota": ["SD",[0,0]],
+  "Tennessee": ["TN",[0,0]],
+  "Texas": ["TX",[0,0]],
+  "Utah": ["UT",[0,0]],
+  "Vermont": ["VT",[0,0]],
+  "Virginia": ["VA",[0,0]],
+  "Washington": ["WA",[0,0]],
+  "West Virginia": ["WV",[0,0]],
+  "Wisconsin": ["WI",[0,0]],
+  "Wyoming": ["WY",[0,0]]
 };
 
 
@@ -177,7 +179,7 @@ var make_topojson_map_counties = function(for_state){
 
       // define variables, to use later.
       var width = (800),
-          height = (500),
+          height = (600),
           centered;
 
       // creates the svg object and adds to the body in the DOM.
@@ -197,16 +199,23 @@ var make_topojson_map_counties = function(for_state){
 
       // "projection" -- how to display this svg vector data.
       //  geo.albersUSA is like a dictionary of how to translate geojson vector numbers?
+      var loc_center = state_name_to_abbv[state_name][1];
+      console.log("loc_center:",loc_center);
       var projection = d3.geo.albers()
           // .center([15,20])
           // .rotate
-          // .scale(3000)
+          // .scale(4,4)
           // .translate([width / 2, height / 2]);
-          .rotate([96, 0])
+
+          //
+          // .rotate([96, 0])  //default
+          // .rotate([124, 0])  //california
+          .rotate(loc_center)  // Alabama
+
           // .center([-.6, 38.7])
           .parallels([29.5, 45.5])
-          .scale(1070)
-          // .translate([width / 2, height / 2])
+          .scale(1500)
+          .translate([width / 2, height / 2])
           .precision(.1);
 
       // d3.geo.path maps geocoordinates to svg.
@@ -334,7 +343,7 @@ var make_topojson_map_counties = function(for_state){
               x = width / (2.5);
               y = height / (2.5);
               k = 1;
-              centered = null;
+              centered = state_name_to_abbv[state_name][1];
               $('#fuel-donut').empty();
               $('#location-name').empty();
               $('#slider-wrapper').css('visibility','hidden');
@@ -371,9 +380,9 @@ var make_topojson_map_counties = function(for_state){
 //  event listener.  Takes the state entered by the user, and triggers the creation of the county map.
   function get_state_and_draw_map(evt){
     $('#topomap').empty();
-    var state_name = $('#enter-state input').val();
+    state_name = $('#enter-state input').val();
     console.log(state_name);
-    var entered_state_abbv = state_name_to_abbv[state_name];
+    var entered_state_abbv = state_name_to_abbv[state_name][0];
     make_topojson_map_counties(entered_state_abbv);
     $('#scenario-div').css('visibility','visible');
   }

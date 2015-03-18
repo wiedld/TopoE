@@ -39,6 +39,7 @@
 /*STYLING FOR INDEX PAGE*/
 html, body, .container {
     height: 100%;
+    font-family: 'Martel Sans', sans-serif;
 }
 .container {
     display: table;
