@@ -86,7 +86,7 @@ var state_name_to_abbv = {
   "New Hampshire": ["NH",[0,0]],
   "New Jersey": ["NJ",[0,0]],
   "New Mexico": ["NM",[0,0]],
-  "New York": ["NY",[0,0]],
+  "New York": ["NY",[79,1]],
   "North Carolina": ["NC",[0,0]],
   "North Dakota": ["ND",[0,0]],
   "Ohio": ["OH",[0,0]],
