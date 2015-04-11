@@ -2,10 +2,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, Float, String, DateTime, ForeignKey
-# from sqlalchemy.orm import relationship, backref, scoped_session
-
-
+from sqlalchemy.orm import relationship, backref, scoped_session
 Base = declarative_base()
+
+# import os
+# import psycopg2
+# import urlparse
 
 #######################################################################
 
@@ -19,7 +21,7 @@ Session = None
 ## in python shell:  -i model.py > s=connect() >
 
 ##  STEP 3 = setup threading.
-##  remove step2 code.   import on line 5.  Insert below.
+#  remove step2 code.   import on line 5.  Insert below.
 # ENGINE = create_engine("sqlite:///generators.db", echo=True)
 # session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
 # Base.query = session.query_property()
@@ -212,9 +214,19 @@ class HistoricCAISONetImport(Base):
 def connect():
 	global ENGINE
 	global Session
+	# ENGINE = create_engine("sqlite:///generators.db", echo=True)
+	# Session = sessionmaker(bind=ENGINE)
+
 	ENGINE = create_engine("sqlite:///generators.db", echo=True)
-	Session = sessionmaker(bind=ENGINE)
+	Session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
+	Base.query = Session.query_property()
 	return Session()
+
+	# urlparse.uses_netloc.append("postgres")
+	# url = urlparse.urlparse(os.environ["DATABASE_URL"])
+
+
+
 
 def main():
 	"""For future use."""
