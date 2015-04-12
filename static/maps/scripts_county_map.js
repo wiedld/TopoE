@@ -1,5 +1,6 @@
 var county_name;
 var state_name;
+var fuel_names;
 
 
 // function called by donut arc tip tool
@@ -116,16 +117,12 @@ var state_name_to_abbv = {
 var set_slider_values = function(data_list,county_name){
 
     // make the sliders
-
-    // var axis = d3.svg.axis().orient("bottom").ticks(5);
-
-    var fuel_names = ["gas", "coal", "solar", "wind", "nuclear", "hydro", "other"],
-        slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4", "#slider5", "#slider6"];
+    fuel_names = ["gas", "coal", "solar", "wind", "nuclear", "hydro", "other"];
+    var slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4", "#slider5", "#slider6"];
 
     $.each(slider_elements, function(idx, slider_element){
         d3.select(slider_element).call(
           d3.slider()
-          // .axis(axis)
           .value(data_list[idx])
           .on("slide", function(evt, value){
             slide_event(value, fuel_names[idx], idx);
@@ -134,36 +131,53 @@ var set_slider_values = function(data_list,county_name){
         );
     });
 
-
     // show the starting values in the html
     for (var i = 0; i<7; i++){
       d3.select('#slider'+i+'text').text(data_list[i]);
     }
 
+    // EVENT FUNCTION -- when the user changes one of the fuel ratios via a slider event, many things have to happen.  (1) update data_list used to render the donut.  (2) update the dict in the frontend cache (which will later be sent to the backend during "Run Scenario").  (3) change the values of all the other fuesl as well (since is a percentage), in order to remake everything.
     // what happens when the sliders are changed by the user.
     var slide_event = function(value, fuel_type, index){
         value = Math.round(value);
         // update_percentages() for all fuels, to sum to 100%
         data_list = update_percentages(value,index);
-        // change values in the html label of the slider
-        d3.select('#slider'+index+'text').text(value);
+        // change values in the html label of the sliders
+        for (var i = 0; i<7; i++){
+          d3.select('#slider'+i+'text').text(data_list[i]);
+          // d3.select('#slider'+i+'').value(data_list[i]);
+        }
         // changle values in the fuel_mix dict
         fuel_mix[county_name][fuel_type] = value;
         //update the donut
         $('#fuel-donut').empty();
         make_donut(data_list);
+        //update the other slides
+        // set_slider_values(data_list, county_name);
+
     };
 
-    // PERCENTAGES - changed with user input via sliders, and impacts the data structure (updates the dict) as well as changes the donut (make_donut(data_list)).
+    // PERCENTAGES -
     var update_percentages = function(value,index){
-      // update percentages based on 100
-      data_list [index] = value;
-      return data_list;
+          // update percentages based on amt slider changed
+          var amt_changed = value - data_list[index];
+          data_list[index] = value;  // this single slider value went up
+
+          for (var i = 0; i<7; i++){
+            if (i != index){
+              // scale amt to change by original.
+              // so if coal 75% of total, but user made 4% increase in solar,  then coal gets decreased by 75% of 4% (=3%).
+              var adjuster = Math.round(amt_changed * (data_list[i]/100));
+              data_list[i] = data_list[i] - adjuster;
+            }
+          }
+          console.log(data_list);
+          return data_list;
     };
 
 
-};
 
+};  // end the sliders being made
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -447,23 +461,6 @@ var make_topojson_map_counties = function(for_state){
             .attr("fill", function(d, i) { return color(i); })
             .attr("d", arc);
 
-    // TODO:  add data labels to each arc in the donut.
-        // svg.append("text")
-        //       .attr("transform", "translate(" + arc.centroid(d) + ")")
-        //       .attr("dy", ".35em")
-        //       .style("text-anchor", "middle")
-        //       .text("test");
-
-
-    // TODO:  add data labels to each arc in the donut.
-          // var g = svg.append("g");
-
-      //   g.append("text")
-      // .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-      // .attr("dy", ".35em")
-      // .style("text-anchor", "middle")
-      // .text(function(d) { return d.data.age; })
-
 
     // ARCS function
         function arcs(data0) {
@@ -516,48 +513,5 @@ $('#submit').on("click", runScenario);
 
 
 
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-  // C3 donut ////////////////////////////////////////////////////
 
-
-  // TODO:  take the interact "mouseover" functionality of the c3 donut below, and add to the d3 element used above.
-
-      // var make_donut = function(){
-      //       var chart = c3.generate({
-      //         data: {
-      //             columns: [
-      //                 ['Natural gas', 30],
-      //                 ['data2', 120],
-      //             ],
-      //             type : 'donut',
-      //             onclick: function (d, i) { console.log("onclick", d, i); },
-      //             onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-      //             onmouseout: function (d, i) { console.log("onmouseout", d, i); }
-      //         },
-      //         donut: {
-      //             title: "Fuel Mix in County"
-      //         },
-      //         bindto: document.getElementById('fuel-donut')
-      //       });
-
-      //       setTimeout(function () {
-      //           chart.load({
-      //               columns: [
-      //                   ["setosa", 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.2, 0.1, 0.1, 0.2, 0.4, 0.4, 0.3, 0.3, 0.3, 0.2, 0.4, 0.2, 0.5, 0.2, 0.2, 0.4, 0.2, 0.2, 0.2, 0.2, 0.4, 0.1, 0.2, 0.2, 0.2, 0.2, 0.1, 0.2, 0.2, 0.3, 0.3, 0.2, 0.6, 0.4, 0.3, 0.2, 0.2, 0.2, 0.2],
-      //                   ["versicolor", 1.4, 1.5, 1.5, 1.3, 1.5, 1.3, 1.6, 1.0, 1.3, 1.4, 1.0, 1.5, 1.0, 1.4, 1.3, 1.4, 1.5, 1.0, 1.5, 1.1, 1.8, 1.3, 1.5, 1.2, 1.3, 1.4, 1.4, 1.7, 1.5, 1.0, 1.1, 1.0, 1.2, 1.6, 1.5, 1.6, 1.5, 1.3, 1.3, 1.3, 1.2, 1.4, 1.2, 1.0, 1.3, 1.2, 1.3, 1.3, 1.1, 1.3],
-      //                   ["virginica", 2.5, 1.9, 2.1, 1.8, 2.2, 2.1, 1.7, 1.8, 1.8, 2.5, 2.0, 1.9, 2.1, 2.0, 2.4, 2.3, 1.8, 2.2, 2.3, 1.5, 2.3, 2.0, 2.0, 1.8, 2.1, 1.8, 1.8, 1.8, 2.1, 1.6, 1.9, 2.0, 2.2, 1.5, 1.4, 2.3, 2.4, 1.8, 1.8, 2.1, 2.4, 2.3, 1.9, 2.3, 2.5, 2.3, 1.9, 2.0, 2.3, 1.8],
-      //               ]
-      //           });
-      //       }, 1500);
-
-      //       setTimeout(function () {
-      //           chart.unload({
-      //               ids: 'data1'
-      //           });
-      //           chart.unload({
-      //               ids: 'data2'
-      //           });
-      //       }, 2500);
-      // };
 
