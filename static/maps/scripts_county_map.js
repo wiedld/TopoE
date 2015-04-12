@@ -125,7 +125,7 @@ var set_slider_values = function(data_list,county_name){
           d3.slider()
           .value(data_list[idx])
           .on("slide", function(evt, value){
-            slide_event(value, fuel_names[idx], idx);
+            slide_event(value, fuel_names, idx, data_list);
             }
           )
         );
@@ -135,30 +135,31 @@ var set_slider_values = function(data_list,county_name){
     for (var i = 0; i<7; i++){
       d3.select('#slider'+i+'text').text(data_list[i]);
     }
+};
 
     // EVENT FUNCTION -- when the user changes one of the fuel ratios via a slider event, many things have to happen.  (1) update data_list used to render the donut.  (2) update the dict in the frontend cache (which will later be sent to the backend during "Run Scenario").  (3) change the values of all the other fuesl as well (since is a percentage), in order to remake everything.
     // what happens when the sliders are changed by the user.
-    var slide_event = function(value, fuel_type, index){
+    var slide_event = function(value, fuel_names, index, data_list){
         value = Math.round(value);
         // update_percentages() for all fuels, to sum to 100%
-        data_list = update_percentages(value,index);
-        // change values in the html label of the sliders
+        data_list = update_percentages(value,index, data_list);
+
         for (var i = 0; i<7; i++){
-          d3.select('#slider'+i+'text').text(data_list[i]);
-          // d3.select('#slider'+i+'').value(data_list[i]);
+          // need to empty sliders, to then re-render
+          $('#slider'+i+'').empty();
+          // change values in the fuel_mix dict
+          fuel_mix[county_name][fuel_names[i]] = data_list[i];
         }
-        // changle values in the fuel_mix dict
-        fuel_mix[county_name][fuel_type] = value;
+        //re-render sliders
+        set_slider_values(data_list,county_name);
         //update the donut
         $('#fuel-donut').empty();
         make_donut(data_list);
-        //update the other slides
-        // set_slider_values(data_list, county_name);
 
     };
 
     // PERCENTAGES -
-    var update_percentages = function(value,index){
+    var update_percentages = function(value,index, data_list){
           // update percentages based on amt slider changed
           var amt_changed = value - data_list[index];
           data_list[index] = value;  // this single slider value went up
@@ -177,7 +178,7 @@ var set_slider_values = function(data_list,county_name){
 
 
 
-};  // end the sliders being made
+// };  // end the sliders being made
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -490,7 +491,7 @@ var make_topojson_map_counties = function(for_state){
 
 function runScenario(evt){
   evt.preventDefault();
-  console.log("runScenario js function");
+  // console.log("runScenario js function");
 
   $.ajax('scenario-result', {
     type: 'POST',
