@@ -1,5 +1,5 @@
 var state_name;
-
+var fuel_names;
 
 // function called by donut arc tip tool
 var getKeyByValue = function( value, obj ) {
@@ -25,7 +25,7 @@ var getKeyByValue = function( value, obj ) {
 
 function get_map_data_usa(evt){
   evt.preventDefault();
-  console.log("get_map_data js function");
+  // console.log("get_map_data js function");
 
   var data = "yo";
   $.ajax('usa-map-data', {
@@ -113,14 +113,14 @@ var set_slider_values = function(data_list,state_name){
 
     // var axis = d3.svg.axis().orient("top").ticks(5);
 
-    var fuel_names = ["gas", "coal", "solar", "wind", "nuclear", "hydro", "other"],
-        slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4", "#slider5", "#slider6"];
+    fuel_names = ["gas", "coal", "solar", "wind", "nuclear", "hydro", "other"];
+    var slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4", "#slider5", "#slider6"];
 
     $.each(slider_elements, function(idx, slider_element){
         d3.select(slider_element).call(d3.slider()
           .value(data_list[idx])
           .on("slide", function(evt, value){
-            slide_event(value, fuel_names[idx], idx);
+            slide_event(value, fuel_names, idx, data_list);
             }
           )
         );
@@ -131,30 +131,46 @@ var set_slider_values = function(data_list,state_name){
     for (var i = 0; i<7; i++){
       d3.select('#slider'+i+'text').text(data_list[i]);
     }
+};
+
 
     // what happens when the sliders are changed by the user.
-    var slide_event = function(value, fuel_type, index){
+    var slide_event = function(value, fuel_names, index, data_list){
         value = Math.round(value);
         // update_percentages() for all fuels, to sum to 100%
-        data_list = update_percentages(value,index);
-        // change values in the html label of the slider
-        d3.select('#slider'+index+'text').text(value);
-        // changle values in the fuel_mix dict
-        fuel_mix[state_name][fuel_type] = value;
+        data_list = update_percentages(value,index, data_list);
+
+        for (var i = 0; i<7; i++){
+          // need to empty sliders, to then re-render
+          $('#slider'+i+'').empty();
+          // change values in the fuel_mix dict
+          fuel_mix[state_name][fuel_names[i]] = data_list[i];
+        }
+        //re-render sliders
+        set_slider_values(data_list,state_name);
+
         //update the donut
         $('#fuel-donut').empty();
         make_donut(data_list);
     };
 
-    // PERCENTAGES - changed with user input via sliders, and impacts the data structure (updates the dict) as well as changes the donut (make_donut(data_list)).
-    var update_percentages = function(value,index){
-      // update percentages based on 100
-      data_list [index] = value;
-      return data_list;
+    // PERCENTAGES -
+    var update_percentages = function(value, index, data_list){
+          // update percentages based on amt slider changed
+          var amt_changed = value - data_list[index];
+          data_list[index] = value;  // this single slider value went up
+
+          for (var i = 0; i<7; i++){
+            if (i != index){
+              // scale amt to change by original.
+              // so if coal 75% of total, but user made 4% increase in solar,  then coal gets decreased by 75% of 4% (=3%).
+              var adjuster = Math.round(amt_changed * (data_list[i]/100));
+              data_list[i] = data_list[i] - adjuster;
+            }
+          }
+          // console.log(data_list);
+          return data_list;
     };
-
-
-};
 
 
 

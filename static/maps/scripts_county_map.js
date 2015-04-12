@@ -19,8 +19,7 @@ var getKeyByValue = function( value, obj ) {
 // get map data structure
     // triggered when the topojson map is created
     function get_map_data(for_state){
-      // evt.preventDefault();
-      console.log("get_map_data js function");
+      // console.log("get_map_data js function");
 
       var data = for_state;
       $.ajax('county-map-data', {
@@ -172,13 +171,11 @@ var set_slider_values = function(data_list,county_name){
               data_list[i] = data_list[i] - adjuster;
             }
           }
-          console.log(data_list);
+          // console.log(data_list);
           return data_list;
     };
 
 
-
-// };  // end the sliders being made
 
 
 //////////////////////////////////////////////////////////////////////////
