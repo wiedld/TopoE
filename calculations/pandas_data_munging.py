@@ -82,21 +82,23 @@ def retrieve_from_db(state_code):
     s = model.connect()
 
     # retrive DECEMBER production data, for all turbines at all power plants in California
-    CA_gen_dec13_obj = s.execute('SELECT plant_name, state, fuel_type, dec_mwh_gen FROM ProdGensDec2013 WHERE state="%s" ' % state_code)
+    cmd = 'SELECT plant_name, state, fuel_type, dec_mwh_gen FROM ProdGensDec2013 WHERE state="%s" '
+    CA_gen_dec13_obj = s.execute(cmd, (state_code))
     CA_gen_dec13_data = CA_gen_dec13_obj.fetchall()
     df_dec2013 = DataFrame(CA_gen_dec13_data)
     df_dec2013.columns = ['plant_name', 'state', 'fuel_type', 'dec_mwh_gen']
 
     # retrive JAN-NOV 2014 production data, for all turbines at all power plants in California
-    CA_gen_2014_obj = s.execute('SELECT plant_name, state, fuel_type, jan_mwh_gen, feb_mwh_gen, mar_mwh_gen, apr_mwh_gen, may_mwh_gen, jun_mwh_gen, jul_mwh_gen, aug_mwh_gen, sep_mwh_gen, oct_mwh_gen, nov_mwh_gen FROM ProdGens WHERE state="%s" ' % state_code)
+    cmd = 'SELECT plant_name, state, fuel_type, jan_mwh_gen, feb_mwh_gen, mar_mwh_gen, apr_mwh_gen, may_mwh_gen, jun_mwh_gen, jul_mwh_gen, aug_mwh_gen, sep_mwh_gen, oct_mwh_gen, nov_mwh_gen FROM ProdGens WHERE state="%s" '
+    CA_gen_2014_obj = s.execute(cmd, (state_code))
 
     CA_gen_2014_data = CA_gen_2014_obj.fetchall()
     df_2014 = DataFrame(CA_gen_2014_data)
     df_2014.columns = ['plant_name', 'state', 'fuel_type', 'jan_mwh_gen', 'feb_mwh_gen', 'mar_mwh_gen', 'apr_mwh_gen', 'may_mwh_gen', 'jun_mwh_gen', 'jul_mwh_gen', 'aug_mwh_gen', 'sep_mwh_gen', 'oct_mwh_gen', 'nov_mwh_gen']
 
     # retrieve county name, assigned to each turbine at each plant in California
-    # query =
-    CA_counties_obj = s.execute('SELECT plant_name, county FROM StatsGens WHERE state="%s" GROUP BY plant_name' % state_code)
+    cmd = 'SELECT plant_name, county FROM StatsGens WHERE state="%s" GROUP BY plant_name'
+    CA_counties_obj = s.execute(cmd, (state_code))
     CA_plant_counties = CA_counties_obj.fetchall()
     df_counties = DataFrame(CA_plant_counties)
     df_counties.columns = ['plant_name', 'county']
@@ -248,7 +250,7 @@ def agg_by_state(fuel_codes, df_jan_to_nov, df_dec):
 
         # only add to dict, if not "State Incremental Fuel Level":
         if plant_name != "State-Fuel Level Increment":
-            print plant_name
+
             # add to dict, summing the list per month:
             if state not in fuel_per_state:
                 fuel_per_state[state] = {
@@ -272,7 +274,6 @@ def agg_by_state(fuel_codes, df_jan_to_nov, df_dec):
 
         # make sure we know the state, before we take the data
         if plant_name != "State-Fuel Level Increment":
-            print plant_name
 
         # get all the data, and insert into nested dict
             plant_name, state, fuel_type, mwh_gen = row[0], row[1], row[2], row[3:]

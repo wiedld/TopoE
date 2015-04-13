@@ -62,7 +62,7 @@ def predict_current_mix(solar, wind, demand):
         ('other', round(other))
     ])
 
-    print curr_fuel_mix_prediction
+    # print curr_fuel_mix_prediction
 
     return curr_fuel_mix_prediction
 

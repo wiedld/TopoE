@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, request, jsonify
+from flask.ext.cache import Cache
 import model
 import os
-import time
 
 ##  these are used within functions.
 # on server startup, the messages print to confirm flask can find
@@ -19,7 +19,8 @@ print RT_scrape.test
 
 app = Flask(__name__)
 app.secret_key = os.environ["flask_app_key"]
-
+cache = Cache(app,config={'CACHE_TYPE':'simple'})
+cached_current_mix = None
 
 
 # HOMEPAGE
@@ -112,28 +113,34 @@ def scenario_result_usa():
 
 
 @app.route("/current")
-# def current_mix(mix=predicted_curr_mix):
 def current_mix():
+    """renders the page immediately"""
 
     return render_template("current_mix.html")
 
 
-cached = None
-timestamp = None
 
 
 @app.route("/current-mix-data", methods=['POST'])
 def current_mix_data():
-    """Take data structure for current fuel mix, and pipe through to frontend object"""
+    """mix is pulled in seperately.  should come from cache"""
+
+    global cached_current_mix
+    return jsonify(cached_current_mix)
+
+
+
+# test with every 30 seconds.  Once working, move to every 5 minutes
+@cache.cached(timeout=30, key_prefix='fuel_mix_for_cache')
+def get_fuel_mix_for_cache():
+    """Called regularily by the cache function.  Gets the current fuel mix, and pipe through to frontend object"""
 
     solar, wind = RT_scrape.get_solar_wind()
     demand = RT_scrape.get_demand()
 
-    predicted_curr_mix = ML.predict_current_mix(solar,wind,demand)
-    print predicted_curr_mix
+    global cached_current_mix
+    cached_current_mix = ML.predict_current_mix(solar,wind,demand)
 
-
-    return jsonify(predicted_curr_mix)
 
 
 
@@ -156,14 +163,21 @@ def about_HB_project():
 
 
 def main():
-    """For future use."""
-    pass
+    """populate the cache for the first time."""
+    get_fuel_mix_for_cache()
+    # global cached_current_mix
+
+    # solar, wind = RT_scrape.get_solar_wind()
+    # demand = RT_scrape.get_demand()
+
+    # cached_current_mix = ML.predict_current_mix(solar,wind,demand)
+    # print ("cached current mix:", cached_current_mix)
+
 
 
 if __name__ == "__main__":
     main()
     # app.run(host="0.0.0.0", debug=False)
     app.run(debug=True)
-
 
 
