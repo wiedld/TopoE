@@ -132,6 +132,7 @@ def current_mix_data():
 
 # test with every 30 seconds.  Once working, move to every 5 minutes
 @cache.cached(timeout=30, key_prefix='fuel_mix_for_cache')
+@app.route("/get-fuel-mix-for-cache")
 def get_fuel_mix_for_cache():
     """Called regularily by the cache function.  Gets the current fuel mix, and pipe through to frontend object"""
 
