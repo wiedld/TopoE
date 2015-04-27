@@ -46,16 +46,12 @@ def fuel_mix_for_map_usa():
 
     # process data into a single, nested dict.  listing all 12 months (per fuel, per state)
     fuel_mix_12mo = agg_by_state(fuel_codes, df2014_states, df2013_states)
-    # print "FUEL MIX 12 MO:\n",fuel_mix_12mo
-    # print
+
     # sum annually,
     annual_mix = sum_annual(fuel_mix_12mo)
-    # print "FUEL MIX ANNUAL:\n",annual_mix
-    # print
+
     #  then convert to percentages, for frontend data map
     fuel_mix_for_map = annual_percentages(annual_mix)
-    # print "FUEL MIX PERCENTS:\n",fuel_mix_for_map
-    # print
 
     # return to the flask route calling this py file.
     return fuel_mix_for_map
@@ -183,14 +179,6 @@ def assign_county_and_agg(dict_counties, fuel_codes, df_jan_to_nov, df_dec):
 
 
 
-
-def counties_into_CAISO():
-    """takes panda df, and sorts by counties in each CAISO zone."""
-
-    pass
-
-
-
 ###########################################################################
 ##########################################################################
 # FUNCTIONS SPECIFIC FOR USA (STATES)
@@ -236,8 +224,6 @@ def agg_by_state(fuel_codes, df_jan_to_nov, df_dec):
 
     #  note -- the retrieved row in only a copy, not the original. Dataframes are good for data manipulation (e.g. pivot table), but are not very mutable.
     for idx,row in enumerate(df_jan_to_nov.values):
-        # plant_name = row[0]     # for each row, get the plant name
-
 
         # get all the data, and insert into nested dict
         plant_name, state, fuel_type, mwh_gen = row[0], row[1], row[2], row[3:]
@@ -248,7 +234,7 @@ def agg_by_state(fuel_codes, df_jan_to_nov, df_dec):
 
         # only add to dict, if not "State Incremental Fuel Level":
         if plant_name != "State-Fuel Level Increment":
-            print plant_name
+
             # add to dict, summing the list per month:
             if state not in fuel_per_state:
                 fuel_per_state[state] = {
@@ -272,7 +258,6 @@ def agg_by_state(fuel_codes, df_jan_to_nov, df_dec):
 
         # make sure we know the state, before we take the data
         if plant_name != "State-Fuel Level Increment":
-            print plant_name
 
         # get all the data, and insert into nested dict
             plant_name, state, fuel_type, mwh_gen = row[0], row[1], row[2], row[3:]
