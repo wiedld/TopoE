@@ -214,17 +214,7 @@ var make_topojson_map_counties = function(for_state){
       var loc_center = state_name_to_abbv[state_name][1];
       console.log("loc_center:",loc_center);
       var projection = d3.geo.albers()
-          // .center([15,20])
-          // .rotate
-          // .scale(4,4)
-          // .translate([width / 2, height / 2]);
-
-          //
-          // .rotate([96, 0])  //default
-          // .rotate([124, 0])  //california
           .rotate(loc_center)  // Alabama
-
-          // .center([-.6, 38.7])
           .parallels([29.5, 45.5])
           .scale(1500)
           .translate([width / 2, height / 2])

@@ -14,14 +14,6 @@ var getKeyByValue = function( value, obj ) {
 
 // UNIQUE CODING FOR THE STATES USA MAP /////////////////////////////////////
 
-  // list of what is different for this scripts2 (versus original):
-    // changed all references of "county" --> "state".  "counties" --> "states"
-    // added the novel functionality below
-    // used mbostock's us.json file.  Had to search state_name_dict to get the code used in the map data pass up to the frontend (see make topojson function)
-    // RunScenarioUSA -- function name, and flask route name
-    // make_topojson_map_usa -- function name, and size of map rendering (ver height=650
-
-
 
 function get_map_data_usa(evt){
   evt.preventDefault();
@@ -110,8 +102,6 @@ var state_name_dict = {
 var set_slider_values = function(data_list,state_name){
 
     // make the sliders
-
-    // var axis = d3.svg.axis().orient("top").ticks(5);
 
     fuel_names = ["gas", "coal", "solar", "wind", "nuclear", "hydro", "other"];
     var slider_elements = ["#slider0", "#slider1", "#slider2", "#slider3", "#slider4", "#slider5", "#slider6"];
@@ -457,52 +447,4 @@ function runScenarioUSA(evt){
 }
 
 $('#submit').on("click", runScenarioUSA);
-
-
-
-
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-  // C3 donut ////////////////////////////////////////////////////
-
-
-  // TODO:  take the interact "mouseover" functionality of the c3 donut below, and add to the d3 element used above.
-
-      // var make_donut = function(){
-      //       var chart = c3.generate({
-      //         data: {
-      //             columns: [
-      //                 ['Natural gas', 30],
-      //                 ['data2', 120],
-      //             ],
-      //             type : 'donut',
-      //             onclick: function (d, i) { console.log("onclick", d, i); },
-      //             onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-      //             onmouseout: function (d, i) { console.log("onmouseout", d, i); }
-      //         },
-      //         donut: {
-      //             title: "Fuel Mix in County"
-      //         },
-      //         bindto: document.getElementById('fuel-donut')
-      //       });
-
-      //       setTimeout(function () {
-      //           chart.load({
-      //               columns: [
-      //                   ["setosa", 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.2, 0.1, 0.1, 0.2, 0.4, 0.4, 0.3, 0.3, 0.3, 0.2, 0.4, 0.2, 0.5, 0.2, 0.2, 0.4, 0.2, 0.2, 0.2, 0.2, 0.4, 0.1, 0.2, 0.2, 0.2, 0.2, 0.1, 0.2, 0.2, 0.3, 0.3, 0.2, 0.6, 0.4, 0.3, 0.2, 0.2, 0.2, 0.2],
-      //                   ["versicolor", 1.4, 1.5, 1.5, 1.3, 1.5, 1.3, 1.6, 1.0, 1.3, 1.4, 1.0, 1.5, 1.0, 1.4, 1.3, 1.4, 1.5, 1.0, 1.5, 1.1, 1.8, 1.3, 1.5, 1.2, 1.3, 1.4, 1.4, 1.7, 1.5, 1.0, 1.1, 1.0, 1.2, 1.6, 1.5, 1.6, 1.5, 1.3, 1.3, 1.3, 1.2, 1.4, 1.2, 1.0, 1.3, 1.2, 1.3, 1.3, 1.1, 1.3],
-      //                   ["virginica", 2.5, 1.9, 2.1, 1.8, 2.2, 2.1, 1.7, 1.8, 1.8, 2.5, 2.0, 1.9, 2.1, 2.0, 2.4, 2.3, 1.8, 2.2, 2.3, 1.5, 2.3, 2.0, 2.0, 1.8, 2.1, 1.8, 1.8, 1.8, 2.1, 1.6, 1.9, 2.0, 2.2, 1.5, 1.4, 2.3, 2.4, 1.8, 1.8, 2.1, 2.4, 2.3, 1.9, 2.3, 2.5, 2.3, 1.9, 2.0, 2.3, 1.8],
-      //               ]
-      //           });
-      //       }, 1500);
-
-      //       setTimeout(function () {
-      //           chart.unload({
-      //               ids: 'data1'
-      //           });
-      //           chart.unload({
-      //               ids: 'data2'
-      //           });
-      //       }, 2500);
-      // };
 

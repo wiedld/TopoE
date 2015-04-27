@@ -118,9 +118,6 @@ def current_mix():
     return render_template("current_mix.html")
 
 
-cached = None
-timestamp = None
-
 
 @app.route("/current-mix-data", methods=['POST'])
 def current_mix_data():
