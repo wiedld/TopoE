@@ -19,8 +19,6 @@ from tasks import CAISO_flask_data_scraper as RT_scrape
 
 app = Flask(__name__)
 app.secret_key = os.environ["flask_app_key"]
-cache = Cache(app,config={'CACHE_TYPE':'simple'})
-cached_current_mix = None
 
 
 # HOMEPAGE
@@ -125,22 +123,12 @@ def current_mix():
 def current_mix_data():
     """mix is pulled in seperately.  should come from cache"""
 
-    global cached_current_mix
-    return jsonify(cached_current_mix)
-
-
-
-# test with every 30 seconds.  Once working, move to every 5 minutes
-@cache.cached(timeout=30, key_prefix='fuel_mix_for_cache')
-@app.route("/get-fuel-mix-for-cache")
-def get_fuel_mix_for_cache():
-    """Called regularily by the cache function.  Gets the current fuel mix, and pipe through to frontend object"""
-
     solar, wind = RT_scrape.get_solar_wind()
     demand = RT_scrape.get_demand()
 
     predicted_curr_mix = ML.predict_current_mix(solar,wind,demand)
 
+    return jsonify(predicted_curr_mix)
 
 
 
@@ -164,14 +152,7 @@ def about_HB_project():
 
 def main():
     """populate the cache for the first time."""
-    get_fuel_mix_for_cache()
-    # global cached_current_mix
-
-    # solar, wind = RT_scrape.get_solar_wind()
-    # demand = RT_scrape.get_demand()
-
-    # cached_current_mix = ML.predict_current_mix(solar,wind,demand)
-    # print ("cached current mix:", cached_current_mix)
+    pass
 
 
 
