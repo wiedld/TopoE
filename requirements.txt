@@ -1,5 +1,6 @@
 BeautifulSoup==3.2.1
 Flask==0.10.1
+Flask-Cache==0.13.1
 Jinja2==2.7.3
 MarkupSafe==0.23
 SQLAlchemy==0.9.8

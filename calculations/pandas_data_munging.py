@@ -80,6 +80,7 @@ def retrieve_from_db(state_code):
 
     # retrive DECEMBER production data, for all turbines at all power plants in California
     CA_gen_dec13_obj = s.execute('SELECT plant_name, state, fuel_type, dec_mwh_gen FROM "ProdGensDec2013" WHERE state=\'%s\' ' % state_code)
+
     CA_gen_dec13_data = CA_gen_dec13_obj.fetchall()
     df_dec2013 = DataFrame(CA_gen_dec13_data)
     df_dec2013.columns = ['plant_name', 'state', 'fuel_type', 'dec_mwh_gen']
@@ -93,6 +94,7 @@ def retrieve_from_db(state_code):
 
     # retrieve county name, assigned to each turbine at each plant in California
     CA_counties_obj = s.execute('SELECT plant_name, county FROM "StatsGens" WHERE state=\'%s\' GROUP BY plant_name' % state_code)
+
     CA_plant_counties = CA_counties_obj.fetchall()
     df_counties = DataFrame(CA_plant_counties)
     df_counties.columns = ['plant_name', 'county']
