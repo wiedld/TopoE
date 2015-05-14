@@ -23,22 +23,6 @@ est4 = LinearRegression(fit_intercept=True)
 est5 = LinearRegression(fit_intercept=True)
 est6 = LinearRegression(fit_intercept=True)
 
-#############################################################
-#############################################################
-# TODO;   was told good design used a class for linear regression.
-#  need to incorporate this class, into the rest of the code.
-
-# class CAISO_hrly_ML(object):
-#     def __init__(self, x_vars, y_var1, y_var2, y_var3):
-#         # data for 2014, time_startly, for:
-#             # solar, wind, nuclear, hydro, demand, net imports
-#         self.available_in_RT = x_vars
-
-#         # data for jan-feb 2015, time_startly, for:
-#         self.need_predict_1 = y_var1    # nuclear
-#         self.need_predict_2 = y_var2    # hydro
-#         self.need_predict_3 = y_var3    # other
-
 
 #############################################################
 #############################################################
@@ -76,13 +60,13 @@ def predict_current_mix(solar, wind, demand):
 def predict_using_hrly_data(curr_solar, curr_wind, curr_demand):
     """this prediction is not used in the final model.  Because the demand, solar, and wind are extremely variable throughout a given day and are not great predictors for the more stable nuclear and hydro.  Was receiving very illogical results...more volatile than reality."""
 
+    # series will index on datetime
     solar_series = query_CAISOProdByFuel_Series('solar')
     wind_series = query_CAISOProdByFuel_Series('wind')
     nuclear_series = query_CAISOProdByFuel_Series('nuclear')
     hydro_series = query_CAISOProdByFuel_Series('hydro')
     demand_series = query_CAISODemand_hrly_Series()
     # imports_series = query_CAISONetImports_hrly_Series()
-    # series will index on datetime
 
     #########################################
     # using x1,x2,x3,x4 = solar, wind, demand.  y= nuclear
@@ -94,12 +78,10 @@ def predict_using_hrly_data(curr_solar, curr_wind, curr_demand):
                     }
 
     df_x_vars = DataFrame(x_vars_dict)
-    # print df_x_vars
 
     #### PREDICTING HYDRO #####
     # get series with y values
     series_y_var = hydro_series
-    # print series_y_var
 
     Ya = np.asarray(series_y_var)
     Xa = np.asarray(df_x_vars)
@@ -117,36 +99,6 @@ def predict_using_hrly_data(curr_solar, curr_wind, curr_demand):
 
     hydro_prediction = estA.predict(curr_input_A)
     print "hydro_prediction", hydro_prediction
-
-
-    # # #### PREDICTING NUCLEAR #####
-    # x_vars_dict = {'solar': solar_series,
-    #                 'wind': wind_series,
-    #                 'demand':demand_series,
-    #                 'hydro': hyd
-    #                 }
-
-    # df_x_vars = DataFrame(x_vars_dict)
-
-    # # get series with y values
-    # series_y_var_b = hydro_series
-
-    # Yb = np.asarray(series_y_var_b)
-
-    # print "PREDICTING HYDRO"
-    # print "shape X", Xb.shape
-    # print "shape y", Yb.shape
-
-    # print "est.fit(X, Y)", estB.fit(Xb,Yb)
-    # print "est.coef_", estB.coef_
-
-    # curr_dict_A = {'solar':curr_solar, 'wind':curr_wind, 'demand':curr_demand, 'hydro':hydro_prediction}
-    # curr_series_A = Series(curr_dict_A)
-    # curr_input_A = np.asarray(curr_series_A)
-
-    # nuclear_prediction = estB.predict(curr_input_B)
-    # print "nuclear_prediction:", nuclear_prediction
-
 
     return hydro_prediction
 
@@ -176,7 +128,7 @@ def predict_using_mo_data(curr_solar,curr_wind,hydro_prediction,curr_demand):
                     }
 
     df_x_vars = DataFrame(x_vars_dict)
-    # print df_x_vars
+
      #########################################
 
     #### PREDICTING GAS #####
@@ -200,39 +152,6 @@ def predict_using_mo_data(curr_solar,curr_wind,hydro_prediction,curr_demand):
 
     gas_prediction = est1.predict(curr_input)
     print "gas_prediction:", gas_prediction
-
-
-
-    # #### PREDICTING HYDRO #####
-
-    # # update using predicted values
-    # x_vars_dict_2 = {'solar': solar_mo_series,
-    #                 'wind': wind_mo_series,
-    #                 'gas': gas_mo_series
-    #                 }
-
-    # df_x_vars_2 = DataFrame(x_vars_dict_2)
-
-    # # get series with y values
-    # series_y_var_2 = hydro_mo_series
-
-    # Y2 = np.asarray(series_y_var_2)
-    # X2 = np.asarray(df_x_vars_2)
-
-    # print "PREDICTING HYDRO"
-    # print "shape X", X2.shape
-    # print "shape y", Y2.shape
-
-    # print "est.fit(X, Y)", est2.fit(X2,Y2)
-    # print "est.coef_", est2.coef_
-
-    # curr_dict_2 = {'solar':curr_solar, 'wind':curr_wind, 'gas':gas_prediction}
-    # curr_series_2 = Series(curr_dict_2)
-    # curr_input_2 = np.asarray(curr_series_2)
-
-    # hydro_prediction = est2.predict(curr_input_2)
-    # print "hydro_prediction:", hydro_prediction
-
 
 
     #### PREDICTING NUCLEAR #####
@@ -323,7 +242,6 @@ def predict_using_mo_data(curr_solar,curr_wind,hydro_prediction,curr_demand):
 
     gas_prediction, coal_prediction, nuclear_prediction, other_prediction = gas_prediction*scaler, coal_prediction*scaler, nuclear_prediction*scaler, other_prediction*scaler
 
-
     return gas_prediction, coal_prediction, nuclear_prediction, other_prediction
 
 
@@ -341,10 +259,9 @@ def query_CAISOProdByFuel_Series(ea_fuel):
     os.sys.path.insert(0,parentdir)
 
     import model
-    print "model imported"
     s = model.connect()
 
-    ea_fuel_obj = s.execute('SELECT time_start, fuel_type, mw_gen FROM HistoricCAISOProdByFuels WHERE fuel_type="%s" and time_start between "2014-01-01 07:00:00.000000" and "2015-01-01 00:00:00.000000"  ' % ea_fuel)
+    ea_fuel_obj = s.execute('SELECT time_start, fuel_type, mw_gen FROM "HistoricCAISOProdByFuels" WHERE fuel_type=\'%s\' and time_start between \'2014-01-01 07:00:00.000000\' and \'2015-01-01 00:00:00.000000\'  ' % ea_fuel)
     ea_fuel_entry = ea_fuel_obj.fetchall()
     ea_fuel_df = DataFrame(ea_fuel_entry)
     ea_fuel_df.columns = ['time_start', 'fuel_type', 'mw_gen']
@@ -374,10 +291,9 @@ def query_CAISODemand_hrly_Series():
     os.sys.path.insert(0,parentdir)
 
     import model
-    print "model imported"
     s = model.connect()
 
-    demand_obj = s.execute('SELECT time_start, mw_demand FROM HistoricCAISODemands WHERE CAISO_tac="CA ISO-TAC" and time_start between "2014-01-01 07:00:00.000000" and "2015-01-01 00:00:00.000000" ')
+    demand_obj = s.execute('SELECT time_start, mw_demand FROM "HistoricCAISODemands" WHERE caiso_tac=\'CA ISO-TAC\' and time_start between \'2014-01-01 07:00:00.000000\' and \'2015-01-01 00:00:00.000000\' ')
     demand_entry = demand_obj.fetchall()
     demand_df = DataFrame(demand_entry)
     demand_df.columns = ['time_start','mw_demand']
@@ -408,10 +324,9 @@ def query_CAISONetImports_hrly_Series():
     os.sys.path.insert(0,parentdir)
 
     import model
-    print "model imported"
     s = model.connect()
 
-    imports_obj = s.execute('SELECT time_start, sum(mw_imports) FROM HistoricCAISONetImports where time_start between "2014-01-01 07:00:00.000000" and "2015-01-01 00:00:00.000000" GROUP BY time_start ')
+    imports_obj = s.execute('SELECT time_start, sum(mw_imports) FROM "HistoricCAISONetImports" where time_start between \'2014-01-01 07:00:00.000000\' and \'2015-01-01 00:00:00.000000\' GROUP BY time_start ')
     imports_entry = imports_obj.fetchall()
     imports_df = DataFrame(imports_entry)
     imports_df.columns = ['time_start','mw_demand']
@@ -442,25 +357,24 @@ def query_EIA_fuel_monthly_Series(ea_fuel):
     os.sys.path.insert(0,parentdir)
 
     import model
-    print "model imported"
     s = model.connect()
 
     fuel_codes = {
-    'coal': '("BIT","ANT","LIG","SUB","RC","WC","CBL","SC", "SGC")',
-    'gas': '("NG","BFG","OG","PG","OTH")',
-    'nuclear': "NUC",
-    'solar':"SUN",
-    'hydro':"WAT",
-    'wind':"WND",
-    'other': '("DFO","RFO","JF","KER","WO","PC","SG","AB","MSW","OBS","WDS","OBL","SLW","BLQ","WDL","OBG","GEO","LFG","TDF","MSB","MSN","WH","PUR","SGP","MWH")'}
+    'coal': "('BIT','ANT','LIG','SUB','RC','WC','CBL','SC', 'SGC')",
+    'gas': "('NG','BFG','OG','PG','OTH')",
+    'nuclear': 'NUC',
+    'solar':'SUN',
+    'hydro':'WAT',
+    'wind':'WND',
+    'other': "('DFO','RFO','JF','KER','WO','PC','SG','AB','MSW','OBS','WDS','OBL','SLW','BLQ','WDL','OBG','GEO','LFG','TDF','MSB','MSN','WH','PUR','SGP','MWH')"}
 
     if (ea_fuel=='nuclear') or (ea_fuel=='solar') or (ea_fuel=='wind') or (ea_fuel == 'hydro'):
         code = fuel_codes[ea_fuel]
-        mo_fuel_obj = s.execute('SELECT sum(jan_mwh_gen), sum(feb_mwh_gen), sum(mar_mwh_gen), sum(apr_mwh_gen), sum(may_mwh_gen), sum(jun_mwh_gen), sum(jul_mwh_gen), sum(aug_mwh_gen), sum(sep_mwh_gen), sum(oct_mwh_gen), sum(nov_mwh_gen) FROM ProdGens WHERE fuel_type="%s" and state="CA" ' % code)
+        mo_fuel_obj = s.execute('SELECT sum(jan_mwh_gen), sum(feb_mwh_gen), sum(mar_mwh_gen), sum(apr_mwh_gen), sum(may_mwh_gen), sum(jun_mwh_gen), sum(jul_mwh_gen), sum(aug_mwh_gen), sum(sep_mwh_gen), sum(oct_mwh_gen), sum(nov_mwh_gen) FROM "ProdGens" WHERE fuel_type=\'%s\' and state=\'CA\' ' % code)
 
     if (ea_fuel=='coal') or (ea_fuel=='gas') or (ea_fuel=='other'):
         list_of_codes = fuel_codes[ea_fuel]
-        mo_fuel_obj = s.execute('SELECT sum(jan_mwh_gen), sum(feb_mwh_gen), sum(mar_mwh_gen), sum(apr_mwh_gen), sum(may_mwh_gen), sum(jun_mwh_gen), sum(jul_mwh_gen), sum(aug_mwh_gen), sum(sep_mwh_gen), sum(oct_mwh_gen), sum(nov_mwh_gen) FROM ProdGens WHERE state="CA" and fuel_type IN %s ' % list_of_codes )
+        mo_fuel_obj = s.execute('SELECT sum(jan_mwh_gen), sum(feb_mwh_gen), sum(mar_mwh_gen), sum(apr_mwh_gen), sum(may_mwh_gen), sum(jun_mwh_gen), sum(jul_mwh_gen), sum(aug_mwh_gen), sum(sep_mwh_gen), sum(oct_mwh_gen), sum(nov_mwh_gen) FROM "ProdGens" WHERE state=\'CA\' and fuel_type IN %s ' % list_of_codes )
 
     mo_fuel_entry = mo_fuel_obj.fetchall()
 
@@ -481,7 +395,7 @@ def check_if_bad_date(datetime_obj_as_str):
     """certain dates are missing in CAISO fuel prod data.  exclude those dates"""
 
     # example index from pandas df:  2015-03-10 04:00:00.000000
-    datetime_list = datetime_obj_as_str.split(" ")
+    datetime_list = str(datetime_obj_as_str).split(" ")
 
     date_to_ck = datetime_list[0]
     bad_dates = ['2014-03-09', '2014-05-21', '2015-03-08', '2015-02-28', '2015-03-01', '2015-03-02', '2015-03-03', '2015-03-04', '2015-03-05', '2015-03-06', '2015-03-07', '2015-03-08', '2015-03-09', '2015-03-10' ]

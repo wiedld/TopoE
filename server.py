@@ -6,13 +6,13 @@ import time
 ##  these are used within functions.
 # on server startup, the messages print to confirm flask can find
 from calculations import pandas_data_munging as pdm
-print pdm.test
+# print pdm.test
 from calculations import binary_decision_tree as bdt
-print bdt.test
+# print bdt.test
 from calculations import ML_linear_regression_v2 as ML
-print ML.test
+# print ML.test
 from tasks import CAISO_flask_data_scraper as RT_scrape
-print RT_scrape.test
+# print RT_scrape.test
 
 
 
@@ -47,10 +47,10 @@ def county_map():
 def county_map_data():
     """get data for topojson map of counties.  Called during initial rendering."""
     chosen_state = request.data
-    # print "CHOSEN STATE:", chosen_state
+    print "CHOSEN STATE:", chosen_state
 
     data_for_topojson = pdm.fuel_mix_for_map(chosen_state)
-    # print "DATA FOR MAP: \n", data_for_topojson
+
     return jsonify(data_for_topojson)
 
 
@@ -61,7 +61,7 @@ def scenario_result():
     """Take data structure from frontend, pipe through binary_decision_tree, return result to front."""
 
     from calculations import binary_decision_tree as bdt
-    print bdt.test
+    # print bdt.test
 
     user_input = request.json
     result = bdt.bdt_on_user_input(user_input)
@@ -97,7 +97,7 @@ def scenario_result_usa():
     """Take data structure from frontend, pipe through binary_decision_tree, return result to front."""
 
     from calculations import binary_decision_tree as bdt
-    print bdt.test
+    # print bdt.test
 
     user_input = request.json
     result = bdt.bdt_on_user_input_usa(user_input)
@@ -127,8 +127,6 @@ def current_mix_data():
     demand = RT_scrape.get_demand()
 
     predicted_curr_mix = ML.predict_current_mix(solar,wind,demand)
-    print predicted_curr_mix
-
 
     return jsonify(predicted_curr_mix)
 

@@ -38,16 +38,11 @@ def get_solar_wind():
         mw_solar = int(str_solar.replace(" MW",""))
         mw_wind = int(str_wind.replace(" MW",""))
 
-        print ("solar:", mw_solar)
-        print ("wind:", mw_wind)
-
         return mw_solar, mw_wind
 
          ## TODO: check values within expected bounds, confirm timestamp is new, and update into db of dynamic data
 
     except:
-        print ("Error.  CAISO_solar-wind_data_scraper failure at",current_str)
-
         f = open('log_file.txt','a')
         f.write("\nError.  CAISO_solar-wind_data_scraper failure at: " +current_str)
         f.close
@@ -76,8 +71,6 @@ def get_demand():
          ## TODO: check values within expected bounds, confirm timestamp is new, and update into db of dynamic data
 
     except:
-        print ("Error.  CAISO_demand_data_scraper failure at",current_str)
-
         f = open('log_file.txt','a')
         f.write("\nError.  CAISO_demand_data_scraper failure at: " +current_str)
         f.close

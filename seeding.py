@@ -40,7 +40,6 @@ def load_gen_prod_2014(session):
 			gen_obj.nerc_region = row[8]
 			gen_obj.naics = row[10]
 			gen_obj.sector_eia_id = row[11]
-			gen_obj.sector_name = row[12]
 			gen_obj.prime_mover = row[13]
 			gen_obj.fuel_type = row[14]
 			gen_obj.aer_fuel_type = row[15]
@@ -104,7 +103,6 @@ def load_gen_prod_DEC2013(session):
 			gen_obj.nerc_region = row[8]
 			gen_obj.naics = row[10]
 			gen_obj.sector_eia_id = row[11]
-			gen_obj.sector_name = row[12]
 			gen_obj.prime_mover = row[13]
 			gen_obj.fuel_type = row[14]
 			gen_obj.aer_fuel_type = row[15]
@@ -185,17 +183,10 @@ def load_CAISO_production():
 	"""the seeding of this file comes from a web scraper.  This web scraper is located in tasks directory.  This web scraper is used both for the initiall seeding (startdate to enddate), as well as a recurring cron task."""
 
 	# from tasks import CAISO_daily_data_scraper
-	# # re-seeded on 3/12/2015
 	# CAISO_daily_data_scraper.initial_db_seeding("20140101","20150311")
 
-	# from tasks import CAISO_daily_api
-	# re-seeded on 3/12/2015
-	# CAISO_daily_api.initial_db_seeding("20140101","20150311")
-	# reseeding halted during the night.  start again.
-	# and again.  last 20140331.  start after
-	# 20140408
-	# 20140416
-	# CAISO_daily_api.initial_db_seeding("20140101","20150311")
+	from tasks import CAISO_daily_api
+	CAISO_daily_api.initial_db_seeding("20140101","20150311")
 
 
 

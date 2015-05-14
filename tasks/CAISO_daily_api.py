@@ -80,10 +80,10 @@ def initial_db_seeding(seed_startdate,seed_enddate):
         url_startdate = single_date.strftime('%Y%m%d')
         url_enddate = (single_date + timedelta(1)).strftime('%Y%m%d')
 
-        # already seeded.  but save for later use (reseeding)
-        # get_historic_demand_api_data(url_startdate, url_enddate)
+        get_historic_demand_api_data(url_startdate, url_enddate)
 
-        get_historic_imports_api_data(url_startdate, url_enddate)
+        # not using Net Imports now.  may use in the future
+        # get_historic_imports_api_data(url_startdate, url_enddate)
 
 
 
@@ -102,10 +102,10 @@ def daily_api_update():
     url_startdate = yesterday.strftime('%Y%m%d')
     url_enddate = date.today().strftime('%Y%m%d')
 
-    # turned off for now.  While getting the Net Imports working.
-    # get_historic_demand_api_data(url_startdate, url_enddate)
+    get_historic_demand_api_data(url_startdate, url_enddate)
 
-    get_historic_imports_api_data(url_startdate, url_enddate)
+    # not using Net Imports now.  may use in the future
+    # get_historic_imports_api_data(url_startdate, url_enddate)
 
 
 ###################################################################
@@ -122,8 +122,6 @@ def get_historic_demand_api_data(api_startdate, api_enddate):
         # note that is GMT time.  use T0:700 for now.
         # TODO: update for Daylight Savings time
         url = "http://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_FCST&market_run_id=ACTUAL&startdatetime="+api_startdate+"T07:00-0000&enddatetime="+api_enddate+"T07:00-0000&version=1&as_region=ALL"
-
-        print url
 
         # API call, downloads and saves the zipped file.
         file_name = url.split('/')[-1]  # zipped filename
@@ -167,7 +165,7 @@ def get_historic_demand_api_data(api_startdate, api_enddate):
                         'opr_date': (handleTok(node.getElementsByTagName("OPR_DATE"))).encode("utf8").strip(),
                         'time_start': datetime.strptime(interval_start,'%Y-%m-%dT%H:%M'),
                         'time_end': datetime.strptime(interval_end,'%Y-%m-%dT%H:%M'),
-                        'CAISO_tac': (handleTok(node.getElementsByTagName("RESOURCE_NAME"))).encode("utf8").strip(),
+                        'caiso_tac': (handleTok(node.getElementsByTagName("RESOURCE_NAME"))).encode("utf8").strip(),
                         'mw_demand': (handleTok(node.getElementsByTagName("VALUE"))).encode("utf8").strip()
                         })
 
@@ -177,16 +175,11 @@ def get_historic_demand_api_data(api_startdate, api_enddate):
 
 
         except:
-            print ("Error.  CAISO_daily_api, Demand data, failure at",current_str)
-
             f = open('tasks/logs/log_file.txt','a')
             f.write("\nError.  CAISO_daily_api, Demand data, failure at: " +current_str+" for date "+api_startdate)
             f.close
 
     except URLError:
-        print "error on line 185"
-        print ("Error.  CAISO_daily_api, Demand data, failure at",current_str)
-
         f = open('tasks/logs/log_file.txt','a')
         f.write("\nError.  CAISO_daily_api, Demand data, failure at: " +current_str+" for date "+api_startdate)
         f.close
@@ -204,9 +197,8 @@ def insert_row_demand_db(date, list_of_dicts):
     import os
     parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.sys.path.insert(0,parentdir)
-    import model
 
-    print "model imported"
+    import model
     session = model.connect()
 
     from datetime import datetime
@@ -220,14 +212,14 @@ def insert_row_demand_db(date, list_of_dicts):
 
         demand_obj.time_start = timept_dict['time_start']
         demand_obj.time_end = timept_dict['time_end']
-        demand_obj.CAISO_tac = (timept_dict['CAISO_tac']).strip()
+        demand_obj.caiso_tac = (timept_dict['caiso_tac']).strip()
         demand_obj.mw_demand = int(timept_dict['mw_demand'])
 
         session.add(demand_obj)
 
-    # session.commit()
+    session.commit()
 
-    print ("Inserted Demand data for date: "+date)
+    # print ("Inserted Demand data for date: "+date)
 
 
 
@@ -248,8 +240,6 @@ def get_historic_imports_api_data(api_startdate, api_enddate):
         # note that is GMT time.  use T0:700 for now.
         # TODO: update for Daylight Savings time
         url = "http://oasis.caiso.com/oasisapi/SingleZip?queryname=TRNS_CURR_USAGE&market_run_id=ACTUAL&startdatetime="+api_startdate+"T07:00-0000&enddatetime="+api_enddate+"T07:00-0000&version=1&as_region=ALL"
-
-        print url
 
         # API call, downloads and saves the zipped file.
         file_name = url.split('/')[-1]  # zipped filename
@@ -307,16 +297,11 @@ def get_historic_imports_api_data(api_startdate, api_enddate):
 
 
         except:
-            print ("Error.  CAISO_daily_api, Imports data, failure at",current_str)
-
             f = open('tasks/logs/log_file.txt','a')
             f.write("\nError.  CAISO_daily_api, Imports data, failure at: " +current_str+" for date "+api_startdate)
             f.close
 
     except URLError:
-        print "error on line 185"
-        print ("Error.  CAISO_daily_api, Imports data, failure at",current_str)
-
         f = open('tasks/logs/log_file.txt','a')
         f.write("\nError.  CAISO_daily_api, Imports data, failure at: " +current_str+" for date "+api_startdate)
         f.close
@@ -334,34 +319,30 @@ def insert_row_imports_db(date, list_of_dicts):
     import os
     parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.sys.path.insert(0,parentdir)
-    import model
 
-    print "model imported"
+    import model
     session = model.connect()
 
     from datetime import datetime
 
     for timept_dict in list_of_dicts:
-        print timept_dict
         imports_obj = model.HistoricCAISONetImport()
-        # print "line 347"
+
         opr_date = timept_dict['opr_date']
         imports_obj.date = datetime.strptime(opr_date,'%Y-%m-%d')
-        # print "line 350"
+
         imports_obj.time_start = timept_dict['time_start']
         imports_obj.time_end = timept_dict['time_end']
-        # print "line 353"
+
         imports_obj.resource = (timept_dict['resource']).strip()
-        # print "line 355"
+
         imports_obj.mw_imports = float(timept_dict['mw_imports'])
-        # print "line 357"
+
         session.add(imports_obj)
-        # print "line 359"
-        print imports_obj
 
     session.commit()
 
-    print ("Inserted Imports data for date: "+date)
+    # print ("Inserted Imports data for date: "+date)
 
 
 

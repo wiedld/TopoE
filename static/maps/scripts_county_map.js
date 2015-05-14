@@ -11,7 +11,7 @@ var getKeyByValue = function( value, obj ) {
                  return prop;
         }
     }
-}
+};
 
 
 // UNIQUE CODING FOR COUNTY MAP/////////////////////////////////////
@@ -55,56 +55,56 @@ var getKeyByValue = function( value, obj ) {
     //  look for code after the topojson map is defined!!!
 
 var state_name_to_abbv = {
-  "Alabama": ["AL",[88,10]],
-  "Alaska": ["AK",[179,25]],   // need to complete [179,25]
-  "Arizona": ["AZ",[114,7]],
-  "Arkansas": ["AR",[94,7]],
-  "California": ["CA",[124,5]],
-  "Colorado": ["CO",[109,6]],
-  "Connecticut": ["CT",[73,2]],
-  "Delaware": ["DE",[75,6]],
-  "Florida": ["FL",[87,14]],
-  "Georgia": ["GA",[85,10]],
-  "Hawaii": ["HI",[178,-5]],
-  "Idaho": ["ID",[117,1]],
-  "Illinois": ["IL",[91,2]],
-  "Indiana": ["IN",[88,2]],
-  "Iowa": ["IA",[96,5]],
-  "Kansas": ["KS",[102,6]],
-  "Kentucky": ["KY",[89,6]],
-  "Louisiana": ["LA",[94,10]],
-  "Maine": ["ME",[71,0]],
-  "Maryland": ["MD",[79,6]],
-  "Massachusetts": ["MA",[73,2]],
-  "Michigan": ["MI",[90,1]],
-  "Minnesota": ["MN",[97,1]],
-  "Mississippi": ["MS",[91,10]],
-  "Missouri": ["MO",[95,5]],
-  "Montana": ["MT",[116,0]],
-  "Nebraska": ["NE",[104,4]],
-  "Nevada": ["NV",[120,6]],
-  "New Hampshire": ["NH",[72,1]],
-  "New Jersey": ["NJ",[75,2]],
-  "New Mexico": ["NM",[109,6]],
-  "New York": ["NY",[79,1]],
-  "North Carolina": ["NC",[84,5]],
-  "North Dakota": ["ND",[104,0]],
-  "Ohio": ["OH",[84,1]],
-  "Oklahoma": ["OK",[103,4]],
-  "Oregon": ["OR",[124,1]],
-  "Pennsylvania": ["PA",[80,2]],
-  "Rhode Island": ["RI",[71,1]],
-  "South Carolina": ["SC",[83,6]],
-  "South Dakota": ["SD",[104,1]],
-  "Tennessee": ["TN",[90,5]],
-  "Texas": ["TX",[106,8]],
-  "Utah": ["UT",[114,4]],
-  "Vermont": ["VT",[73,1]],
-  "Virginia": ["VA",[83,4]],
-  "Washington": ["WA",[124,-1]],
-  "West Virginia": ["WV",[82,6]],
-  "Wisconsin": ["WI",[92,0]],
-  "Wyoming": ["WY",[111,1]]
+  "Alabama": ['AL',[88,10]],
+  "Alaska": ['AK',[179,25]],   // need to complete [179,25]
+  "Arizona": ['AZ',[114,7]],
+  "Arkansas": ['AR',[94,7]],
+  "California": ['CA',[124,5]],
+  "Colorado": ['CO',[109,6]],
+  "Connecticut": ['CT',[73,2]],
+  "Delaware": ['DE',[75,6]],
+  "Florida": ['FL',[87,14]],
+  "Georgia": ['GA',[85,10]],
+  "Hawaii": ['HI',[178,-5]],
+  "Idaho": ['ID',[117,1]],
+  "Illinois": ['IL',[91,2]],
+  "Indiana": ['IN',[88,2]],
+  "Iowa": ['IA',[96,5]],
+  "Kansas": ['KS',[102,6]],
+  "Kentucky": ['KY',[89,6]],
+  "Louisiana": ['LA',[94,10]],
+  "Maine": ['ME',[71,0]],
+  "Maryland": ['MD',[79,6]],
+  "Massachusetts": ['MA',[73,2]],
+  "Michigan": ['MI',[90,1]],
+  "Minnesota": ['MN',[97,1]],
+  "Mississippi": ['MS',[91,10]],
+  "Missouri": ['MO',[95,5]],
+  "Montana": ['MT',[116,0]],
+  "Nebraska": ['NE',[104,4]],
+  "Nevada": ['NV',[120,6]],
+  "New Hampshire": ['NH',[72,1]],
+  "New Jersey": ['NJ',[75,2]],
+  "New Mexico": ['NM',[109,6]],
+  "New York": ['NY',[79,1]],
+  "North Carolina": ['NC',[84,5]],
+  "North Dakota": ['ND',[104,0]],
+  "Ohio": ['OH',[84,1]],
+  "Oklahoma": ['OK',[103,4]],
+  "Oregon": ['OR',[124,1]],
+  "Pennsylvania": ['PA',[80,2]],
+  "Rhode Island": ['RI',[71,1]],
+  "South Carolina": ['SC',[83,6]],
+  "South Dakota": ['SD',[104,1]],
+  "Tennessee": ['TN',[90,5]],
+  "Texas": ['TX',[106,8]],
+  "Utah": ['UT',[114,4]],
+  "Vermont": ['VT',[73,1]],
+  "Virginia": ['VA',[83,4]],
+  "Washington": ['WA',[124,-1]],
+  "West Virginia": ['WV',[82,6]],
+  "Wisconsin": ['WI',[92,0]],
+  "Wyoming": ['WY',[111,1]]
 };
 
 
@@ -130,10 +130,6 @@ var set_slider_values = function(data_list,county_name){
         );
     });
 
-    // show the starting values in the html
-    for (var i = 0; i<7; i++){
-      d3.select('#slider'+i+'text').text(data_list[i]);
-    }
 };
 
     // EVENT FUNCTION -- when the user changes one of the fuel ratios via a slider event, many things have to happen.  (1) update data_list used to render the donut.  (2) update the dict in the frontend cache (which will later be sent to the backend during "Run Scenario").  (3) change the values of all the other fuesl as well (since is a percentage), in order to remake everything.

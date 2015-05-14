@@ -9,7 +9,7 @@ var getKeyByValue = function( value, obj ) {
                  return prop;
         }
     }
-}
+};
 
 
 // UNIQUE CODING FOR THE STATES USA MAP /////////////////////////////////////
@@ -116,11 +116,6 @@ var set_slider_values = function(data_list,state_name){
         );
     });
 
-
-    // show the starting values in the html
-    for (var i = 0; i<7; i++){
-      d3.select('#slider'+i+'text').text(data_list[i]);
-    }
 };
 
 

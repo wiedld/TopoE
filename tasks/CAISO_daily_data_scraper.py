@@ -105,8 +105,6 @@ def get_historic_mw_by_fuel(date):
             count_lines+=1
 
     except:
-        print ("Error. CAISO_hrly_data_scraper failure at",current_str)
-
         f = open('tasks/logs/log_file.txt','a')
         f.write("\nError.  CAISO_daily_data_scraper failure at: " +current_str+" for date "+date)
         f.close
@@ -126,7 +124,6 @@ def insert_row_db(date, hr, adict):
     os.sys.path.insert(0,parentdir)
 
     import model
-    print "model imported"
     session = model.connect()
 
 
@@ -143,7 +140,7 @@ def insert_row_db(date, hr, adict):
 
     session.commit()
 
-    print ("Inserted data for date: "+str(hr))
+    # print ("Inserted data for date: "+str(hr))
 
 
 

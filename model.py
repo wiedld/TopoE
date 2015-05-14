@@ -3,20 +3,22 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, Float, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship, backref, scoped_session
+import os
+
+ENGINE = None
+Session = None
+DATABASE_URL = os.environ["DATABASE_URL"]
 Base = declarative_base()
 
-# import os
-# import psycopg2
-# import urlparse
 
 #######################################################################
 
 ##  STEP1 = make the db file and metadata.  In python shell:
 # -i model.py  >  create_engine  >  Base.metadata.create_all(eng)
 
-##  STEP 2 = Perform seeding.
-ENGINE = None
-Session = None
+# ##  STEP 2 = Perform seeding.
+# ENGINE = None
+# Session = None
 # function connect() at bottom...before main.
 ## in python shell:  -i model.py > s=connect() >
 
@@ -44,7 +46,6 @@ class ProdGen(Base):
 	nerc_region = Column(String(15))
 	naics = Column(String(15))
 	sector_eia_id = Column(String(15))
-	sector_name = Column(String(15))
 	prime_mover = Column(String(15))
 	fuel_type = Column(String(15))
 	aer_fuel_type = Column(String(15))
@@ -97,7 +98,6 @@ class ProdGenDec2013(Base):
 	nerc_region = Column(String(15))
 	naics = Column(String(15))
 	sector_eia_id = Column(String(15))
-	sector_name = Column(String(15))
 	prime_mover = Column(String(15))
 	fuel_type = Column(String(15))
 	aer_fuel_type = Column(String(15))
@@ -180,12 +180,12 @@ class HistoricCAISODemand(Base):
 	date = Column(DateTime)
 	time_start = Column(DateTime)
 	time_end = Column(DateTime)
-	CAISO_tac = Column(String(20))
+	caiso_tac = Column(String(20))
 	mw_demand = Column(Integer)
 
 	def __repr__(self):
 		"""Show info about object"""
-		return "<date: %s, time_start: %s, CAISO_tac: %s, mw_demand: %d>" % (str(self.date), str(self.time_start), self.CAISO_tac, self.mw_demand)
+		return "<date: %s, time_start: %s, caiso_tac: %s, mw_demand: %d>" % (str(self.date), str(self.time_start), self.caiso_tac, self.mw_demand)
 
 
 
@@ -214,16 +214,12 @@ class HistoricCAISONetImport(Base):
 def connect():
 	global ENGINE
 	global Session
-	# ENGINE = create_engine("sqlite:///generators.db", echo=True)
-	# Session = sessionmaker(bind=ENGINE)
+	global DATABASE_URL
 
-	ENGINE = create_engine("sqlite:///generators.db", echo=True)
+	ENGINE = create_engine(DATABASE_URL, echo=False)
 	Session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
-	Base.query = Session.query_property()
-	return Session()
 
-	# urlparse.uses_netloc.append("postgres")
-	# url = urlparse.urlparse(os.environ["DATABASE_URL"])
+	return Session()
 
 
 
