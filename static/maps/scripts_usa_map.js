@@ -144,15 +144,22 @@ var set_slider_values = function(data_list,state_name){
           var amt_changed = value - data_list[index];
           data_list[index] = value;  // this single slider value went up
 
+          // figure out the non-zero elements, so know how many to adjust
+          var num_non_zero = 0;
           for (var i = 0; i<7; i++){
-            if (i != index){
-              // scale amt to change by original.
-              // so if coal 75% of total, but user made 4% increase in solar,  then coal gets decreased by 75% of 4% (=3%).
-              var adjuster = amt_changed * (data_list[i]/100);
+            if ((i != index) && (data_list[i] > 0)){
+              num_non_zero++;
+            }
+          }
+
+          // evenly distribute the modification to offset slider
+          var adjuster = amt_changed/num_non_zero;
+          for (var i = 0; i<7; i++){
+            if ((i != index) && (data_list[i] > 0)){
               data_list[i] = data_list[i] - adjuster;
             }
           }
-          // console.log(data_list);
+
           return data_list;
     };
 
