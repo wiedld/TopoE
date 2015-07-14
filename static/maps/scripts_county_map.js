@@ -122,7 +122,7 @@ var set_slider_values = function(data_list,county_name){
     $.each(slider_elements, function(idx, slider_element){
         d3.select(slider_element).call(
           d3.slider()
-          .value(data_list[idx])
+          .value(Math.round(data_list[idx]))
           .on("slide", function(evt, value){
             slide_event(value, fuel_names, idx, data_list);
             }
@@ -135,7 +135,6 @@ var set_slider_values = function(data_list,county_name){
     // EVENT FUNCTION -- when the user changes one of the fuel ratios via a slider event, many things have to happen.  (1) update data_list used to render the donut.  (2) update the dict in the frontend cache (which will later be sent to the backend during "Run Scenario").  (3) change the values of all the other fuesl as well (since is a percentage), in order to remake everything.
     // what happens when the sliders are changed by the user.
     var slide_event = function(value, fuel_names, index, data_list){
-        value = Math.round(value);
         // update_percentages() for all fuels, to sum to 100%
         data_list = update_percentages(value,index, data_list);
 
@@ -163,7 +162,7 @@ var set_slider_values = function(data_list,county_name){
             if (i != index){
               // scale amt to change by original.
               // so if coal 75% of total, but user made 4% increase in solar,  then coal gets decreased by 75% of 4% (=3%).
-              var adjuster = Math.round(amt_changed * (data_list[i]/100));
+              var adjuster = amt_changed * (data_list[i]/100);
               data_list[i] = data_list[i] - adjuster;
             }
           }
