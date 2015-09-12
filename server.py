@@ -1,5 +1,4 @@
 from flask import Flask, render_template, redirect, request, jsonify
-from flask.ext.cache import Cache
 import model
 import os
 
@@ -118,7 +117,7 @@ def current_mix():
 
 @app.route("/current-mix-data", methods=['POST'])
 def current_mix_data():
-    """mix is pulled in seperately.  should come from cache"""
+    """mix is pulled in seperately"""
 
     solar, wind = RT_scrape.get_solar_wind()
     demand = RT_scrape.get_demand()
