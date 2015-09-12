@@ -1,0 +1,1 @@
+web: gunicorn hidden-badlands-2653.wsgi --log-file
