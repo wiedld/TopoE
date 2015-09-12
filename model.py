@@ -226,7 +226,7 @@ def connect():
 
 def main():
 	"""For future use."""
-	pass
+	connect()
 
 if __name__ == "__main__":
 	main()

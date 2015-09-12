@@ -1,6 +1,6 @@
 import model
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 """Below are the models for the database.  The tables can be broadly grouped into two types:
@@ -182,8 +182,8 @@ def load_gen_stats(session):
 def load_CAISO_production():
 	"""the seeding of this file comes from a web scraper.  This web scraper is located in tasks directory.  This web scraper is used both for the initiall seeding (startdate to enddate), as well as a recurring cron task."""
 
-	# from tasks import CAISO_daily_data_scraper
-	# CAISO_daily_data_scraper.initial_db_seeding("20140101","20150311")
+	from tasks import CAISO_daily_data_scraper
+	CAISO_daily_data_scraper.initial_db_seeding("20140101","20150311")
 
 	from tasks import CAISO_daily_api
 	CAISO_daily_api.initial_db_seeding("20140101","20150311")

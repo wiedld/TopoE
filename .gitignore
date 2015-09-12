@@ -6,3 +6,9 @@ secrets.sh
 
 tasks/tmp/
 tasks/logs/
+.gitignore
+
+static/current-mix/jquery-layer.js
+static/current-mix/jquery.lightbox-0.5.pack.js
+static/current-mix/jquery.sliderotator.js
+eia_codes.numbers

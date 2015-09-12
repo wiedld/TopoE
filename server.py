@@ -151,14 +151,13 @@ def about_HB_project():
 
 
 def main():
-    """populate the cache for the first time."""
     pass
 
 
 
 if __name__ == "__main__":
     main()
-    # app.run(host="0.0.0.0", debug=False)
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=False)
+    # app.run(debug=True)
 
 
