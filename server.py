@@ -46,7 +46,6 @@ def county_map():
 def county_map_data():
     """get data for topojson map of counties.  Called during initial rendering."""
     chosen_state = request.data
-    print "CHOSEN STATE:", chosen_state
 
     data_for_topojson = pdm.fuel_mix_for_map(chosen_state)
 
@@ -60,7 +59,6 @@ def scenario_result():
     """Take data structure from frontend, pipe through binary_decision_tree, return result to front."""
 
     from calculations import binary_decision_tree as bdt
-    # print bdt.test
 
     user_input = request.json
     result = bdt.bdt_on_user_input(user_input)
@@ -96,7 +94,6 @@ def scenario_result_usa():
     """Take data structure from frontend, pipe through binary_decision_tree, return result to front."""
 
     from calculations import binary_decision_tree as bdt
-    # print bdt.test
 
     user_input = request.json
     result = bdt.bdt_on_user_input_usa(user_input)

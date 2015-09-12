@@ -64,8 +64,6 @@ def get_demand():
         str_demand = demand.string
         mw_demand = int(str_demand.replace(" MW",""))
 
-        print ("demand", mw_demand)
-
         return mw_demand
 
          ## TODO: check values within expected bounds, confirm timestamp is new, and update into db of dynamic data
@@ -81,4 +79,3 @@ def get_demand():
 if __name__ == "__main__":
     get_demand()
     get_solar_wind()
-
